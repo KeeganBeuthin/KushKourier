@@ -1,5 +1,6 @@
-
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
+@font-face {
+    font-family: 'YourFontName';
+    src: url('../public/fonts/Pacifico-Regular.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+  }

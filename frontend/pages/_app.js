@@ -5,8 +5,7 @@ import App from 'next/app';
 
 import { Provider } from '@capacitor/core';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import '../styles/main.css'
 
 
 
