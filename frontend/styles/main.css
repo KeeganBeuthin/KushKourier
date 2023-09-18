@@ -6,6 +6,7 @@
  */
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
 :root,
 [data-bs-theme=light] {
   --bs-blue: #0d6efd;
@@ -12117,15 +12118,29 @@ th {
   color: inherit;
 }
 
-a {
+.pacifico {
   font-family: "Pacifico", cursive;
 }
 
 .Fgreen {
-  background-color: #b2a59a;
+  background-color: #586f56;
 }
 
 .Lgreen {
-  
-  color: #586f56;
+  color: #b2a59a;
+}
+
+.carousel-item img {
+  max-height: 300px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin: 0 auto;
+}
+
+.carousel-control-prev, .carousel-control-next {
+  margin-right: 0; /* Adjust button position */
+}
+
+.roboto {
+  font-family: "Roboto", sans-serif;
 }/*# sourceMappingURL=main.css.map */
