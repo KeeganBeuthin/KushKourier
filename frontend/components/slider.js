@@ -1,6 +1,6 @@
 const Slider = () => {
     return (
-        <div className="border-bottom border-dark pt-4 pb-4 shadow-lg " style={{ height: 210 }}>
+        <div className="border-bottom  pt-4 pb-4 shadow-lg " style={{ height: 210 }}>
             <h2 className="container pb-2">Shop by category</h2>
             <div className="container d-flex justify-content-between overflow-auto mx-auto pb-sm " style={{ height: 150, }}>
                 {/* Category 1 (Hemp CBD) */}

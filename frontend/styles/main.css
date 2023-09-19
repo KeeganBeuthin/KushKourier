@@ -12143,4 +12143,8 @@ th {
 
 .roboto {
   font-family: "Roboto", sans-serif;
+}
+
+.logo-image {
+  min-width: 200px; /* Adjust the minimum width as needed */
 }/*# sourceMappingURL=main.css.map */
