@@ -12132,6 +12132,7 @@ th {
 
 .carousel-item img {
   max-height: 300px;
+  max-width: 500px;
   -o-object-fit: cover;
      object-fit: cover;
   margin: 0 auto;
