@@ -17,7 +17,7 @@ const Home = () => {
         <>
     
             <Navbar/>
-            <Card/>
+        
             <ProductRow/>
             <Slider/>
             <ControlledCarousel/>

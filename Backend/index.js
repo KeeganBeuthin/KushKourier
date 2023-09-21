@@ -96,7 +96,13 @@ const api = new OpenAPIBackend({
     },
     registerUser: async (c, req, res) => {
       console.log(req.body)
+
+
       const {registerUsername,registerEmail,registerPassword,registerCpassword} = req.body;
+
+       if(!registerUsername||!registerCpassword||!registerEmail||!registerPassword){
+        return res.status(400).json({error: 'incorrect info'})
+       }
 
       const usercheck= await sql`
       SELECT * FROM accounts WHERE username =${registerUsername}`
