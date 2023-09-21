@@ -27,9 +27,9 @@ const Navbar = () => {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav mx-3">
         <li className="nav-item">
-          <button className="btn btn-outline-light text-dark" onClick={openModal}><img src={'/person.svg'} width='20' height={20} alt="Search Icon" />Login</button>
+          <button className="btn btn-outline-light text-dark" onClick={openModal}><img src={'/person.svg'} width='20' height={20} alt="Search Icon"/>Login</button>
         </li>
-        <LoginRegisterModal show={showModal} onClose={closeModal} />
+        <LoginRegisterModal show={showModal} onClose={closeModal}/>
           <li className="nav-item">
             <a className="nav-link" href="#">About</a>
           </li>

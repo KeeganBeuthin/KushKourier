@@ -1,7 +1,8 @@
 const cors = require('cors');
-
+const postgres = require('postgres')
 const OpenAPIBackend = require('openapi-backend').default;
 const express = require('express');
+const bcrypt = require('bcrypt');
 const app = express();
 app.use(express.json());
 app.set('trust proxy', 1)
@@ -13,6 +14,7 @@ app.use(
     allowedHeaders: ['Content-Type, Authorization, credentials']
   })
 );
+const sql = postgres('postgres://postgres:hahaha@127.0.0.1:8080/rat')
 
 const api = new OpenAPIBackend({
   definition: {
@@ -93,12 +95,37 @@ const api = new OpenAPIBackend({
       res.status(200).json({ message: 'Login successful' });
     },
     registerUser: async (c, req, res) => {
-      // Handle registration logic here
-      // You can access the request body using req.body
-      // Example: const { username, email, password } = req.body;
+      console.log(req.body)
+      const {registerUsername,registerEmail,registerPassword,registerCpassword} = req.body;
 
-      // Send a successful response
-      res.status(200).json({ message: 'Registration successful' });
+      const usercheck= await sql`
+      SELECT * FROM accounts WHERE username =${registerUsername}`
+
+      const emailCheck= await sql`
+      SELECT * FROM accounts WHERE email =${registerEmail}`
+
+      if(registerPassword!==registerCpassword){
+        console.log('password match failed')
+        return res.status(400).json({error: 'password match failed'})
+      }
+
+
+      if(emailCheck.length===1){
+        console.log('email already exists')
+        return res.status(400).json({error:'email already exists'})
+      }
+    
+      const hashPassword = await bcrypt.hash(registerPassword, 13)
+      console.log('hash completed')
+
+      const result = await sql`
+      INSERT INTO accounts (username,email,password,created_on) VALUES (${registerUsername},${registerEmail},${hashPassword},now())
+    `
+
+    console.log(`new user created with username ${registerUsername} and email ${registerEmail}`)
+
+
+    return res.status(200).json({registerUsername, registerEmail})
     },
     validationFail: async (c, req, res) => res.status(400).json({ err: c.validation.errors }),
     notFound: async (c, req, res) => res.status(404).json({ err: 'not found' }),

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
-import login_validate from '@/lib/validate';
+import login_validate from '@/lib/loginValidate';
+import { register_validate } from '@/lib/registerValidate';
 import { Capacitor } from '@capacitor/core';
+
 function LoginRegisterModal({ show, onClose }) {
   const isAndroid = Capacitor.getPlatform() === 'android';
 let regUrl
@@ -13,28 +15,32 @@ let regUrl
 
   // Function to switch between Login and Register forms
   const switchForm = () => {
+    console.log(isRegistering)
+    console.log(initialValues)
+ 
     setIsRegistering(!isRegistering);
+    console.log(validate)
+    console.log(register_validate)
   };
 
-  const initialValues = {
-    username: '',
-    email: '',
-    password: '',
-    cpassword: '',
-    usernameLogin: '',
-    passwordLogin: '',
-  };
+  const initialValues = isRegistering
+    ? {
+      registerUsername:'',
+      registerEmail:'',
+      registerPassword:'',
+      registerCpassword:'',
+      }
+    : {
+        loginUsername:'',
+        loginPassword:'',
+      };
+
+      const validate = isRegistering ? register_validate : login_validate;
 
   const handleSubmit = async (values) => {
-
-    let url
-    if(isRegistering){
-      url = '/api/register'
-    } else {
-      url = '/api/login'
-    }
+    const apiUrl = isRegistering ? '/api/register' : '/api/login';
     try {
-      const response = await fetch(url, {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,14 +49,14 @@ let regUrl
       });
 
       if (response.ok) {
-        console.log('Request successful');
+        console.log(isRegistering ? 'Registration successful' : 'Login successful');
         // Handle success, e.g., redirect or display a success message
       } else {
-        console.error('Request failed');
-        // Handle failure, e.g., display an error message
+        console.error(isRegistering ? 'Registration request failed' : 'Login request failed');
+        // Handle registration/login failure, e.g., display an error message
       }
     } catch (error) {
-      console.error('Request error:', error);
+      console.error(isRegistering ? 'Registration request error' : 'Login request error', error);
       // Handle network error or other unexpected issues
     }
 
@@ -65,46 +71,47 @@ let regUrl
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}
-          validate= {login_validate}
+          validate={validate}
         >
+          
           {({ handleSubmit }) => (
             <Form onSubmit={handleSubmit}>
               {isRegistering ? (
                 // Registration form fields
                 <>
-                  <Form.Group controlId="username">
+                  <Form.Group controlId="registerUsername">
                     <Form.Label>Username</Form.Label>
-                    <Field type="text" name="username" as={Form.Control} placeholder="Enter username" />
-                    <ErrorMessage name="username" component="div" className="text-danger" />
+                    <Field type="text" name="registerUsername" as={Form.Control} placeholder="Enter username" />
+                    <ErrorMessage name="registerUsername" component="div" className="text-danger" />
                   </Form.Group>
-                  <Form.Group controlId="email">
+                  <Form.Group controlId="registerEmail">
                     <Form.Label>Email</Form.Label>
-                    <Field type="email" name="email" as={Form.Control} placeholder="Enter email" />
-                    <ErrorMessage name="email" component="div" className="text-danger" />
+                    <Field type="email" name="registerEmail" as={Form.Control} placeholder="Enter email" />
+                    <ErrorMessage name="registerEmail" component="div" className="text-danger" />
                   </Form.Group>
-                  <Form.Group controlId="password">
+                  <Form.Group controlId="registerPassword">
                     <Form.Label>Password</Form.Label>
-                    <Field type="password" name="password" as={Form.Control} placeholder="Password" />
-                    <ErrorMessage name="password" component="div" className="text-danger" />
+                    <Field type="password" name="registerPassword" as={Form.Control} placeholder="Password" />
+                    <ErrorMessage name="registerPassword" component="div" className="text-danger" />
                   </Form.Group>
-                  <Form.Group controlId="cpassword">
+                  <Form.Group controlId="registerCpassword">
                     <Form.Label>Confirm Password</Form.Label>
-                    <Field type="password" name="cpassword" as={Form.Control} placeholder="Confirm password" />
-                    <ErrorMessage name="cpassword" component="div" className="text-danger" />
+                    <Field type="password" name="registerCpassword" as={Form.Control} placeholder="Confirm password" />
+                    <ErrorMessage name="registerCpassword" component="div" className="text-danger" />
                   </Form.Group>
                 </>
               ) : (
                 // Login form fields
                 <>
-                  <Form.Group controlId="usernameLogin">
+                  <Form.Group controlId="loginUsername">
                     <Form.Label>Username</Form.Label>
-                    <Field type="text" name="usernameLogin" as={Form.Control} placeholder="Enter your username" />
-                    <ErrorMessage name="usernameLogin" component="div" className="text-danger" />
+                    <Field type="text" name="loginUsername" as={Form.Control} placeholder="Enter your username" />
+                    <ErrorMessage name="loginUsername" component="div" className="text-danger" />
                   </Form.Group>
-                  <Form.Group controlId="passwordLogin">
+                  <Form.Group controlId="loginPassword">
                     <Form.Label>Password</Form.Label>
-                    <Field type="password" name="passwordLogin" as={Form.Control} placeholder="Enter your password" />
-                    <ErrorMessage name="passwordLogin" component="div" className="text-danger" />
+                    <Field type="password" name="loginPassword" as={Form.Control} placeholder="Enter your password" />
+                    <ErrorMessage name="loginPassword" component="div" className="text-danger" />
                   </Form.Group>
                 </>
               )}
