@@ -3,7 +3,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
 import login_validate from '@/lib/loginValidate';
 import { register_validate } from '@/lib/registerValidate';
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, CapacitorHttp } from '@capacitor/core';
 
 function LoginRegisterModal({ show, onClose }) {
   const isAndroid = Capacitor.getPlatform() === 'android';
@@ -40,18 +40,21 @@ let regUrl
   const handleSubmit = async (values) => {
     const apiUrl = isRegistering ? '/api/register' : '/api/login';
     try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
+      const options ={
+        url: apiUrl,
+        headers: {'Content-Type': 'application/json', 'credentials': 'include',},
+        data: JSON.stringify(values)
+      }
+      const response = await CapacitorHttp.post(options)
 
-      if (response.ok) {
+      if (response.status === 200) {
         console.log(isRegistering ? 'Registration successful' : 'Login successful');
-        // Handle success, e.g., redirect or display a success message
+        const sessionId = response.data.sessionId;
+        document.cookie = `info=${sessionId}; path=/; Secure; SameSite=None; max-age=360000000`;
+        window.location.reload();
+
       } else {
+        console.log(response)
         console.error(isRegistering ? 'Registration request failed' : 'Login request failed');
         // Handle registration/login failure, e.g., display an error message
       }
