@@ -106,18 +106,31 @@ const api = new OpenAPIBackend({
           },
         },
       },
+      '/api/cookieVal': {
+        post: {
+          operationId: 'cookieValidate',
+          responses: {
+            '200': {
+              description: 'Validated'
+            },
+            '400': {
+              description: 'Validation Failed'
+            }
+          }
+        }
+      }
     },
   },
   handlers: {
-    // Define your handler functions for login and registration here
     loginUser: async (c, req, res) => {
 
-      console.log(req.session)
       const { loginUsername, loginPassword } = req.body;
+
 
       const userCheck = await sql`
       select * from accounts where username=${loginUsername}
       `
+
 
       if (!userCheck) {
         return res.status(400).json({ error: 'invalid user information' })
@@ -127,18 +140,24 @@ const api = new OpenAPIBackend({
       const hash = await sql`
 select password from accounts where username=${loginUsername}
 `
+
+
       if (!hash) {
         return res.status(400).json({ error: 'password select failed' })
       }
 
+
       const passwordCheck = await bcrypt.compare(loginPassword, hash[0].password)
 
 
+      const id = await sql`
+      select  user_id from accounts where username=${loginUsername}
+      `
+
 const sessionId = req.session.id
-console.log(sessionId
-  )
 
 
+req.session.userId= id
      
       req.session.save(function (err) {
         if (err) return (err)
@@ -152,9 +171,6 @@ console.log(sessionId
 
 
     registerUser: async (c, req, res) => {
-      console.log(req.body)
-
-
       const { registerUsername, registerEmail, registerPassword, registerCpassword } = req.body;
 
 
@@ -162,11 +178,14 @@ console.log(sessionId
         return res.status(400).json({ error: 'incorrect info' })
       }
 
+
       const usercheck = await sql`
       SELECT * FROM accounts WHERE username =${registerUsername}`
 
+
       const emailCheck = await sql`
       SELECT * FROM accounts WHERE email =${registerEmail}`
+
 
       if (registerPassword !== registerCpassword) {
         console.log('password match failed')
@@ -179,8 +198,9 @@ console.log(sessionId
         return res.status(400).json({ error: 'email already exists' })
       }
 
+
       const hashPassword = await bcrypt.hash(registerPassword, 13)
-      console.log('hash completed')
+
 
       const result = await sql`
       INSERT INTO accounts (username,email,password,created_on) VALUES (${registerUsername},${registerEmail},${hashPassword},now())
@@ -190,13 +210,17 @@ console.log(sessionId
 
 
       return res.status(200).json({ registerUsername, registerEmail })
-    },addToCart: async (c, req, res) => {
+    },
+    
+    addToCart: async (c, req, res) => {
       const { user_id, product_id, quantity, price } = req.body;
     
+
       if (!user_id || !product_id || !quantity || !price) {
         return res.status(400).json({ error: 'Invalid cart item data' });
       }
     
+
       try {
         await sql`
           INSERT INTO carts (user_id, product_id, quantity, price)
@@ -209,13 +233,16 @@ console.log(sessionId
       }
     },
     
+
     removeFromCart: async (c, req, res) => {
       const { user_id, cart_id } = req.body;
     
+
       if (!user_id || !cart_id) {
         return res.status(400).json({ error: 'Invalid user or cart item data' });
       }
     
+
       try {
         await sql`
           DELETE FROM carts
@@ -228,13 +255,16 @@ console.log(sessionId
       }
     },
     
+
     updateQuantity: async (c, req, res) => {
       const { user_id, cart_id, new_quantity } = req.body;
     
+
       if (!user_id || !cart_id || new_quantity === undefined) {
         return res.status(400).json({ error: 'Invalid user, cart item, or quantity data' });
       }
     
+
       try {
         await sql`
           UPDATE carts
@@ -252,6 +282,7 @@ console.log(sessionId
     getCartContents: async (c, req, res) => {
       const { user_id } = req.query;
     
+
       if (!user_id) {
         return res.status(400).json({ error: 'Invalid user ID' });
       }
@@ -274,6 +305,7 @@ console.log(sessionId
     getCartPrice: async (c, req, res) =>{
       const { user_id } = req.query;
     
+
       if (!user_id) {
         return res.status(400).json({ error: 'Invalid user ID' });
       }
@@ -290,7 +322,18 @@ console.log(sessionId
         return res.status(500).json({ error: 'Server error' });
       }
     },
-    
+     cookieValidate: async (c, req, res) =>{
+      const session = req.session.id
+
+      const cookies = req.headers.cookie;
+
+  
+      const sessionData = await redisClient.get(`SessionStore:${session}`)
+      
+      console.log('session:',sessionData)
+      return res.status(200).json({success: 'user Validated'})
+
+     },
     validationFail: async (c, req, res) => res.status(400).json({ err: c.validation.errors }),
     notFound: async (c, req, res) => res.status(404).json({ err: 'not found' }),
   },

@@ -1,22 +1,35 @@
-import React, { useState } from 'react';
+// @flow
+
+import React, { useState,useEffect } from 'react';
 import LoginRegisterModal from './login'; // Make sure to import the LoginModal component
 import { CapacitorHttp } from '@capacitor/core';
+type NavbarProps = {
+};
 
-const Navbar = () => {
-  
-  const apiUrl = '/api/cookieValidate'
-  try {
-    const options ={
-      url: apiUrl,
-      headers: {'Content-Type': 'application/json', 'credentials': 'include',},
-      data: JSON.stringify(values)
-    }
-    const response =  CapacitorHttp.post(options)
-  } catch{
-    console.log('fuck')
-  }
-  const cookieCheck = document.cookie.info
-  console.log(cookieCheck)
+const Navbar = (props: NavbarProps): React$Element<any> => {
+  const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    // Function to send a request to the '/api/cookieVal' endpoint
+    const fetchData = async () => {
+      const apiUrl = '/api/cookieVal';
+      try {
+        const options = {
+          url: apiUrl,
+          headers: { 'Content-Type': 'application/json', 'credentials': 'include' },
+        };
+        const response = await CapacitorHttp.post(options);
+        if (response.status === 200) {
+          setAuth(true);
+        }
+      } catch {
+        console.log('An error occurred');
+      }
+    };
+
+    fetchData(); // Call the fetchData function when the component mounts
+  }, []);
+
   const [showModal, setShowModal] = useState(false);
 
   // Function to open the modal

@@ -1,60 +1,80 @@
+// @flow
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { Formik, Field, ErrorMessage } from 'formik';
-import login_validate from '@/lib/loginValidate';
-import { register_validate } from '@/lib/registerValidate';
+import { Formik, Field, ErrorMessage,  } from 'formik';
+import login_validate from '../lib/loginValidate';
+import { register_validate } from '../lib/registerValidate';
 import { Capacitor, CapacitorHttp } from '@capacitor/core';
+import type { FormikProps } from 'formik';
+import type { Node } from 'react';
+type LoginRegisterModalProps = {
+  show: boolean,
+  onClose: () => void,
+};
 
-function LoginRegisterModal({ show, onClose }) {
+type LoginValues = {
+  loginUsername: string;
+  loginPassword: string;
+};
+
+type RegisterValues = {
+  registerUsername: string;
+  registerEmail: string;
+  registerPassword: string;
+  registerCpassword: string;
+};
+
+
+
+export default function LoginRegisterModal({
+  show,
+  onClose,
+}: LoginRegisterModalProps): React$Element<any> {
   const isAndroid = Capacitor.getPlatform() === 'android';
-let regUrl
-  if(!isAndroid){
-    regUrl = 'http://localhost:9000/register'
-  }
-  const [isRegistering, setIsRegistering] = useState(false);
+  let regUrl;
 
-  // Function to switch between Login and Register forms
+  if (!isAndroid) {
+    regUrl = 'http://localhost:9000/register';
+  }
+
+  const [isRegistering, setIsRegistering] = useState<boolean>(false);
+
   const switchForm = () => {
-    console.log(isRegistering)
-    console.log(initialValues)
- 
     setIsRegistering(!isRegistering);
-    console.log(validate)
-    console.log(register_validate)
   };
 
-  const initialValues = isRegistering
-    ? {
-      registerUsername:'',
-      registerEmail:'',
-      registerPassword:'',
-      registerCpassword:'',
-      }
-    : {
-        loginUsername:'',
-        loginPassword:'',
+  type FormValues = LoginValues | RegisterValues;
+
+  let initialValues: LoginValues;
+
+  let initialValues2: RegisterValues;
+
+  let initialValuesTrue
+  if (isRegistering) {
+    initialValuesTrue = initialValues2
+  } else {
+    initialValuesTrue = initialValues
+  }
+
+  const validate = isRegistering ? register_validate : login_validate;
+
+  const handleSubmit = async (values: FormValues) => {
+    const apiUrl = isRegistering ? '/api/register' : '/api/login';
+
+    try {
+      const options = {
+        url: apiUrl,
+        headers: { 'Content-Type': 'application/json', credentials: 'include' },
+        data: JSON.stringify(values),
       };
 
-      const validate = isRegistering ? register_validate : login_validate;
-
-  const handleSubmit = async (values) => {
-    const apiUrl = isRegistering ? '/api/register' : '/api/login';
-    try {
-      const options ={
-        url: apiUrl,
-        headers: {'Content-Type': 'application/json', 'credentials': 'include',},
-        data: JSON.stringify(values)
-      }
-      const response = await CapacitorHttp.post(options)
+      const response = await CapacitorHttp.post(options);
 
       if (response.status === 200) {
         console.log(isRegistering ? 'Registration successful' : 'Login successful');
-        const sessionId = response.data.sessionId;
-        document.cookie = `info=${sessionId}; path=/; Secure; SameSite=None; max-age=360000000`;
         window.location.reload();
-
       } else {
-        console.log(response)
+        console.log(response);
         console.error(isRegistering ? 'Registration request failed' : 'Login request failed');
         // Handle registration/login failure, e.g., display an error message
       }
@@ -65,22 +85,17 @@ let regUrl
 
     onClose();
   };
+
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>{isRegistering ? 'Register' : 'Login'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validate={validate}
-        >
-          
-          {({ handleSubmit }) => (
-            <Form onSubmit={handleSubmit}>
+        <Formik<FormValues> initialValues={initialValuesTrue} onSubmit={handleSubmit} validate={validate}>
+          {(formikProps: FormikProps<FormValues>) => (
+            <Form onSubmit={formikProps.handleSubmit}>
               {isRegistering ? (
-                // Registration form fields
                 <>
                   <Form.Group controlId="registerUsername">
                     <Form.Label>Username</Form.Label>
@@ -104,7 +119,6 @@ let regUrl
                   </Form.Group>
                 </>
               ) : (
-                // Login form fields
                 <>
                   <Form.Group controlId="loginUsername">
                     <Form.Label>Username</Form.Label>
@@ -133,5 +147,3 @@ let regUrl
     </Modal>
   );
 }
-
-export default LoginRegisterModal;
