@@ -59,6 +59,8 @@ export default function LoginRegisterModal({
   const validate = isRegistering ? register_validate : login_validate;
 
   const handleSubmit = async (values: FormValues) => {
+
+    
     const apiUrl = isRegistering ? '/api/register' : '/api/login';
 
     try {
