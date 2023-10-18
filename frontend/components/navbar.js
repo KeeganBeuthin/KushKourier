@@ -3,6 +3,8 @@
 import React, { useState,useEffect } from 'react';
 import LoginRegisterModal from './login'; // Make sure to import the LoginModal component
 import { CapacitorHttp } from '@capacitor/core';
+import LoginModal from './LoginModal'
+import registerModal from './registerModal'
 type NavbarProps = {
 };
 
@@ -57,7 +59,7 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
           <li className="nav-item">
             <button className="btn btn-outline-light text-dark" onClick={openModal}><img src={'/person.svg'} width='20' height={20} alt="Search Icon" />Login</button>
           </li>
-          <LoginRegisterModal show={showModal} onClose={closeModal} />
+          <LoginModal show={showModal} onClose={closeModal} />
           <li className="nav-item">
             <a className="nav-link" href="#">About</a>
           </li>

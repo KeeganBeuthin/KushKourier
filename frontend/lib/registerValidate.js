@@ -1,18 +1,18 @@
 // @flow
 
 type Values = {
-    registerUsername: string,
-    registerEmail: string,
-    registerPassword: string,
-    registerCpassword: string,
+    registerUsername: string | void,
+    registerEmail: string | void,
+    registerPassword: string | void,
+    registerCpassword: string | void,
 
   };
   
   type Errors = {
-    registerUsername?: string,
-    registerEmail?: string,
-    registerPassword?: string,
-    registerCpassword?: string,
+    registerUsername?: string | void,
+    registerEmail?: string | void,
+    registerPassword?: string | void,
+    registerCpassword?: string | void,
     
   };
   

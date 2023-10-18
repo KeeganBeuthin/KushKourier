@@ -1,13 +1,13 @@
 // @flow
 
 type Values = {
-    loginUsername: string,
-    loginPassword: string,
+    loginUsername: string | void,
+    loginPassword: string | void,
   };
   
   type Errors = {
-    loginUsername?: string,
-    loginPassword?: string,
+    loginUsername?: string | void,
+    loginPassword?: string | void,
   };
   
   export default function login_validate(values: Values): Errors {

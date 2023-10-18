@@ -1,9 +1,10 @@
 [ignore]
 .*/**/malformed_package_json/package.json
+
 [include]
 
 [libs]
-
+./flow-typed
 [lints]
 
 [options]
@@ -11,4 +12,6 @@
 [strict]
 
 [declarations]
-<PROJECT_ROOT>/node_modules/resolve/.*
+./node_modules/resolve/.*
+[version]
+^0.219.0
