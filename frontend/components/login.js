@@ -60,7 +60,7 @@ export default function LoginRegisterModal({
 
   const handleSubmit = async (values: FormValues) => {
 
-    
+
     const apiUrl = isRegistering ? '/api/register' : '/api/login';
 
     try {
@@ -78,11 +78,10 @@ export default function LoginRegisterModal({
       } else {
         console.log(response);
         console.error(isRegistering ? 'Registration request failed' : 'Login request failed');
-        // Handle registration/login failure, e.g., display an error message
+       
       }
     } catch (error) {
       console.error(isRegistering ? 'Registration request error' : 'Login request error', error);
-      // Handle network error or other unexpected issues
     }
 
     onClose();
