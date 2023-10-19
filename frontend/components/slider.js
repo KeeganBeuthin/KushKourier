@@ -1,7 +1,7 @@
 import React from 'react';
 const Slider = () => {
     return (
-        <div className="border-bottom  pt-4 pb-4 shadow-lg " style={{ height: 210 }}>
+        <div className="border-bottom  pt-4 pb-4" style={{ height: 210 }}>
             <h2 className="container pb-2">Shop by category</h2>
             <div className="container d-flex justify-content-between overflow-auto mx-auto pb-sm " style={{ height: 150, }}>
                 {/* Category 1 (Hemp CBD) */}
@@ -11,7 +11,7 @@ const Slider = () => {
                         className="d-block text-center"
                         data-testid="Hemp CBD-products-category"
                     >
-                        <div className="rounded-circle overflow-hidden mb-lg shadow-lg " style={{ isolation: 'isolate' }}>
+                        <div className="rounded-circle overflow-hidden mb-lg" style={{ isolation: 'isolate' }}>
                             <div
                                 className="image-container block ratio ratio-1x1 position-relative overflow-hidden "
                                 data-testid="image-container"
@@ -35,7 +35,7 @@ const Slider = () => {
                         className="d-block text-center"
                         data-testid="Delta-8 THC-products-category"
                     >
-                        <div className="rounded-circle overflow-hidden mb-lg shadow-lg" style={{ isolation: 'isolate' }}>
+                        <div className="rounded-circle overflow-hidden mb-lg" style={{ isolation: 'isolate' }}>
                             <div
                                 className="image-container block ratio ratio-1x1 position-relative overflow-hidden"
                                 data-testid="image-container"
@@ -61,7 +61,7 @@ const Slider = () => {
                         className="d-block text-center"
                         data-testid="Growing-products-category"
                     >
-                        <div className="rounded-circle overflow-hidden mb-lg shadow-lg" style={{ isolation: 'isolate' }}>
+                        <div className="rounded-circle overflow-hidden mb-lg" style={{ isolation: 'isolate' }}>
                             <div
                                 className="image-container block ratio ratio-1x1 position-relative overflow-hidden"
                                 data-testid="image-container"
@@ -85,7 +85,7 @@ const Slider = () => {
                         className="d-block text-center"
                         data-testid="Edibles-products-category"
                     >
-                        <div className="rounded-circle overflow-hidden mb-lg shadow-lg" style={{ isolation: 'isolate' }}>
+                        <div className="rounded-circle overflow-hidden mb-lg" style={{ isolation: 'isolate' }}>
                             <div
                                 className="image-container block ratio ratio-1x1 position-relative overflow-hidden"
                                 data-testid="image-container"
@@ -109,7 +109,7 @@ const Slider = () => {
                         className="d-block text-center"
                         data-testid="Vaping-products-category"
                     >
-                        <div className="rounded-circle overflow-hidden mb-lg shadow-lg" style={{ isolation: 'isolate' }}>
+                        <div className="rounded-circle overflow-hidden mb-lg" style={{ isolation: 'isolate' }}>
                             <div
                                 className="image-container block ratio ratio-1x1 position-relative overflow-hidden"
                                 data-testid="image-container"
@@ -133,7 +133,7 @@ const Slider = () => {
                         className="d-block text-center"
                         data-testid="Flower-products-category"
                     >
-                        <div className="rounded-circle overflow-hidden mb-lg shadow-lg" style={{ isolation: 'isolate' }}>
+                        <div className="rounded-circle overflow-hidden mb-lg " style={{ isolation: 'isolate' }}>
                             <div
                                 className="image-container block ratio ratio-1x1 position-relative overflow-hidden"
                                 data-testid="image-container"
@@ -157,7 +157,7 @@ const Slider = () => {
                         className="d-block text-center"
                         data-testid="Pre-rolls-products-category"
                     >
-                        <div className="rounded-circle overflow-hidden mb-lg shadow-lg" style={{ isolation: 'isolate' }}>
+                        <div className="rounded-circle overflow-hidden mb-lg" style={{ isolation: 'isolate' }}>
                             <div
                                 className="image-container block ratio ratio-1x1 position-relative overflow-hidden"
                                 data-testid="image-container"

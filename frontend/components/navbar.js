@@ -12,7 +12,7 @@ type NavbarProps = {
 
 const Navbar = (props: NavbarProps): React$Element<any> => {
   const [auth, setAuth] = useState(false);
-  
+
   const dispatch = useDispatch();
   
   const [activeModal, setActiveModal] = useState('login');
@@ -70,7 +70,7 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
         <li className="nav-item">
             {auth ? (
              <li className="nav-item">
-             <a className="nav-link Lgreen" href="/profile">hello {username}!</a>
+             <a className="nav-link Lgreen" href="/user">hello {username}!</a>
            </li>
             ) : (
               <button className="btn btn-outline-light text-dark" onClick={() => openModal('login')}>
@@ -89,10 +89,10 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
             </li>
           )}
           <li className="nav-item">
-            <a className="nav-link Lgreen" href="#">About</a>
+            <a className="nav-link Lgreen" href="/shop">Products</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link Lgreen" href="#">Services</a>
+            <a className="nav-link Lgreen" href="#">services</a>
           </li>
           <li className="nav-item">
             <a className="nav-link Lgreen" href="#">Contact</a>
