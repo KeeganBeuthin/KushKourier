@@ -1,3 +1,4 @@
+//@flow
 const cors = require('cors');
 const postgres = require('postgres')
 const OpenAPIBackend = require('openapi-backend').default;
@@ -323,6 +324,7 @@ req.session.userId= id
       }
     },
      cookieValidate: async (c, req, res) =>{
+
       const session = req.session.id
 
       const cookies = req.headers.cookie;

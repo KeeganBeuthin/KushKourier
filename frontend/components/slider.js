@@ -1,3 +1,4 @@
+import React from 'react';
 const Slider = () => {
     return (
         <div className="border-bottom  pt-4 pb-4 shadow-lg " style={{ height: 210 }}>

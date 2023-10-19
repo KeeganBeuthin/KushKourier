@@ -1,5 +1,5 @@
 import Carousel from "react-multi-carousel";
-
+import React from 'react';
 const Product =()=>{
 
 <Carousel >

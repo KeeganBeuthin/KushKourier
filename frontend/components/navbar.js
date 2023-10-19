@@ -4,13 +4,13 @@ import React, { useState,useEffect } from 'react';
 import LoginRegisterModal from './login'; // Make sure to import the LoginModal component
 import { CapacitorHttp } from '@capacitor/core';
 import LoginModal from './LoginModal'
-import registerModal from './registerModal'
+import RegisterModal from './registerModal'
 type NavbarProps = {
 };
 
 const Navbar = (props: NavbarProps): React$Element<any> => {
   const [auth, setAuth] = useState(false);
-
+  const [activeModal, setActiveModal] = useState('login');
   useEffect(() => {
     // Function to send a request to the '/api/cookieVal' endpoint
     const fetchData = async () => {
@@ -29,15 +29,15 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
       }
     };
 
-    fetchData(); // Call the fetchData function when the component mounts
+    fetchData(); 
   }, []);
 
   const [showModal, setShowModal] = useState(false);
 
-  // Function to open the modal
-  const openModal = () => {
+  const openModal = (modalType: string) => {
     setShowModal(true);
-  };
+    setActiveModal(modalType);
+  }; 
 
   // Function to close the modal
   const closeModal = () => {
@@ -57,9 +57,16 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav mx-3">
           <li className="nav-item">
-            <button className="btn btn-outline-light text-dark" onClick={openModal}><img src={'/person.svg'} width='20' height={20} alt="Search Icon" />Login</button>
-          </li>
-          <LoginModal show={showModal} onClose={closeModal} />
+          <button className="btn btn-outline-light text-dark" onClick={() => openModal('login')}>
+            <img src={'/person.svg'} width='20' height={20} alt="Search Icon" />
+            {activeModal === 'login' ? 'Login' : 'login'}
+          </button>
+        </li>
+        {activeModal === 'login' ? (
+          <LoginModal show={showModal} onClose={closeModal} switchForm={() => openModal('register')} />
+        ) : (
+          <RegisterModal show={showModal} onClose={closeModal} switchForm={() => openModal('login')} />
+        )}
           <li className="nav-item">
             <a className="nav-link" href="#">About</a>
           </li>

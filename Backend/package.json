@@ -23,11 +23,11 @@
     "redis": "^4.6.10"
   },
   "devDependencies": {
-    "@babel/cli": "^7.22.15",
-    "@babel/core": "^7.22.20",
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.2",
     "@babel/preset-flow": "^7.22.15",
     "axios": "^0.21.1",
-    "flow-bin": "^0.216.1",
+    "flow-bin": "^0.219.0",
     "jest": "^29.3.1",
     "wait-on": "^3.2.0"
   }

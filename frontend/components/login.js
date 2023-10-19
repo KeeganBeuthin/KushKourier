@@ -1,4 +1,4 @@
-// @flow
+
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage,  } from 'formik';
