@@ -131,6 +131,11 @@ const api = new OpenAPIBackend({
       const userCheck = await sql`
       select * from accounts where username=${loginUsername}
       `
+     
+const emailvalue = await sql`
+select email from accounts where username=${loginUsername} 
+`
+const email = emailvalue[0].email
 
 
       if (!userCheck) {
@@ -139,7 +144,7 @@ const api = new OpenAPIBackend({
 
 
       const hash = await sql`
-select password from accounts where username=${loginUsername}
+select password from accounts where email=${email}
 `
 
 
@@ -149,17 +154,19 @@ select password from accounts where username=${loginUsername}
 
 
       const passwordCheck = await bcrypt.compare(loginPassword, hash[0].password)
-
+   
 
       const id = await sql`
-      select  user_id from accounts where username=${loginUsername}
+      select user_id from accounts where email=${email}
       `
+console.log(id)
 
 const sessionId = req.session.id
 
 
 req.session.userId= id
-     
+
+     console.log(req.session.userId)
       req.session.save(function (err) {
         if (err) return (err)
         
@@ -331,9 +338,20 @@ req.session.userId= id
 
   
       const sessionData = await redisClient.get(`SessionStore:${session}`)
+      if(!sessionData){
+        return res.status(500).json({error: 'session data not found'})
+      }
+      const id = JSON.parse(sessionData)
       
-      console.log('session:',sessionData)
-      return res.status(200).json({success: 'user Validated'})
+      const identifierNum = id.userId[0].user_id
+    
+      const userInfo = await sql`
+      select email,username from accounts where user_id =${identifierNum}
+      `
+
+      const package = userInfo[0]
+      console.log(package)
+      return res.status(200).json({package})
 
      },
     validationFail: async (c, req, res) => res.status(400).json({ err: c.validation.errors }),

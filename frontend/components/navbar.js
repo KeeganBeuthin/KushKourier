@@ -1,18 +1,28 @@
 // @flow
 
 import React, { useState,useEffect } from 'react';
-import LoginRegisterModal from './login'; // Make sure to import the LoginModal component
+import LoginRegisterModal from './login';
 import { CapacitorHttp } from '@capacitor/core';
 import LoginModal from './LoginModal'
+import { useDispatch, useSelector } from 'react-redux';
+import { setUsername, setEmail } from '../redux/userSlice';
 import RegisterModal from './registerModal'
 type NavbarProps = {
 };
 
 const Navbar = (props: NavbarProps): React$Element<any> => {
   const [auth, setAuth] = useState(false);
+  
+  const dispatch = useDispatch();
+  
   const [activeModal, setActiveModal] = useState('login');
+
+  const username = useSelector((state) => state.user.username); 
+
+  const email = useSelector((state) => state.user.email); 
+
   useEffect(() => {
-    // Function to send a request to the '/api/cookieVal' endpoint
+
     const fetchData = async () => {
       const apiUrl = '/api/cookieVal';
       try {
@@ -21,8 +31,12 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
           headers: { 'Content-Type': 'application/json', 'credentials': 'include' },
         };
         const response = await CapacitorHttp.post(options);
-        if (response.status === 200) {
+        if(response.status===200) {
+         
+          dispatch(setUsername(response.data.package.username));
+          dispatch(setEmail(response.data.package.email));
           setAuth(true);
+          
         }
       } catch {
         console.log('An error occurred');
@@ -30,7 +44,7 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
     };
 
     fetchData(); 
-  }, []);
+  }, [dispatch]);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -39,7 +53,7 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
     setActiveModal(modalType);
   }; 
 
-  // Function to close the modal
+  
   const closeModal = () => {
     setShowModal(false);
   };
@@ -48,33 +62,40 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
     <nav className="navbar navbar-expand-lg navbar-light Fgreen shadow-lg">
       <img src="/kushman.png" alt="weed leaf" className="col-md-1 mx-1 d-block mw-100 mh-300 logo-image" />
       <a className="navbar-brand Lgreen d-inline-flex fs-1 pacifico" href="/home">Kush Kourier</a>
-
       <button className="navbar-toggler ps-sm-2" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>
-
-
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav mx-3">
+        <li className="nav-item">
+            {auth ? (
+             <li className="nav-item">
+             <a className="nav-link Lgreen" href="/profile">hello {username}!</a>
+           </li>
+            ) : (
+              <button className="btn btn-outline-light text-dark" onClick={() => openModal('login')}>
+                <img src={'/person.svg'} width="20" height={20} alt="Search Icon" />
+                {activeModal === 'login' ? 'Login' : 'login'}
+              </button>
+            )}
+          </li>
+          {auth ? null : (
+            <li className="nav-item">
+              {activeModal === 'login' ? (
+                <LoginModal show={showModal} onClose={closeModal} switchForm={() => openModal('register')} />
+              ) : (
+                <RegisterModal show={showModal} onClose={closeModal} switchForm={() => openModal('login')} />
+              )}
+            </li>
+          )}
           <li className="nav-item">
-          <button className="btn btn-outline-light text-dark" onClick={() => openModal('login')}>
-            <img src={'/person.svg'} width='20' height={20} alt="Search Icon" />
-            {activeModal === 'login' ? 'Login' : 'login'}
-          </button>
-        </li>
-        {activeModal === 'login' ? (
-          <LoginModal show={showModal} onClose={closeModal} switchForm={() => openModal('register')} />
-        ) : (
-          <RegisterModal show={showModal} onClose={closeModal} switchForm={() => openModal('login')} />
-        )}
-          <li className="nav-item">
-            <a className="nav-link" href="#">About</a>
+            <a className="nav-link Lgreen" href="#">About</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#">Services</a>
+            <a className="nav-link Lgreen" href="#">Services</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#">Contact</a>
+            <a className="nav-link Lgreen" href="#">Contact</a>
           </li>
         </ul>
 
