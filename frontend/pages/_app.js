@@ -15,7 +15,7 @@ type CustomAppProps = {
 };
 
 
-export default function MyApp({ Component, pageProps }: CustomAppProps)  {
+export default function MyApp({ Component, pageProps }: CustomAppProps): React$Element<any>  {
   return (
     <>
       <Head />
