@@ -14,4 +14,4 @@
 [declarations]
 ./node_modules/resolve/.*
 [version]
-^0.219.0
+^0.216.1

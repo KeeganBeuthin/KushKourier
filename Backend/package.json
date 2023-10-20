@@ -6,7 +6,7 @@
   "license": "MIT",
   "keywords": [],
   "scripts": {
-    "start": "node index.js",
+    "start": "node server.js",
     "test": "jest",
     "flow": "flow"
   },
