@@ -208,6 +208,30 @@ module.exports = {
             },
           },
         },
+        post: {
+          operationId: 'updateUserName',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    username: { type: 'string' },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'User updated successfully',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
       },
       '/api/users/{userId}': {
         get: {
@@ -229,40 +253,7 @@ module.exports = {
             },
           },
         },
-        put: {
-          operationId: 'updateUser',
-          parameters: [
-            {
-              name: 'userId',
-              in: 'path',
-              required: true,
-              schema: { type: 'integer' },
-            },
-          ],
-          requestBody: {
-            required: true,
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    username: { type: 'string' },
-                    email: { type: 'string' },
-                    password: { type: 'string' },
-                  },
-                },
-              },
-            },
-          },
-          responses: {
-            '200': {
-              description: 'User updated successfully',
-            },
-            '400': {
-              description: 'Bad Request',
-            },
-          },
-        },
+        
         delete: {
           operationId: 'deleteUser',
           parameters: [

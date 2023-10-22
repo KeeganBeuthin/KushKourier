@@ -1,3 +1,4 @@
+//@flow
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
@@ -21,12 +22,36 @@ const ProfilePage = () => {
     // You can use formData to send updates to the server
   };
 
+  const handleUsernameSubmit = () => {
+    // Send a POST request with the username value to /api/users
+    fetch('/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username: formData.username }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          // Handle success, e.g., show a success message to the user
+          console.log('Username updated successfully');
+        } else {
+          // Handle errors, e.g., show an error message to the user
+          console.error('Failed to update username');
+        }
+      })
+      .catch((error) => {
+        // Handle network errors, e.g., show an error message to the user
+        console.error('Network error:', error);
+      });
+  };
+
   return (
     <Container className="mt-4">
       <Row>
         <Col md={6}>
           <h1>Edit Profile</h1>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleUsernameSubmit}>
             <Form.Group controlId="username">
               <Form.Label>Username</Form.Label>
               <Form.Control

@@ -1,104 +1,28 @@
+//@flow
+const cors = require('cors');
+const postgres = require('postgres')
+const OpenAPIBackend = require('openapi-backend').default;
+const express = require('express');
+const session = require('express-session');
+const RedisStore = require('connect-redis').default
+const bcrypt = require('bcrypt');
+const { createClient } = require('redis');
+const cookieParser = require('cookie-parser');
+const app = express();
+const sql = postgres('postgres://postgres:hahaha@127.0.0.1:8080/rat')
+import { Request, Response } from 'express';
+let redisClient = createClient()
+redisClient.connect().catch(console.error)
 
+let redisStore = new RedisStore({
+  client: redisClient,
+  prefix: "SessionStore:",
+})
 
 module.exports = {
-    loginUser: async (c, req, res) => {
-
-      const { loginUsername, loginPassword } = req.body;
-
-
-      const userCheck = await sql`
-      select * from accounts where username=${loginUsername}
-      `
-     
-const emailvalue = await sql`
-select email from accounts where username=${loginUsername} 
-`
-const email = emailvalue[0].email
-
-
-      if (!userCheck) {
-        return res.status(400).json({ error: 'invalid user information' })
-      }
-
-
-      const hash = await sql`
-select password from accounts where email=${email}
-`
-
-
-      if (!hash) {
-        return res.status(400).json({ error: 'password select failed' })
-      }
-
-
-      const passwordCheck = await bcrypt.compare(loginPassword, hash[0].password)
-   
-
-      const id = await sql`
-      select user_id from accounts where email=${email}
-      `
-console.log(id)
-
-const sessionId = req.session.id
-
-
-req.session.userId= id
-
-     console.log(req.session.userId)
-      req.session.save(function (err) {
-        if (err) return (err)
-        
-        console.log('session saved')
-        return res.status(200).json({sessionId})
-      })   
-      
-      
-    },
-
-
-    registerUser: async (c, req, res) => {
-      const { registerUsername, registerEmail, registerPassword, registerCpassword } = req.body;
-
-
-      if (!registerUsername || !registerCpassword || !registerEmail || !registerPassword) {
-        return res.status(400).json({ error: 'incorrect info' })
-      }
-
-
-      const usercheck = await sql`
-      SELECT * FROM accounts WHERE username =${registerUsername}`
-
-
-      const emailCheck = await sql`
-      SELECT * FROM accounts WHERE email =${registerEmail}`
-
-
-      if (registerPassword !== registerCpassword) {
-        console.log('password match failed')
-        return res.status(400).json({ error: 'password match failed' })
-      }
-
-
-      if (emailCheck.length === 1) {
-        console.log('email already exists')
-        return res.status(400).json({ error: 'email already exists' })
-      }
-
-
-      const hashPassword = await bcrypt.hash(registerPassword, 13)
-
-
-      const result = await sql`
-      INSERT INTO accounts (username,email,password,created_on) VALUES (${registerUsername},${registerEmail},${hashPassword},now())
-    `
-
-      console.log(`new user created with username ${registerUsername} and email ${registerEmail}`)
-
-
-      return res.status(200).json({ registerUsername, registerEmail })
-    },
+    //cart
     
-    addToCart: async (c, req, res) => {
+    addToCart: async (c: any, req: Request, res: Response): Promise<void> => {
       const { user_id, product_id, quantity, price } = req.body;
     
 
@@ -208,6 +132,10 @@ req.session.userId= id
         return res.status(500).json({ error: 'Server error' });
       }
     },
+
+    //cookies
+
+
      cookieValidate: async (c, req, res) =>{
 
       const session = req.session.id
@@ -232,9 +160,12 @@ req.session.userId= id
       return res.status(200).json({package})
 
      },
+
+     //products
+
      updateProduct: async (c, req, res) =>{
      const id = c.request.params.productId
-
+     
      console.log(id)
   
      },
@@ -252,6 +183,130 @@ req.session.userId= id
         select * from products where product_id=${id}
         `
         return res.status(200).json({product})
+        },
+
+        //user manipulation
+
+
+        loginUser: async (c, req, res) => {
+
+          const { loginUsername, loginPassword } = req.body;
+    
+    
+          const userCheck = await sql`
+          select * from accounts where username=${loginUsername}
+          `
+         
+    const emailvalue = await sql`
+    select email from accounts where username=${loginUsername} 
+    `
+    const email = emailvalue[0].email
+    
+    
+          if (!userCheck) {
+            return res.status(400).json({ error: 'invalid user information' })
+          }
+    
+    
+          const hash = await sql`
+    select password from accounts where email=${email}
+    `
+    
+    
+          if (!hash) {
+            return res.status(400).json({ error: 'password select failed' })
+          }
+    
+    
+          const passwordCheck = await bcrypt.compare(loginPassword, hash[0].password)
+       
+    
+          const id = await sql`
+          select user_id from accounts where email=${email}
+          `
+    console.log(id)
+    
+    const sessionId = req.session.id
+    
+    
+    req.session.userId= id
+    
+         console.log(req.session.userId)
+          req.session.save(function (err) {
+            if (err) return (err)
+            
+            console.log('session saved')
+            return res.status(200).json({sessionId})
+          })   
+          
+          
+        },
+    
+    
+        registerUser: async (c, req, res) => {
+          const { registerUsername, registerEmail, registerPassword, registerCpassword } = req.body;
+    
+    
+          if (!registerUsername || !registerCpassword || !registerEmail || !registerPassword) {
+            return res.status(400).json({ error: 'incorrect info' })
+          }
+    
+    
+          const usercheck = await sql`
+          SELECT * FROM accounts WHERE username =${registerUsername}`
+    
+    
+          const emailCheck = await sql`
+          SELECT * FROM accounts WHERE email =${registerEmail}`
+    
+    
+          if (registerPassword !== registerCpassword) {
+            console.log('password match failed')
+            return res.status(400).json({ error: 'password match failed' })
+          }
+    
+    
+          if (emailCheck.length === 1) {
+            console.log('email already exists')
+            return res.status(400).json({ error: 'email already exists' })
+          }
+    
+    
+          const hashPassword = await bcrypt.hash(registerPassword, 13)
+    
+    
+          const result = await sql`
+          INSERT INTO accounts (username,email,password,created_on) VALUES (${registerUsername},${registerEmail},${hashPassword},now())
+        `
+    
+          console.log(`new user created with username ${registerUsername} and email ${registerEmail}`)
+    
+    
+          return res.status(200).json({ registerUsername, registerEmail })
+        },
+
+        updateUserName: async (c,req,res) => {
+          const session = req.session.id
+      const newUsername = req.body.username
+console.log(newUsername)
+          if (!session){
+            return res.status(400).json({error: 'session not found'})
+          }
+
+
+          const sessionData = await redisClient.get(`SessionStore:${session}`)
+          if(!sessionData){
+            return res.status(500).json({error: 'session data not found'})
+          }
+
+          const id = JSON.parse(sessionData)
+      
+          const identifierNum = id.userId[0].user_id
+        
+          const userInfo = await sql`
+        update accounts set username=${newUsername} where user_id=${identifierNum}
+          `
+          return res.status(200).json({success: 'username changed'})
         },
     validationFail: async (c, req, res) => res.status(400).json({ err: c.validation.errors }),
     notFound: async (c, req, res) => res.status(404).json({ err: 'not found' }),
