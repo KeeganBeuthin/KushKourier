@@ -8,18 +8,13 @@ module.exports = {
     paths: {
       '/api/login': {
         post: {
-          operationId: 'loginUser', // Define the operationId
+          operationId: 'loginUser',
           requestBody: {
             required: true,
             content: {
               'application/json': {
                 schema: {
-                  // Define the request body schema for the login endpoint
-                  type: 'object',
-                  properties: {
-                    username: { type: 'string' },
-                    password: { type: 'string' },
-                  },
+                  $ref: '#/components/schemas/user', 
                 },
               },
             },
@@ -36,20 +31,13 @@ module.exports = {
       },
       '/api/register': {
         post: {
-          operationId: 'registerUser', // Define the operationId
+          operationId: 'registerUser', 
           requestBody: {
             required: true,
             content: {
               'application/json': {
                 schema: {
-                  // Define the request body schema for the register endpoint
-                  type: 'object',
-                  properties: {
-                    username: { type: 'string' },
-                    email: { type: 'string' },
-                    password: { type: 'string' },
-                    cpassword: { type: 'string' }
-                  },
+                  $ref: '#/components/schemas/user', 
                 },
               },
             },
@@ -85,14 +73,7 @@ module.exports = {
             content: {
               'application/json': {
                 schema: {
-                  type: 'object',
-                  properties: {
-                    productName: { type: 'string' },
-                    price: { type: 'number' },
-                    stock: { type: 'integer' },
-                    category: { type: 'string' },
-                    discount: { type: 'number' },
-                  },
+                  $ref: '#/components/schemas/product', 
                 },
               },
             },
@@ -121,14 +102,7 @@ module.exports = {
             content: {
               'application/json': {
                 schema: {
-                  type: 'object',
-                  properties: {
-                    productName: { type: 'string' },
-                    price: { type: 'number' },
-                    stock: { type: 'integer' },
-                    category: { type: 'string' },
-                    discount: { type: 'number' },
-                  },
+                  $ref: '#/components/schemas/product', 
                 },
               },
             },
@@ -215,10 +189,7 @@ module.exports = {
             content: {
               'application/json': {
                 schema: {
-                  type: 'object',
-                  properties: {
-                    username: { type: 'string' },
-                  },
+                  $ref: '#/components/schemas/user', 
                 },
               },
             },
@@ -274,9 +245,50 @@ module.exports = {
           },
         },
       },
-
     },
+    components: {
+     schemas: {
+      user: {
+       type: 'object',
+       properties: {
+        username: {
+         type: 'string'
+         },
+         password: {
+          type: 'string'
+        },
+         email: {
+          type: 'string'
+       },
+       cpassword: {
+        type: 'string'
+       },
+
+      }
+     },
+     product: {
+      type: 'object',
+      properties: {
+        product_name: {
+        type: 'string'
+        },
+        price: {
+          type: 'integer'
+        },
+        stock: {
+          type: 'integer'
+        },
+        category: {
+          type: 'string'
+        },
+        discount: {
+          type: 'integer'
+        }
+      }
+     }
+   }
   }
+ }
 
 
 

@@ -1,4 +1,4 @@
-//@flow
+
 const cors = require('cors');
 const postgres = require('postgres')
 const OpenAPIBackend = require('openapi-backend').default;
@@ -11,6 +11,9 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const sql = postgres('postgres://postgres:hahaha@127.0.0.1:8080/rat')
 import { Request, Response } from 'express';
+
+
+
 let redisClient = createClient()
 redisClient.connect().catch(console.error)
 
@@ -19,10 +22,11 @@ let redisStore = new RedisStore({
   prefix: "SessionStore:",
 })
 
+
 module.exports = {
     //cart
     
-    addToCart: async (c: any, req: Request, res: Response): Promise<void> => {
+    addToCart: async (c, req, res) => {
       const { user_id, product_id, quantity, price } = req.body;
     
 
