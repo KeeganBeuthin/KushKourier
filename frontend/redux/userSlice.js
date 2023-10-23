@@ -6,13 +6,17 @@ const userSlice = createSlice({
   initialState: {
     username: '',
     email: '',
+    legalName: ''
   },
   reducers: {
     setUsername: (state, action) => {
-      state.username = action.payload; // Update the username field
+      state.username = action.payload; 
     },
     setEmail: (state, action) => {
-      state.email = action.payload; // Update the email field
+      state.email = action.payload; 
+    },
+    setName: (state, action) => {
+      state.legalName = action.payload; 
     },
   },
 });

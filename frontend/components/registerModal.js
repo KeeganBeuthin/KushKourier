@@ -16,6 +16,7 @@ type RegisterValues = {
   registerEmail: string | void;
   registerPassword: string | void;
   registerCpassword: string | void;
+  registerLegalName: string | void;
 };
 
 const RegisterModal = ({ show, onClose,switchForm}: RegisterModalProps ): React$Element<any> => {
@@ -24,6 +25,7 @@ const RegisterModal = ({ show, onClose,switchForm}: RegisterModalProps ): React$
     registerEmail: '',
     registerPassword: '',
     registerCpassword: '',
+    registerLegalName: '',
   };
 
   const handleSubmit = async (values: RegisterValues) => {
@@ -33,7 +35,7 @@ const RegisterModal = ({ show, onClose,switchForm}: RegisterModalProps ): React$
     try {
       const options = {
         url: apiUrl,
-        headers: { 'Content-Type': 'application/json', credentials: 'include' },
+        headers: { 'Content-Type': 'application/json', 'credentials': 'include' },
         data: JSON.stringify(values),
       };
 
@@ -71,9 +73,14 @@ const RegisterModal = ({ show, onClose,switchForm}: RegisterModalProps ): React$
                     <Field type="text" name="registerUsername" as={Form.Control} placeholder="Enter username" />
                     <ErrorMessage name="registerUsername" component="div" className="text-danger" />
                   </Form.Group>
+                  <Form.Group controlId="registerLegalName">
+                    <Form.Label>Full Name</Form.Label>
+                    <Field type="text" name="registerLegalName" as={Form.Control} placeholder="Michael Jordan" />
+                    <ErrorMessage name="registerLegalName" component="div" className="text-danger" />
+                  </Form.Group>
                   <Form.Group controlId="registerEmail">
                     <Form.Label>Email</Form.Label>
-                    <Field type="email" name="registerEmail" as={Form.Control} placeholder="Enter email" />
+                    <Field type="email" name="registerEmail" as={Form.Control} placeholder="someboy@example.com" />
                     <ErrorMessage name="registerEmail" component="div" className="text-danger" />
                   </Form.Group>
                   <Form.Group controlId="registerPassword">
@@ -86,6 +93,7 @@ const RegisterModal = ({ show, onClose,switchForm}: RegisterModalProps ): React$
                     <Field type="password" name="registerCpassword" as={Form.Control} placeholder="Confirm password" />
                     <ErrorMessage name="registerCpassword" component="div" className="text-danger" />
                   </Form.Group>
+                  
                 </>
               <Modal.Footer>
                 <Button variant="secondary" onClick={switchForm}>

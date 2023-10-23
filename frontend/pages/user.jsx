@@ -9,8 +9,37 @@ import Card from '../components/card';
 import ProductRow from '../components/productRow';
 import ProductPage from '../components/productPage'
 import ProfilePage from '../components/profile'
+import { useRouter } from 'next/router';
+
+
 type UserProps = {};
 const User = (props: UserProps): React$Element<any> => {
+
+
+  
+
+    const router = useRouter();
+
+    useEffect(() => {
+     
+      fetch('/api/cookieVal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => {
+          if (response.status === 500) {
+            router.push('/home');
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }, [router]);
+  
+
+
     return (
         <>
             <Navbar />

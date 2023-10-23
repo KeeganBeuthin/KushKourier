@@ -10,7 +10,6 @@ const { createClient } = require('redis');
 const cookieParser = require('cookie-parser');
 const app = express();
 const sql = postgres('postgres://postgres:hahaha@127.0.0.1:8080/rat')
-import { Request, Response } from 'express';
 
 
 
@@ -248,10 +247,10 @@ module.exports = {
     
     
         registerUser: async (c, req, res) => {
-          const { registerUsername, registerEmail, registerPassword, registerCpassword } = req.body;
+          const { registerUsername, registerEmail, registerPassword, registerCpassword, registerLegalName } = req.body;
     
     
-          if (!registerUsername || !registerCpassword || !registerEmail || !registerPassword) {
+          if (!registerUsername || !registerCpassword || !registerEmail || !registerPassword || !registerLegalName) {
             return res.status(400).json({ error: 'incorrect info' })
           }
     
@@ -280,19 +279,36 @@ module.exports = {
     
     
           const result = await sql`
-          INSERT INTO accounts (username,email,password,created_on) VALUES (${registerUsername},${registerEmail},${hashPassword},now())
+          INSERT INTO accounts (username,email,password,created_on,legal_name) VALUES (${registerUsername},${registerEmail},${hashPassword},now(),${registerLegalName})
         `
     
           console.log(`new user created with username ${registerUsername} and email ${registerEmail}`)
+
+          
+          const id = await sql`
+          select user_id from accounts where email=${registerEmail}
+          `
+
+          const sessionId = req.session.id
     
     
-          return res.status(200).json({ registerUsername, registerEmail })
+          req.session.userId= id
+          
+               console.log(req.session.userId)
+                req.session.save(function (err) {
+                  if (err) return (err)
+                  
+                  console.log('session saved')
+                  return res.status(200).json({sessionId})
+                })   
+    
         },
 
         updateUserName: async (c,req,res) => {
           const session = req.session.id
       const newUsername = req.body.username
 console.log(newUsername)
+
           if (!session){
             return res.status(400).json({error: 'session not found'})
           }

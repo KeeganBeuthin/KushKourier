@@ -23,12 +23,12 @@ const LoginModal = ({ show, onClose, switchForm }: LoginModalProps): React$Eleme
   };
 
   const handleSubmit = async (values: LoginValues) => {
-    const apiUrl = '/api/login';
+    const apiUrl:string = '/api/login';
 
     try {
       const options = {
         url: apiUrl,
-        headers: { 'Content-Type': 'application/json', credentials: 'include' },
+        headers: { 'Content-Type': 'application/json', 'credentials': 'include' },
         data: JSON.stringify(values),
       };
 

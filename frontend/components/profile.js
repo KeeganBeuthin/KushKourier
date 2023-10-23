@@ -1,29 +1,19 @@
-//@flow
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { validateProfile } from '../lib/profileValidate';
+import { Formik, Field, ErrorMessage } from 'formik';
+import type { FormikProps } from 'formik'; 
 
 const ProfilePage = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    newPassword: '',
-    confirmNewPassword: '',
-    email: '',
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  type profileValues ={
+     profileUsername: string,
+     profilePassword: string,
+     profileLegalName: string,
+     profileEmail: string
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Implement your logic to update user profile here
-    // You can use formData to send updates to the server
-  };
-
-  const handleUsernameSubmit = () => {
-    // Send a POST request with the username value to /api/users
+  const handleUsernameSubmit = (values: validateProfile) => {
     fetch('/api/users', {
       method: 'POST',
       headers: {
@@ -33,66 +23,75 @@ const ProfilePage = () => {
     })
       .then((response) => {
         if (response.ok) {
-          // Handle success, e.g., show a success message to the user
           console.log('Username updated successfully');
         } else {
-          // Handle errors, e.g., show an error message to the user
           console.error('Failed to update username');
         }
       })
       .catch((error) => {
-        // Handle network errors, e.g., show an error message to the user
+     
         console.error('Network error:', error);
       });
   };
 
+  const handlePasswordSubmit = () => {
+
+
+  };
+
+  const handleEmailSubmit = () => {
+
+  
+  };
+
   return (
-    <Container className="mt-4">
-      <Row>
-        <Col md={6}>
+    <Container className="mt-5 ">
+      <Row className="mt-5  d-flex justify-content-center">
+
           <h1>Edit Profile</h1>
-          <Form onSubmit={handleUsernameSubmit}>
-            <Form.Group controlId="username">
-              <Form.Label>Username</Form.Label>
+          <Form>
+            <Form.Group controlId="username" className='d-inline-flex pt-4'>
+              <Form.Label className='pe-3 pt-3'>Username</Form.Label>
               <Form.Control
                 type="text"
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
               />
+              <Button variant="primary" type="submit" onClick={handleUsernameSubmit} className='ms-3'>
+                Save Username
+              </Button>
             </Form.Group>
-            <Form.Group controlId="newPassword">
-              <Form.Label>New Password</Form.Label>
+          </Form>
+          <Form className='pt-4'>
+            <Form.Group controlId="newPassword" className='d-inline-flex pt-4'>
+              <Form.Label className='pe-3'>New Password</Form.Label>
               <Form.Control
                 type="password"
                 name="newPassword"
                 value={formData.newPassword}
                 onChange={handleChange}
               />
+              <Button variant="primary" type="submit" onClick={handlePasswordSubmit} className='ms-3'>
+                Save Password
+              </Button>
             </Form.Group>
-            <Form.Group controlId="confirmNewPassword">
-              <Form.Label>Confirm New Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="confirmNewPassword"
-                value={formData.confirmNewPassword}
-                onChange={handleChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
+          </Form>
+          <Form className='pt-4'>
+            <Form.Group controlId="email" className='d-inline-flex pt-4'>
+              <Form.Label className='pe-3 pt-3'>Email</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
               />
+              <Button variant="primary" type="submit" onClick={handleEmailSubmit}>
+                Save Email
+              </Button>
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Save Changes
-            </Button>
           </Form>
-        </Col>
+    
       </Row>
     </Container>
   );

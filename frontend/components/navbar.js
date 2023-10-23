@@ -21,6 +21,10 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
 
   const email = useSelector((state) => state.user.email); 
 
+  const name = useSelector((state) => state.user.legalName)
+
+  console.log(name)
+  
   useEffect(() => {
 
     const fetchData = async () => {
@@ -35,6 +39,7 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
          
           dispatch(setUsername(response.data.package.username));
           dispatch(setEmail(response.data.package.email));
+          dispatch(setEmail(response.data.package.legalName));
           setAuth(true);
           
         }
@@ -75,7 +80,7 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
             ) : (
               <button className="btn btn-outline-light text-dark" onClick={() => openModal('login')}>
                 <img src={'/person.svg'} width="20" height={20} alt="Search Icon" />
-                {activeModal === 'login' ? 'Login' : 'login'}
+                {activeModal === 'login' ? 'Login/Register' : 'login/Register'}
               </button>
             )}
           </li>
