@@ -204,7 +204,7 @@ module.exports = {
           },
         },
       },
-      '/api/users/{userId}': {
+      '/api/user/{userId}': {
         get: {
           operationId: 'getUserById',
           parameters: [

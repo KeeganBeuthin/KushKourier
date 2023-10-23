@@ -3,7 +3,7 @@ import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
 import { register_validate } from '../lib/registerValidate';
-import { CapacitorHttp } from '@capacitor/core';
+import {CapacitorHttp} from '@capacitor/core';
 import type { FormikProps } from 'formik'; 
 type RegisterModalProps = {
   show: boolean,
@@ -29,32 +29,30 @@ const RegisterModal = ({ show, onClose,switchForm}: RegisterModalProps ): React$
   };
 
   const handleSubmit = async (values: RegisterValues) => {
+    const apiUrl = '/api/users';
   
-    const apiUrl = '/api/register';
-
     try {
       const options = {
         url: apiUrl,
         headers: { 'Content-Type': 'application/json', 'credentials': 'include' },
         data: JSON.stringify(values),
-      };
-
+      }
+  
       const response = await CapacitorHttp.post(options);
-
+  
       if (response.status === 200) {
-        console.log('Registration successful' );
+        console.log('Registration successful');
         window.location.reload();
       } else {
         console.log(response);
         console.error('Registration request failed');
-       
       }
     } catch (error) {
-      console.error(error,'Registration request error');
+      console.error(error, 'Registration request error');
     }
-
-    onClose();
+  
   };
+  
 
   const validate = register_validate;
 
@@ -106,9 +104,13 @@ const RegisterModal = ({ show, onClose,switchForm}: RegisterModalProps ): React$
             </Form>
           )}
         </Formik>
+        
       </Modal.Body>
     </Modal>
   );
+  
 };
+
+
 
 export default RegisterModal;
