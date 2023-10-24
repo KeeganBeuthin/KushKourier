@@ -1,16 +1,15 @@
 // @flow
 
 import React, { useState,useEffect } from 'react';
-import LoginRegisterModal from './login';
 import { CapacitorHttp } from '@capacitor/core';
 import LoginModal from './LoginModal'
 import { useDispatch, useSelector } from 'react-redux';
 import { setUsername, setEmail } from '../redux/userSlice';
 import RegisterModal from './registerModal'
-type NavbarProps = {
-};
+// type NavbarProps = {
+// };
 
-const Navbar = (props: NavbarProps): React$Element<any> => {
+const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
   const [auth, setAuth] = useState(false);
 
   const dispatch = useDispatch();
@@ -19,7 +18,7 @@ const Navbar = (props: NavbarProps): React$Element<any> => {
 
   const username = useSelector((state) => state.user.username); 
 
-  const email = useSelector((state) => state.user.email); 
+  // const email = useSelector((state) => state.user.email); 
 
   const name = useSelector((state) => state.user.legalName)
 

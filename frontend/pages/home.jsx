@@ -1,16 +1,15 @@
 // @flow
 import React from 'react';
-import { useState, useRef, useEffect } from 'react';
 
 import ControlledCarousel from '../components/carousel';
 import Navbar from '../components/navbar';
 import Slider from '../components/slider';
-import Card from '../components/card';
+// import Card from '../components/card';
 import ProductRow from '../components/productRow';
 
 
 type HomeProps = {};
-const Home = (props: HomeProps): React$Element<any> => {
+const Home = (/*props: HomeProps*/): React$Element<any> => {
     return (
         <>
             <Navbar />

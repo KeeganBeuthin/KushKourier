@@ -1,6 +1,6 @@
 //@flow
 import React from 'react';
-import { AppProps } from 'next/app';
+// import { AppProps } from 'next/app';
 import Head from 'next/head';
 import Script from 'next/script';
 
@@ -32,3 +32,5 @@ export default function MyApp({ Component, pageProps }: CustomAppProps): React$E
     </>
   );
 }
+
+

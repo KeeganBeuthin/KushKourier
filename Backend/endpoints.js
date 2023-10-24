@@ -245,6 +245,52 @@ module.exports = {
           },
         },
       },
+      '/api/users/email': {
+        post: {
+          operationId: 'updateEmail',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/user', 
+                },
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'User Email updated successfully',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
+      '/api/users/name': {
+        post: {
+          operationId: 'updateLegalName',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/user', 
+                },
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'User Email updated successfully',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
     },
     components: {
      schemas: {

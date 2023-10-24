@@ -1,19 +1,20 @@
 // @flow
 import React from 'react';
-import { useState, useRef, useEffect } from 'react';
-
-import ControlledCarousel from '../components/carousel';
+ import { useEffect } from 'react';
+//  import {Container} from 'react-bootstrap';
+// import ControlledCarousel from '../components/carousel';
 import Navbar from '../components/navbar';
-import Slider from '../components/slider';
-import Card from '../components/card';
-import ProductRow from '../components/productRow';
-import ProductPage from '../components/productPage'
+// import Slider from '../components/slider';
+// import Card from '../components/card';
+// import ProductRow from '../components/productRow';
+// import ProductPage from '../components/productPage'
+
 import ProfilePage from '../components/profile'
 import { useRouter } from 'next/router';
 
 
 type UserProps = {};
-const User = (props: UserProps): React$Element<any> => {
+const User = (/*props: UserProps*/): React$Element<any> => {
 
 
   

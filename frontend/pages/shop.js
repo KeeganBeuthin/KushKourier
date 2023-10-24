@@ -1,16 +1,16 @@
 // @flow
 import React from 'react';
-import { useState, useRef, useEffect } from 'react';
+// import { useState, useRef, useEffect } from 'react';
 
-import ControlledCarousel from '../components/carousel';
+// import ControlledCarousel from '../components/carousel';
 import Navbar from '../components/navbar';
-import Slider from '../components/slider';
-import Card from '../components/card';
-import ProductRow from '../components/productRow';
+// import Slider from '../components/slider';
+// import Card from '../components/card';
+// import ProductRow from '../components/productRow';
 import ProductPage from '../components/productPage'
 
 type ShopProps = {};
-const Shop = (props: ShopProps): React$Element<any> => {
+const Shop = (/*props: ShopProps*/): React$Element<any> => {
     return (
         <>
             <Navbar />

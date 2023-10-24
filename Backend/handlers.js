@@ -306,9 +306,10 @@ module.exports = {
 
         updateUserName: async (c,req,res) => {
           const session = req.session.id
-      const newUsername = req.body.username
-console.log(newUsername)
-
+      const newUsername = req.body.profileUsername
+      const usernameString = newUsername; 
+      console.log(usernameString);
+      
           if (!session){
             return res.status(400).json({error: 'session not found'})
           }
@@ -324,10 +325,64 @@ console.log(newUsername)
           const identifierNum = id.userId[0].user_id
         
           const userInfo = await sql`
-        update accounts set username=${newUsername} where user_id=${identifierNum}
+        update accounts set username=${usernameString} where user_id=${identifierNum}
           `
           return res.status(200).json({success: 'username changed'})
         },
+
+        updateEmail: async (c,req,res) => {
+          const session = req.session.id
+      const newEmail = req.body.profileEmail
+      console.log(req.body)
+      const emailString = newEmail; 
+      console.log(emailString);
+      
+          if (!session){
+            return res.status(400).json({error: 'session not found'})
+          }
+
+
+          const sessionData = await redisClient.get(`SessionStore:${session}`)
+          if(!sessionData){
+            return res.status(500).json({error: 'session data not found'})
+          }
+
+          const id = JSON.parse(sessionData)
+      
+          const identifierNum = id.userId[0].user_id
+        
+          const userInfo = await sql`
+        update accounts set email=${emailString} where user_id=${identifierNum}
+          `
+          return res.status(200).json({success: 'username changed'})
+        },
+        updateLegalName: async (c,req,res) => {
+          const session = req.session.id
+      const newName = req.body.profileLegalName
+      console.log(req.body)
+      const nameString = newName; 
+      
+          if (!session){
+            return res.status(400).json({error: 'session not found'})
+          }
+
+
+          const sessionData = await redisClient.get(`SessionStore:${session}`)
+          if(!sessionData){
+            return res.status(500).json({error: 'session data not found'})
+          }
+
+          const id = JSON.parse(sessionData)
+      
+          const identifierNum = id.userId[0].user_id
+        
+          const userInfo = await sql`
+        update accounts set legal_name=${nameString} where user_id=${identifierNum}
+          `
+          return res.status(200).json({success: 'username changed'})
+        },
+
+
     validationFail: async (c, req, res) => res.status(400).json({ err: c.validation.errors }),
     notFound: async (c, req, res) => res.status(404).json({ err: 'not found' }),
   }

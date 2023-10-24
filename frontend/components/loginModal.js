@@ -23,7 +23,7 @@ const LoginModal = ({ show, onClose, switchForm }: LoginModalProps): React$Eleme
   };
 
   const handleSubmit = async (values: LoginValues) => {
-    const apiUrl:string = '/api/login';
+    const apiUrl: string = '/api/login';
 
     try {
       const options = {
