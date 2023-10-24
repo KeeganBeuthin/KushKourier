@@ -10,12 +10,12 @@ const validate = passVal
 
 
 type ProfileValues ={
-    profileLegalName: string | void,
+    profilePassword: string | void,
   }
   
 
   const initialValues: ProfileValues = {
-    profileLegalName:'',
+    profilePassword:'',
   };
 
 
@@ -35,10 +35,10 @@ const Form4=(): React$Element<any>=> {
                 'credentials': 'include',
                 'authorization': 'include'
               },
-              data:JSON.stringify(values)
+              body:JSON.stringify(values)
             };
         
-            const response = await CapacitorHttp(options);
+            const response = await CapacitorHttp.post(options);
       
           if (response.status === 200) {
             console.log('Registration successful');

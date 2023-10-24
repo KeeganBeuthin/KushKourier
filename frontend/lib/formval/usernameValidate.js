@@ -15,6 +15,9 @@ type Values = {
     } else if (values.profileUsername.length > 25) {
       errors.profileUsername = 'Username must be 25 characters or less';
     }
+    else if (values.profileUsername.length < 5) {
+      errors.profileUsername = 'Username must be at least 5 characters';
+    }
   
     return errors;
   }

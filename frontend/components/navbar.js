@@ -6,8 +6,21 @@ import LoginModal from './LoginModal'
 import { useDispatch, useSelector } from 'react-redux';
 import { setUsername, setEmail } from '../redux/userSlice';
 import RegisterModal from './registerModal'
+import { Capacitor } from '@capacitor/core';
 // type NavbarProps = {
 // };
+
+const isAndroid = Capacitor.getPlatform() === 'android';
+
+let client;
+
+
+if (isAndroid) {
+  client = 'http://192.168.39.115:9000/api/cookieVal';
+} else {
+  client = '/api/cookieVal';
+}
+
 
 const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
   const [auth, setAuth] = useState(false);
@@ -27,7 +40,7 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
   useEffect(() => {
 
     const fetchData = async () => {
-      const apiUrl = '/api/cookieVal';
+      const apiUrl = client;
       try {
         const options = {
           url: apiUrl,

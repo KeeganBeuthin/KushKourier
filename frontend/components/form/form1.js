@@ -6,6 +6,8 @@ import { username_validate} from '../../lib/formval/usernameValidate';
 import { Form, Button } from 'react-bootstrap';
 import { CapacitorHttp } from '@capacitor/core';
 
+
+
 const validate = username_validate
 
 
@@ -19,7 +21,7 @@ type ProfileValues ={
   };
 
 const Form1 =(): React$Element<any> => {
-
+console.log(CapacitorHttp)
     const handleSubmit = async (values: ProfileValues) => {
     
       const apiUrl = '/api/users';
@@ -35,8 +37,9 @@ const Form1 =(): React$Element<any> => {
           data:JSON.stringify(values)
         };
     
-        const response = await CapacitorHttp(options);
-    
+        const response = await CapacitorHttp.post(options);
+
+        console.log(response)
         if (response.status === 200) {
           console.log('Registration successful');
         } else {

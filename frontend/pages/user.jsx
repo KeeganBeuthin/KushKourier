@@ -11,7 +11,7 @@ import Navbar from '../components/navbar';
 
 import ProfilePage from '../components/profile'
 import { useRouter } from 'next/router';
-
+// import { CapacitorHttp } from '@capacitor/core';
 
 type UserProps = {};
 const User = (/*props: UserProps*/): React$Element<any> => {

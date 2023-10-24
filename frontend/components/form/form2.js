@@ -36,7 +36,7 @@ const Form2 =(): React$Element<any> => {
               data:JSON.stringify(values)
             };
         
-            const response = await CapacitorHttp(options);
+            const response = await CapacitorHttp.post(options);
       
           if (response.status === 200) {
             console.log('Registration successful');
