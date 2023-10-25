@@ -12,6 +12,7 @@ type HomeProps = {};
 const Home = (/*props: HomeProps*/): React$Element<any> => {
     return (
         <>
+       
             <Navbar />
             <ProductRow />
             <Slider />
