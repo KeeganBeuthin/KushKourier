@@ -4,35 +4,16 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
 import { CapacitorHttp } from '@capacitor/core';
 import type { FormikProps } from 'formik'; 
-const validate = (values) => {
-  const errors = {};
+import productVal from '../../lib/adminVal/productVal'
 
-  if (!values.imageUrl) {
-    errors.imageUrl = 'Image URL is required';
-  }
-  if (!values.productName) {
-    errors.productName = 'Product Name is required';
-  }
-  if (!values.productCategory) {
-    errors.productCategory = 'Product Category is required';
-  }
-  if (isNaN(values.productStock)) {
-    errors.productStock = 'Product Stock must be a number';
-  }
-  if (isNaN(values.productPrice)) {
-    errors.productPrice = 'Product Price must be a number';
-  }
 
-  return errors;
-};
-
+const validate = productVal
 type AdminForm1 = {
     show: boolean,
     onClose: () => void,
   };
 
 type ProductValues = {
-  imageUrl: string | void,
   productName: string | void,
   productCategory: string | void,
   productStock: string | void,
@@ -40,36 +21,84 @@ type ProductValues = {
 };
 
 const initialValues: ProductValues = {
-  imageUrl: '',
   productName: '',
   productCategory: '',
   productStock: '',
   productPrice: '',
 };
 
+interface ProductPayload {
+    productName: string;
+    productCategory: string;
+    productStock: string;
+    productPrice: string;
+    imageUrl: string
+  }
+
+
 const AdminForm1 = ({ show, onClose}: AdminForm1): React$Element<any> => {
 
-    const [selectedFiles, setSelectedFiles] = useState([]);
+    
+    const [selectedFile, setSelectedFile] = useState(null);
 
 
     const fileInputRef = useRef(null);
 
 
     const handleFileInputChange = (e) => {
-        const files = Array.from(e.target.files);
-        setSelectedFiles([...selectedFiles, ...files]);
-        e.target.value = null;
+        const file = e.target.files[0]; 
+
+        setSelectedFile(file); 
+
+        e.target.value = null; 
+
       };
+      
      
-      const removeFile = (index) => {
-        const updatedFiles = [...selectedFiles];
-        updatedFiles.splice(index, 1);
-        setSelectedFiles(updatedFiles);
+      const removeFile = () => {
+        setSelectedFile(null); 
       };
 
   const handleSubmit = async (values: ProductValues) => {
-    const apiUrl = '/api/products'; // Change to your product API endpoint
 
+
+    const apiUrl = '/api/products'; 
+
+
+    function readFileAsBase64(file) {
+
+        return new Promise((resolve, reject) => {
+
+          const reader = new FileReader();
+      
+          reader.onload = (event) => {
+            const base64Data = event.target.result.split(',')[1]; 
+            resolve(base64Data);
+          };
+      
+          reader.onerror = (error) => {
+            reject(error);
+          };
+      
+          reader.readAsDataURL(file); 
+        });
+      }
+
+    const base64Data = await readFileAsBase64(selectedFile);
+
+
+    const imageInfo = {
+        filename: selectedFile.name,
+        data: base64Data
+    }
+
+
+    const productPayload = {
+        values, imageInfo
+    }
+
+    const productData = JSON.stringify(productPayload)
+    
     try {
       const options = {
         url: apiUrl,
@@ -78,12 +107,10 @@ const AdminForm1 = ({ show, onClose}: AdminForm1): React$Element<any> => {
           'credentials': 'include',
           'authorization': 'include',
         },
-        data: JSON.stringify(values),
+        data: productData
       };
 
       const response = await CapacitorHttp.post(options);
-
-      console.log(response);
 
       if (response.status === 200) {
         console.log('Product submission successful');
@@ -108,12 +135,6 @@ const AdminForm1 = ({ show, onClose}: AdminForm1): React$Element<any> => {
     <Formik initialValues={initialValues} onSubmit={handleSubmit} validate={validate}>
       {(formikProps: FormikProps<ProductValues>) => (
         <Form onSubmit={formikProps.handleSubmit}>
-          <Form.Group controlId="imageUrl">
-            <Form.Label className="fw-bold">Image URL</Form.Label>
-            <Field type="text" name="imageUrl" as={Form.Control} placeholder="Enter Image URL" />
-            <ErrorMessage name="imageUrl" component="div" className="text-danger" />
-          </Form.Group>
-
           <Form.Group controlId="productName">
             <Form.Label className="fw-bold">Product Name</Form.Label>
             <Field type="text" name="productName" as={Form.Control} placeholder="Enter Product Name" />
@@ -135,14 +156,21 @@ const AdminForm1 = ({ show, onClose}: AdminForm1): React$Element<any> => {
           <Form.Group controlId="productPrice">
             <Form.Label className="fw-bold">Product Price</Form.Label>
             <Field type="number" name="productPrice" step="1.00" as={Form.Control} placeholder="Enter Product Price" />
+            
             <ErrorMessage name="productPrice" component="div" className="text-danger" />
           </Form.Group>
-
-       
+      
+          <Modal.Footer>
+          <Button variant="primary" type="submit" className="mt-3">
+            upload Product
+          </Button>
+        </Modal.Footer>
+     
         </Form>
-      )}
-    </Formik>
-    <form encType='multipart/form-data' className='pt-3'>
+     )}
+     </Formik>
+  
+     <form encType='multipart/form-data' className='pt-3'>
               <input
                 type="file"
                 name='file'
@@ -152,26 +180,14 @@ const AdminForm1 = ({ show, onClose}: AdminForm1): React$Element<any> => {
                 multiple={false}
               />
             </form>
-            <ul>
-      {selectedFiles.map((file, index) => (
-        <li key={index}>{file.name} 
-        <button onClick={() => removeFile(index)} className='px-3 pt-2 col'>
-     <img src="https://i.ibb.co/k1BVnnB/cross.png" className='img-thumbnail' alt="Remove" />
-        </button>
-         </li>
-        
-      ))}
-
-    </ul>
-    <Modal.Footer>
-    <Button variant="primary" type="submit" className="mt-3">
-            upload Product
-          </Button>
-        </Modal.Footer>
-     
-
- 
-  
+            {selectedFile && (
+        <div>
+          <p>Selected file: {selectedFile.name}</p>
+          <button onClick={removeFile} className="btn btn-danger">
+            Remove File
+          </button>
+        </div>
+      )}
 </Modal.Body>
 </Modal>
   );

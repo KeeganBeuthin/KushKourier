@@ -291,6 +291,29 @@ module.exports = {
           },
         },
       },
+      '/api/product/create': {
+        post: {
+          operationId: 'createProduct',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/product', 
+                },
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'Product Created Successfully',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
     },
     components: {
      schemas: {
@@ -329,6 +352,9 @@ module.exports = {
         },
         discount: {
           type: 'integer'
+        },
+        image: {
+          type: 'string'
         }
       }
      }

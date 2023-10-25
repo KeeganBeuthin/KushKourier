@@ -20,7 +20,7 @@ const AdminPage = (): React$Element<any> => {
     <Container className="mt-3">
       <Row className="d-flex justify-content-center">
         <h1>Admin Terminal</h1>
-        <button className="btn btn-outline-light text-dark" onClick={() => openAdminModal1()}>
+        <button className="btn btn-primary text-light" onClick={() => openAdminModal1()}>
             add product
               </button>
         <AdminForm1 show={showAdminModal1} onClose={closeAdminModal1}/>

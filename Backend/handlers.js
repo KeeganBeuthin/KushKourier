@@ -188,6 +188,12 @@ module.exports = {
         return res.status(200).json({product})
         },
 
+        createProduct: async (c,req,res) => {
+       const info = req.body
+       console.log(info)
+       return res.status(200)
+        },
+
         //user manipulation
 
 
