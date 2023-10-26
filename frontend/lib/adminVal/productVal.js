@@ -1,12 +1,15 @@
-const productVal = (values:Values): Errors => {
+
+type Values = {
+    ProductName: string | void,
+    ProductCategory: string | void,
+    ProductStock: string | void,
+    ProductPrice: string | void
+  };
+  
+const productVal = (values: Values): Errors => {
 
 
-    type Values = {
-        ProductName: string | void,
-        ProductCategory: string | void,
-        ProductStock: string | void,
-        ProductPrice: string | void
-      };
+  
       
       type Errors = {
         ProductName?: string | void,
@@ -20,12 +23,9 @@ const productVal = (values:Values): Errors => {
 
     if (!values.productName) {
       errors.productName = 'Product Name is required';
+    } else if (/\d/.test(values.productName)) {
+      errors.productName = 'Product Name should not contain numbers';
     }
-
-    if (!values.productCategory) {
-      errors.productCategory = 'Product Category is required';
-    }
-
 
     if (isNaN(values.productStock)) {
       errors.productStock = 'Product Stock must be a number';

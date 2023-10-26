@@ -1,41 +1,39 @@
 @import "../node_modules/bootstrap/scss/bootstrap";
 @import "./bootswatch.scss";
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
-.pacifico{
-    font-family: 'Pacifico', cursive;
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+.pacifico {
+  font-family: "Pacifico", cursive;
 }
 
 .Fgreen {
-    background-color: #586f56 ;
+  background-color: #586f56;
 }
 
-.Lgreen{
-    color: #b2a59a;
+.Lgreen {
+  color: #b2a59a;
 }
 
-.Dblack{
+.Dblack {
   color: #121611;
 }
 
 .carousel-item img {
-    max-height: 300px;
-    max-width: 500px;
-    object-fit: cover;
-    margin: 0 auto; 
-  }
+  max-height: 300px;
+  max-width: 500px;
+  object-fit: cover;
+  margin: 0 auto;
+}
 
-  .carousel-control-prev, .carousel-control-next {
-    margin-right: 0; /* Adjust button position */
-  }
+.carousel-control-prev,
+.carousel-control-next {
+  margin-right: 0; /* Adjust button position */
+}
 
-  .roboto{
-   font-family: 'Roboto', sans-serif
-  }
+.roboto {
+  font-family: "Roboto", sans-serif;
+}
 
-  .logo-image {
-    min-width: 200px; /* Adjust the minimum width as needed */
-  }
-
-
-  
+.logo-image {
+  min-width: 200px; /* Adjust the minimum width as needed */
+}

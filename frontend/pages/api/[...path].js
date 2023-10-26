@@ -1,18 +1,10 @@
-import {proxy} from '../../server/proxy'
-
-
+import { proxy } from "../../server/proxy";
 
 export default (req, res) => {
   return new Promise((resolve, reject) => {
-
-
     proxy.once("error", reject);
-    
-   
-  
-    proxy.web(req, res,{
- 
-    });
+
+    proxy.web(req, res, {});
   });
 };
 

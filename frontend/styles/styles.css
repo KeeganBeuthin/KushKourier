@@ -1,6 +1,6 @@
 @font-face {
-    font-family: 'YourFontName';
-    src: url('../public/fonts/Pacifico-Regular.ttf') format('ttf');
-    font-weight: normal;
-    font-style: normal;
-  }
+  font-family: "YourFontName";
+  src: url("../public/fonts/Pacifico-Regular.ttf") format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}

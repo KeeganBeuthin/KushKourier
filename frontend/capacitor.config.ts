@@ -1,11 +1,11 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'com.example.app',
-  appName: 'Android',
-  webDir: 'out',
+  appId: "com.example.app",
+  appName: "Android",
+  webDir: "out",
   server: {
-    androidScheme: 'https'
+    androidScheme: "https",
   },
   plugins: {
     CapacitorHttp: {

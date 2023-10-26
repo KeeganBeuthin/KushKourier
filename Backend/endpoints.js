@@ -52,9 +52,45 @@ module.exports = {
           },
         },
       },
+      '/api/logout': {
+        post: {
+          operationId: 'logoutUser', 
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/user', 
+                },
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'logut successful',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
       '/api/cookieVal': {
         post: {
           operationId: 'cookieValidate',
+          responses: {
+            '200': {
+              description: 'Validated'
+            },
+            '400': {
+              description: 'Validation Failed'
+            }
+          }
+        }
+      }, 
+      '/api/admin/val': {
+        post: {
+          operationId: 'adminValidate',
           responses: {
             '200': {
               description: 'Validated'
@@ -332,6 +368,12 @@ module.exports = {
        cpassword: {
         type: 'string'
        },
+       first_name: {
+        type: 'string'
+       },
+       last_name: {
+        type: 'string'
+       }
 
       }
      },
