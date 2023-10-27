@@ -26,14 +26,16 @@ const Admin = (/*props: UserProps*/): React$Element<any> => {
       },
     })
       .then((response) => {
-        if (response.status !== 200) {
-          router.push("/home");
+        if (response.status !==200||201) {
+        
         }
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   }, [router]);
+
+
 
   return (
     <>

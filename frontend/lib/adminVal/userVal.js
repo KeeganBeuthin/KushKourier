@@ -5,10 +5,14 @@ type Values = {
 
 const userVal = (values: Values): Errors => {
 
-        
+
+
     type Errors = {
         userId?: string | void,
       };
+
+      const errors = {}
+      
 if (isNaN(values.userId)) {
     errors.userId = 'Id must be a number';
   } else if(!values.userId){
@@ -16,4 +20,8 @@ if (isNaN(values.userId)) {
   } else if (values.userId < 0){
       errors.userId = 'Id must be 0 or more'
   }
+
+  return errors
 }
+
+export default userVal

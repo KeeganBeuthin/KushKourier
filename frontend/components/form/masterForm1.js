@@ -4,28 +4,28 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from "formik";
 import { CapacitorHttp } from "@capacitor/core";
 import type { FormikProps } from "formik";
-import userVal from "../../lib/formVal/userVal";
+import userVal from "../../lib/adminVal/userVal";
 
 const validate = userVal;
-type AdminForm2 = {
+type MasterForm1 = {
   show: boolean,
   onClose: () => void,
 };
 
 const initialValues: userId = {
- userId: 0
+ userId: ''
 };
 
-type userId {
+type userId ={
   userId: number;
 
 }
 
-const AdminForm2 = ({ show, onClose }: AdminForm2): React$Element<any> => {
+const MasterForm1 = ({ show, onClose }: AdminForm2): React$Element<any> => {
 
 
   const handleSubmit = async (values: ProductValues) => {
-    const apiUrl = "/api/user/delete";
+    const apiUrl = "/api/user/promote";
 
     try {
       const options = {
@@ -41,14 +41,14 @@ const AdminForm2 = ({ show, onClose }: AdminForm2): React$Element<any> => {
       const response = await CapacitorHttp.post(options);
 
       if (response.status === 200) {
-        console.log("User Deletion successful");
+        console.log("User Promotion successful");
       } else {
         const responseBody = await response.json();
         console.log(responseBody);
-        console.error("Deletion request failed");
+        console.error("Deletion Promotion failed");
       }
     } catch (error) {
-      console.error(error, "Deletion request error");
+      console.error(error, "Promotion request error");
     }
     onClose();
   };
@@ -56,7 +56,7 @@ const AdminForm2 = ({ show, onClose }: AdminForm2): React$Element<any> => {
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Product</Modal.Title>
+        <Modal.Title>Promote to admin</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
@@ -66,16 +66,16 @@ const AdminForm2 = ({ show, onClose }: AdminForm2): React$Element<any> => {
         >
           {(formikProps: FormikProps<ProductValues>) => (
             <Form onSubmit={formikProps.handleSubmit}>
-              <Form.Group controlId="productStock">
+              <Form.Group controlId="userId">
                 <Form.Label className="fw-bold pt-4">User Id</Form.Label>
                 <Field
                   type="number"
-                  name="productStock"
+                  name="userId"
                   as={Form.Control}
-                  placeholder="Enter Product Stock"
+                  placeholder="Enter User Id"
                 />
                 <ErrorMessage
-                  name="productStock"
+                  name="userId"
                   component="div"
                   className="text-danger"
                 />
@@ -83,34 +83,15 @@ const AdminForm2 = ({ show, onClose }: AdminForm2): React$Element<any> => {
 
               <Modal.Footer>
                 <Button variant="primary" type="submit" className="mt-3">
-                  upload Product
+                  Promote User
                 </Button>
               </Modal.Footer>
             </Form>
           )}
         </Formik>
-
-        <form encType="multipart/form-data" className="pt-3">
-          <input
-            type="file"
-            name="file"
-            ref={fileInputRef}
-            accept="image/*, video/*"
-            onChange={handleFileInputChange}
-            multiple={false}
-          />
-        </form>
-        {selectedFile && (
-          <div>
-            <p>Selected file: {selectedFile.name}</p>
-            <button onClick={removeFile} className="btn btn-danger">
-              Remove File
-            </button>
-          </div>
-        )}
       </Modal.Body>
     </Modal>
   );
 };
 
-export default AdminForm1;
+export default MasterForm1;

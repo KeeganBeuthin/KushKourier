@@ -84,9 +84,26 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
     setShowModal(false);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+      try {
+        const options = {
+          url: logout,
+          headers: {
+            "Content-Type": "application/json",
+            'credentials': "include",
+          },
+        };
+        const response = await CapacitorHttp.post(options);
+        if (response.status === 200) {
+          setAuth(false);
 
-  }
+        }
+      } catch {
+        console.log("An error occurred");
+      }
+    }
+
+  
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light Fgreen shadow-lg">

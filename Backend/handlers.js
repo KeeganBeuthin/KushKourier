@@ -166,15 +166,19 @@ module.exports = {
    const roleInfo = userInfo[0].role
 
 
-   const role = JSON.stringify(roleInfo)
+   const stringRole = JSON.stringify(roleInfo)
 
 
-    if(role==="admin"||"master"){
-      return res.status(200).json({validated:'welcome admin' });
-    }
+const parsedRole = JSON.parse(stringRole)
 
-    
+
+   if(parsedRole==="master"){
+    res.status(201).json({validated: 'welcome master user'})
+   }else if(parsedRole==="admin"){
+    return res.status(200).json({validated:'welcome admin' });
+   } else {
     return res.status(400).json({error:'validation failed'})
+  }
   },
 
   //products
@@ -366,6 +370,22 @@ console.log(req.body.values)
       return res.status(200).json({ sessionId });
     });
   },
+
+  logoutUser: async (c,req,res) => {
+    const sessionId = req.session.id
+    console.log(sessionId)
+    if(!sessionId){
+      return res.status(400).json({error:'no session'})
+    }
+
+   req.session.destroy((err, reply) =>{
+      if(err){
+        console.error(err);
+        return res.status(500).json({error:'failed to delete session data'})
+      }
+      return res.status(200).json({successs:'session deleted'})
+  })
+},
 
   // registerMasterUser: async (c, req, res) => {
   //   const { registerUsername, registerEmail, registerPassword, registerCpassword, registerFirstName, registerLastName } = req.body;
