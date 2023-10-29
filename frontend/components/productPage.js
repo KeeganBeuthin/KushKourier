@@ -1,26 +1,74 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Capacitor } from "@capacitor/core";
+import { CapacitorHttp } from "@capacitor/core";
 const ProductPage = () => {
+
+  const [products, setProducts] = useState([]);
+
+  const isAndroid = Capacitor.getPlatform() === "android";
+
+  let client;
+
+  if (isAndroid) {
+    client = "http://192.168.39.115:9000/api/products";
+  } else {
+    client = "/api/products";
+  }
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+    
+      try {
+        const options = {
+          url: client,
+          headers: {
+            "Content-Type": "application/json",
+            credentials: "include",
+          },
+        };
+        const response = await CapacitorHttp.get(options);
+        if (response.status === 200||304) {
+  
+          const responseData = await response.json();
+          console.log(responseData)
+          setProducts(responseData);
+          console.log(products)
+        }
+      } catch {
+        console.log("An error occurred");
+      }
+    }
+    fetchData()
+  }, []);
+
+
   return (
-    <div class="container mt-4">
-      <h1>Products</h1>
-
-      <div class="form-group">
-        <label for="category">Filter by Category:</label>
-        <select class="form-control" id="category">
-          <option value="all">All Categories</option>
-          <option value="marijuana">Marijuana</option>
-          <option value="equipment">Growing Equipment</option>
-          <option value="paraphernalia">Paraphernalia</option>
-          <option value="seeds">Seeds</option>
-        </select>
-      </div>
-
-      <div class="row" id="product-container"></div>
-
-      <nav>
-        <ul class="pagination" id="pagination-container"></ul>
-      </nav>
-    </div>
+    <table className="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Category</th>
+        <th>Image</th>
+      </tr>
+    </thead>
+    <tbody>
+      {products.map((product, index) => (
+        <tr key={index}>
+          <td>{product.name}</td>
+          <td>{product.price}</td>
+          <td>{product.stock}</td>
+          <td>{product.category}</td>
+          <td>
+            <img src={product.image} alt={product.name} width="50" height="50" />
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
   );
 };
 export default ProductPage;

@@ -10,8 +10,12 @@ const { createClient } = require('redis');
 const cookieParser = require('cookie-parser');
 const app = express();
 const endpoints = require('./endpoints'); 
-const handlers = require('./handlers');
+const handlers = require('./handlers/packagedHandlers');
 const bodyParser = require('body-parser');
+
+
+//defined handlers
+
 
 let redisClient = createClient()
 
@@ -25,9 +29,9 @@ let redisStore = new RedisStore({
 
 
 
-app.use(express.json({ limit: '2mb' })); 
+app.use(express.json({ limit: '6mb' })); 
 
-app.use(express.urlencoded({ limit: '2mb', extended: true }));
+app.use(express.urlencoded({ limit: '6mb', extended: true }));
 
 app.use(bodyParser.json());
 
@@ -59,11 +63,11 @@ app.use(session({
 
 const api = new OpenAPIBackend({
     definition: endpoints,
-    handlers, 
+    handlers
   });
   
   api.init();
   
   app.use((req, res) => api.handleRequest(req, req, res));
   
-  app.listen(9000, () => console.info('API listening at http://localhost:9000'));
+  app.listen(9000, () => console.log('server started on localhost:9000'));

@@ -151,6 +151,7 @@ console.log(values)
               <option value="Vaping">Vaping</option>
               <option value="CBD/Hemp">CBD/Hemp</option>
               <option value="Rolling-Papers">Rolling-Papers</option>
+              <option value="Smoking-Equipment">Smoking-Equipment</option>
               </Field>
               <ErrorMessage
                name="productCategory"
