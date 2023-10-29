@@ -2,10 +2,10 @@
 
 import React from "react";
 import { Container, Row } from "react-bootstrap";
-import Form1 from "./form/form1";
-import Form2 from "./form/form2";
-import Form3 from "./form/form3";
-import Form4 from "./form/form4";
+import Form1 from "./form/profileForm1";
+import Form2 from "./form/profileForm2";
+import Form3 from "./form/profileForm3";
+import Form4 from "./form/profileForm4";
 
 const ProfilePage = (): React$Element<any> => {
   return (
