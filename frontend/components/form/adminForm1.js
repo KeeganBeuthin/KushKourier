@@ -34,12 +34,19 @@ interface ProductPayload {
   imageUrl: string;
 }
 
-const AdminForm1 = ({ show, onClose }: AdminForm1): React$Element<any> => {
+interface Image {
+  filename: string,
+  data: string
+}
+
+const ProductForm = ({ show, onClose }: AdminForm1): React$Element<any> => {
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const fileInputRef = useRef(null);
 
-  const handleFileInputChange = (e) => {
+  
+  const fileInputRef= useRef(null);
+
+  const handleFileInputChange = (e: any) => {
     const file = e.target.files[0];
 
     setSelectedFile(file);
@@ -52,13 +59,16 @@ const AdminForm1 = ({ show, onClose }: AdminForm1): React$Element<any> => {
   };
 
   const handleSubmit = async (values: ProductValues) => {
+
+
     const apiUrl = "/api/products";
-console.log(values)
-    function readFileAsBase64(file) {
-      return new Promise((resolve, reject) => {
+
+
+    function readFileAsBase64(file: any) {
+      return new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
 
-        reader.onload = (event) => {
+        reader.onload = (event: any) => {
           const base64Data = event.target.result.split(",")[1];
           resolve(base64Data);
         };
@@ -73,7 +83,7 @@ console.log(values)
 
     const base64Data = await readFileAsBase64(selectedFile);
 
-    const imageInfo = {
+    const imageInfo: Image = {
       filename: selectedFile.name,
       data: base64Data,
     };
@@ -224,4 +234,4 @@ console.log(values)
   );
 };
 
-export default AdminForm1;
+export default ProductForm;

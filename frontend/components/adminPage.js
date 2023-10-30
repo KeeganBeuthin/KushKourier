@@ -1,10 +1,10 @@
 //@flow
 import React, { useState,useEffect } from "react";
 import { Container, Row } from "react-bootstrap";
-import AdminForm1 from "../components/form/AdminForm1";
+import ProductForm from "./form/adminForm1";
 import { Capacitor } from "@capacitor/core";
 import { CapacitorHttp } from "@capacitor/core";
-import MasterForm1 from '../components/form/masterForm1'
+import PromoteForm from './form/masterForm1'
 const isAndroid = Capacitor.getPlatform() === "android";
 
 let client;
@@ -78,14 +78,14 @@ const AdminPage = (): React$Element<any> => {
             >
               Add Product
             </button>
-            <AdminForm1 show={showAdminModal1} onClose={closeAdminModal1} />
+            <ProductForm show={showAdminModal1} onClose={closeAdminModal1} />
             <button
               className="btn btn-primary text-light mt-4"
               onClick={() => openMasterModal1()}
             >
               Promote User
             </button>
-            <MasterForm1 show={showMasterModal1} onClose={closeMasterModal1} />
+            <PromoteForm show={showMasterModal1} onClose={closeMasterModal1} />
           </>
         ) : (
           <>
@@ -95,7 +95,7 @@ const AdminPage = (): React$Element<any> => {
           >
             Add Product
           </button>
-          <AdminForm1 show={showAdminModal1} onClose={closeAdminModal1} />
+          <ProductForm show={showAdminModal1} onClose={closeAdminModal1} />
         </>
         )}
       </Row>

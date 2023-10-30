@@ -12,19 +12,20 @@ type MasterForm1 = {
   onClose: () => void,
 };
 
-const initialValues: userId = {
- userId: ''
-};
-
-type userId ={
-  userId: number;
-
+type UserId ={
+  userId: number|void;
 }
 
-const MasterForm1 = ({ show, onClose }: AdminForm2): React$Element<any> => {
+const initialValues: UserId = {
+  userId: 0
+};
 
 
-  const handleSubmit = async (values: ProductValues) => {
+
+const PromoteForm = ({ show, onClose }: MasterForm1): React$Element<any> => {
+
+console.log(initialValues.userId)
+  const handleSubmit = async (values: UserId) => {
     const apiUrl = "/api/user/promote";
 
     try {
@@ -64,7 +65,7 @@ const MasterForm1 = ({ show, onClose }: AdminForm2): React$Element<any> => {
           onSubmit={handleSubmit}
           validate={validate}
         >
-          {(formikProps: FormikProps<ProductValues>) => (
+          {(formikProps: FormikProps<UserId>) => (
             <Form onSubmit={formikProps.handleSubmit}>
               <Form.Group controlId="userId">
                 <Form.Label className="fw-bold pt-4">User Id</Form.Label>
@@ -94,4 +95,4 @@ const MasterForm1 = ({ show, onClose }: AdminForm2): React$Element<any> => {
   );
 };
 
-export default MasterForm1;
+export default PromoteForm;

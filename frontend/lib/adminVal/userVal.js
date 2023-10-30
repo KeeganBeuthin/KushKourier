@@ -1,5 +1,5 @@
 type Values = {
-    userId: string | void,
+    userId: number | void,
 
   };
 
@@ -8,7 +8,7 @@ const userVal = (values: Values): Errors => {
 
 
     type Errors = {
-        userId?: string | void,
+        userId?: number | void,
       };
 
       const errors = {}
