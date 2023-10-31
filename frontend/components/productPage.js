@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Capacitor } from "@capacitor/core";
 import { CapacitorHttp } from "@capacitor/core";
+import ProductSideBar from "./productSideBar";
+import ProductList from "./productCard";
 const ProductPage = () => {
-
   const [products, setProducts] = useState([]);
 
   const isAndroid = Capacitor.getPlatform() === "android";
@@ -15,11 +16,8 @@ const ProductPage = () => {
     client = "/api/products";
   }
 
-
-
   useEffect(() => {
     const fetchData = async () => {
-    
       try {
         const options = {
           url: client,
@@ -29,46 +27,23 @@ const ProductPage = () => {
           },
         };
         const response = await CapacitorHttp.get(options);
-        if (response.status === 200||304) {
-  
+        if (response.status === 200 || 304) {
           const responseData = await response.json();
-          console.log(responseData)
+          console.log(responseData);
           setProducts(responseData);
-          console.log(products)
+          console.log(products);
         }
       } catch {
         console.log("An error occurred");
       }
-    }
-    fetchData()
+    };
+    fetchData();
   }, []);
 
-
   return (
-    <table className="table table-striped">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Stock</th>
-        <th>Category</th>
-        <th>Image</th>
-      </tr>
-    </thead>
-    <tbody>
-      {products.map((product, index) => (
-        <tr key={index}>
-          <td>{product.name}</td>
-          <td>{product.price}</td>
-          <td>{product.stock}</td>
-          <td>{product.category}</td>
-          <td>
-            <img src={product.image} alt={product.name} width="50" height="50" />
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
+    <>
+      <ProductList />
+    </>
   );
 };
 export default ProductPage;

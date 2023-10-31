@@ -35,16 +35,14 @@ interface ProductPayload {
 }
 
 interface Image {
-  filename: string,
-  data: string
+  filename: string;
+  data: string;
 }
 
 const ProductForm = ({ show, onClose }: AdminForm1): React$Element<any> => {
   const [selectedFile, setSelectedFile] = useState(null);
 
-
-  
-  const fileInputRef= useRef(null);
+  const fileInputRef = useRef(null);
 
   const handleFileInputChange = (e: any) => {
     const file = e.target.files[0];
@@ -59,10 +57,7 @@ const ProductForm = ({ show, onClose }: AdminForm1): React$Element<any> => {
   };
 
   const handleSubmit = async (values: ProductValues) => {
-
-
     const apiUrl = "/api/products";
-
 
     function readFileAsBase64(file: any) {
       return new Promise<string>((resolve, reject) => {
@@ -150,25 +145,24 @@ const ProductForm = ({ show, onClose }: AdminForm1): React$Element<any> => {
               </Form.Group>
 
               <Form.Group controlId="productCategory">
-              <Form.Label className="fw-bold pt-4">Product Category</Form.Label>
-              <Field
-              as="select" 
-              name="productCategory"
-              >
-              <option value="Flower">Flower</option>
-              <option value="Edibles">Edibles</option>
-              <option value="Growing-equipment">Growing-equipment</option>
-              <option value="Vaping">Vaping</option>
-              <option value="CBD/Hemp">CBD/Hemp</option>
-              <option value="Rolling-Papers">Rolling-Papers</option>
-              <option value="Smoking-Equipment">Smoking-Equipment</option>
-              </Field>
-              <ErrorMessage
-               name="productCategory"
-               component="div"
-               className="text-danger"
-               />
-               </Form.Group>
+                <Form.Label className="fw-bold pt-4">
+                  Product Category
+                </Form.Label>
+                <Field as="select" name="productCategory">
+                  <option value="Flower">Flower</option>
+                  <option value="Edibles">Edibles</option>
+                  <option value="Growing-equipment">Growing-equipment</option>
+                  <option value="Vaping">Vaping</option>
+                  <option value="CBD/Hemp">CBD/Hemp</option>
+                  <option value="Rolling-Papers">Rolling-Papers</option>
+                  <option value="Smoking-Equipment">Smoking-Equipment</option>
+                </Field>
+                <ErrorMessage
+                  name="productCategory"
+                  component="div"
+                  className="text-danger"
+                />
+              </Form.Group>
 
               <Form.Group controlId="productStock">
                 <Form.Label className="fw-bold pt-4">Product Stock</Form.Label>
@@ -211,24 +205,19 @@ const ProductForm = ({ show, onClose }: AdminForm1): React$Element<any> => {
           )}
         </Formik>
 
-        <form encType="multipart/form-data" className="pt-3">
-          <input
-            type="file"
-            name="file"
-            ref={fileInputRef}
-            accept="image/*, video/*"
-            onChange={handleFileInputChange}
-            multiple={false}
-          />
-        </form>
-        {selectedFile && (
-          <div>
-            <p>Selected file: {selectedFile.name}</p>
-            <button onClick={removeFile} className="btn btn-danger">
-              Remove File
-            </button>
-          </div>
-        )}
+        <div class="mb-3">
+          <form encType="multipart/form-data" className="pt-3">
+            <input
+              class="form-control"
+              type="file"
+              ref={fileInputRef}
+              name="file"
+              accept="image/*"
+              onChange={handleFileInputChange}
+              id="formFile"
+            />
+          </form>
+        </div>
       </Modal.Body>
     </Modal>
   );

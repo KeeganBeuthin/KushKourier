@@ -173,7 +173,7 @@ module.exports = {
          
         },
         get: {
-          operationId: 'getProducts',
+          operationId: 'getProduct',
           responses: {
             '200': {
               description: 'Products retrieved successfully',
