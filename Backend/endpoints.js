@@ -173,7 +173,14 @@ module.exports = {
          
         },
         get: {
-          operationId: 'getProduct',
+          operationId: 'getProducts',
+          parameters: [
+            {
+              name: 'page',
+              in: 'query',
+              schema: { type: 'integer' },
+            },
+          ],
           responses: {
             '200': {
               description: 'Products retrieved successfully',
@@ -183,6 +190,7 @@ module.exports = {
             },
           },
         },
+        
        
       },
       '/api/products/{productId}': {

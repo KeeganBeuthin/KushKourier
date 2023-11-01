@@ -27,45 +27,57 @@ module.exports = {
     console.log(id);
   },
   getProducts: async (c, req, res) => {
-    const product = await sql`
-          select * from products 
-          `;
-    console.log(product);
-    return res.status(200).json({ product });
-  },
-  getProduct: async (c, req, res) => {
+    console.log(req.params);
+    const limit = 10;
+    const page = req.query.page || 1;
+    const offset = (page - 1) * limit;
+
     const productInfo = await sql`
-          select * from products where product_id=1
-          `;
+    SELECT
+      p.product_id,
+      p.product_name,
+      p.price,
+      p.stock,
+      p.discount,
+      p.category_id
+    FROM products p
+    ORDER BY p.product_id
+    LIMIT ${limit}
+    OFFSET ${offset}
+  `;
 
-          const category = await sql`
-          select category_name from categories where category_id=1
-          `;
+    if (productInfo.length === 0) {
+      return res.status(404).json({ error: "No products found" });
+    }
 
-          const product = {
-            ...productInfo[0],  // Assuming productInfo contains a single product
-            category: category[0].category_name,
-        };
+    const products = [];
 
-        
-    const image = await sql`
-          select image_data from images where product_id=1`;
+    for (const product of productInfo) {
+      const category = await sql`
+      SELECT category_name
+      FROM categories
+      WHERE category_id = ${product.category_id}
+    `;
 
-    console.log(image[0].image_data);
+      const images = await sql`
+      SELECT image_data
+      FROM images
+      WHERE product_id = ${product.product_id}
+    `;
 
-    const imageData = image[0].image_data
+      const productObject = {
+        product_id: product.product_id,
+        product_name: product.product_name,
+        price: product.price,
+        stock: product.stock,
+        discount: product.discount,
+        category: category[0].category_name,
+        image: images.map((image) => image.image_data.toString("base64")),
+      };
+      products.push(productObject);
+    }
 
- if (image.length > 0) {
-    const imageData = image[0].image_data;
-
-
-    const base64ImageData = imageData.toString('base64');
-
-    return res.status(200).json({ product, base64ImageData });
-  } else {
-    return res.status(404).json({ error: "Image not found" });
-  }
-
+    return res.status(200).json({ products });
   },
   getProductById: async (c, req, res) => {
     const id = c.request.params.productId;
@@ -86,23 +98,23 @@ module.exports = {
 
     const base64Data = imageInfo.data;
 
-   const category= await sql`
+    const category = await sql`
    select category_id from categories where category_name=${productCategory}
-   `
-  
-   const categoryId = category[0].category_id
-   console.log(categoryId)
+   `;
+
+    const categoryId = category[0].category_id;
+    console.log(categoryId);
     const product = await sql`
         insert into products (product_name, price, stock, category_id, discount) 
         values (${productName}, ${productPrice}, ${productStock}, ${categoryId},0)
       `;
 
-      const productData = await sql`
+    const productData = await sql`
       select product_id from products where product_name=${productName}
-      `
+      `;
 
-      const productId = productData[0].product_id
-      console.log(productId)
+    const productId = productData[0].product_id;
+    console.log(productId);
 
     const image = await sql`
       insert into images (image_data, product_id) values (decode(${base64Data},'base64'),${productId})
