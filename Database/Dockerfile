@@ -5,4 +5,4 @@ ENV POSTGRES_DB rat
 ENV POSTGRES_USER postgres
 
 EXPOSE 8080
-COPY user.sql /docker-entrypoint-initdb.d/
+COPY KushKourier.sql /docker-entrypoint-initdb.d/
