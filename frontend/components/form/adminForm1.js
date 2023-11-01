@@ -151,7 +151,7 @@ const ProductForm = ({ show, onClose }: AdminForm1): React$Element<any> => {
                 <Field as="select" name="productCategory">
                   <option value="Flower">Flower</option>
                   <option value="Edibles">Edibles</option>
-                  <option value="Growing-equipment">Growing-equipment</option>
+                  <option value="Growing-Equipment">Growing-Equipment</option>
                   <option value="Vaping">Vaping</option>
                   <option value="CBD/Hemp">CBD/Hemp</option>
                   <option value="Rolling-Papers">Rolling-Papers</option>
