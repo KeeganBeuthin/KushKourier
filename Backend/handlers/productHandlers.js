@@ -32,7 +32,7 @@ module.exports = {
     const limit = 10;
     const page = c.request.params.productId || 1;
     const offset = (page - 1) * limit;
-
+console.log(offset)
     const productInfo = await sql`
     SELECT
       p.product_id,

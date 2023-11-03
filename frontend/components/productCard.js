@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { Capacitor } from "@capacitor/core";
 import { CapacitorHttp } from "@capacitor/core";
-import Link from 'next/link';
+import Link from "next/link";
 const isAndroid = Capacitor.getPlatform() === "android";
 
 const ProductList = () => {
-  
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;
   const router = useRouter();
 
   const { page } = router.query;
- console.log(page)
+  const pageNum = parseInt(page, 10);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (page !== undefined) { // Check if page is defined
+    if (page !== undefined) {
+      // Check if page is defined
       const fetchData = async () => {
         try {
           let productPage;
@@ -31,8 +31,8 @@ const ProductList = () => {
           const options = {
             url: productPage,
             headers: {
-              'Content-Type': 'application/json',
-              credentials: 'include',
+              "Content-Type": "application/json",
+              credentials: "include",
             },
             params: {
               page,
@@ -45,9 +45,13 @@ const ProductList = () => {
             const productInfo = response.data.products;
             setProducts(productInfo);
             setLoading(false);
+          } else if (response.status === 404 || 500) {
+            setLoading(false);
+            setProducts([]);
+            setError("Error: 404 - The page you're looking for does not exist");
           }
         } catch {
-          console.log('An error occurred');
+          console.log("An error occurred");
           setLoading(false);
         }
       };
@@ -55,7 +59,6 @@ const ProductList = () => {
     }
   }, [page]);
 
-  
   return (
     <div className="container">
       <div className="row">
@@ -80,11 +83,14 @@ const ProductList = () => {
           ))
         )}
       </div>
-      <nav aria-label="Page navigation example" className="d-flex justify-content-center">
+      <nav
+        aria-label="Page navigation example"
+        className="d-flex justify-content-center"
+      >
         <ul className="pagination">
           <li className="page-item">
-            <Link legacyBehavior href={`/shop/${parseInt(page) - 1}`} passHref>
-              <a className={`page-link ${parseInt(page) === 1 ? 'disabled' : ''}`}>
+            <Link legacyBehavior href={`/shop/${page - 1}`} passHref>
+              <a className={`page-link ${page === 1 ? "disabled" : ""}`}>
                 &laquo;
               </a>
             </Link>
@@ -94,21 +100,17 @@ const ProductList = () => {
             (_, index) => (
               <li
                 key={index}
-                className={`page-item ${parseInt(page) === index + 1 ? 'active' : ''}`}
+                className={`page-item ${page === index + 1 ? "active" : ""}`}
               >
                 <Link legacyBehavior href={`/shop/${index + 1}`} passHref>
-                  <a className="page-link">
-                    {index + 1}
-                  </a>
+                  <a className="page-link">{index + 1}</a>
                 </Link>
               </li>
-            )
+            ),
           )}
           <li className="page-item">
-            <Link legacyBehavior href={`/shop/${parseInt(page) + 1}`} passHref>
-              <a className={`page-link ${parseInt(page) === Math.ceil(products.length / productsPerPage) ? 'disabled' : ''}`}>
-                &raquo;
-              </a>
+            <Link legacyBehavior href={`/shop/${pageNum + 1}`} passHref>
+              <a className={`page-link ${page === page + 1}`}>&raquo;</a>
             </Link>
           </li>
         </ul>
