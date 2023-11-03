@@ -16,9 +16,10 @@ const AppShell = () => {
         <IonReactRouter>
           <IonRouterOutlet id="main">
             <Switch>
-              <Route path="/shop" render={() => <Shop />} />
-              <Route path="/" render={() => <Home />} />
-              <Route path="/user" render={() => <User />} />
+            <Route path="/shop" component={Shop} /> 
+              <Route path="/shop/:page" component={Shop} />
+              <Route path="/" exact component={Home} />
+              <Route path="/user" component={User} />
             </Switch>
           </IonRouterOutlet>
         </IonReactRouter>

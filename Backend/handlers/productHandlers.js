@@ -28,8 +28,9 @@ module.exports = {
   },
   getProducts: async (c, req, res) => {
     console.log(req.params);
+    console.log(c.request.params.productId)
     const limit = 10;
-    const page = req.query.page || 1;
+    const page = c.request.params.productId || 1;
     const offset = (page - 1) * limit;
 
     const productInfo = await sql`
@@ -81,6 +82,7 @@ module.exports = {
   },
   getProductById: async (c, req, res) => {
     const id = c.request.params.productId;
+    console.log('hi')
 
     const product = await sql`
             select * from products where product_id=${id}

@@ -195,7 +195,7 @@ module.exports = {
       },
       '/api/products/{productId}': {
         get: {
-          operationId: 'getProductById',
+          operationId: 'getProducts',
           parameters: [
             {
               name: 'productId',

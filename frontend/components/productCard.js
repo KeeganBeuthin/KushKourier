@@ -1,102 +1,66 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Capacitor } from "@capacitor/core";
 import { CapacitorHttp } from "@capacitor/core";
-
+import Link from 'next/link';
 const isAndroid = Capacitor.getPlatform() === "android";
 
-let client;
-
-if (isAndroid) {
-  client = "http://192.168.39.115:9000/api/products";
-} else {
-  client = "/api/products";
-}
-
 const ProductList = () => {
-  const [products, setProducts] = useState([]);
-
-  const [loading, setloading] = useState(true);
-
+  
   const [currentPage, setCurrentPage] = useState(1);
-
   const productsPerPage = 10;
+  const router = useRouter();
 
-  const handlePageChange = async (page) => {
-    if (
-      page < 1 ||
-      page > Math.ceil(products.length / productsPerPage) ||
-      loading
-    ) {
-      return;
-    }
-
-    try {
-      setloading(true);
-      console.log("trying");
-      let productPage;
-
-      if (isAndroid) {
-        productPage = `http://192.168.39.115:9000/api/products/${page}`;
-      } else {
-        productPage = `/api/products/${page}`;
-      }
-
-      const options = {
-        url: productPage,
-        headers: {
-          "Content-Type": "application/json",
-          credentials: "include",
-        },
-        params: {
-          page: page,
-        },
-      };
-      console.log(page);
-      const response = await CapacitorHttp.get(options);
-      console.log(response);
-      if (response.status === 200 || response.status === 304) {
-        const productInfo = response.data.products;
-        setProducts(productInfo);
-        setCurrentPage(page);
-        setloading(false);
-      }
-    } catch {
-      console.log("An error occurred");
-      setloading(false);
-    }
-  };
+  const { page } = router.query;
+ console.log(page)
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const options = {
-          url: client,
-          headers: {
-            "Content-Type": "application/json",
-            credentials: "include",
-          },
-        };
-        const response = await CapacitorHttp.get(options);
+    if (page !== undefined) { // Check if page is defined
+      const fetchData = async () => {
+        try {
+          let productPage;
 
-        if (response.status === 200 || response.status === 304) {
-          const productInfo = response.data.products;
-          setProducts(productInfo);
-          setloading(false);
+          if (isAndroid) {
+            productPage = `http://192.168.39.115:9000/api/products/${page}`;
+          } else {
+            productPage = `/api/products/${page}`;
+          }
+
+          const options = {
+            url: productPage,
+            headers: {
+              'Content-Type': 'application/json',
+              credentials: 'include',
+            },
+            params: {
+              page,
+            },
+          };
+
+          const response = await CapacitorHttp.get(options);
+
+          if (response.status === 200 || response.status === 304) {
+            const productInfo = response.data.products;
+            setProducts(productInfo);
+            setLoading(false);
+          }
+        } catch {
+          console.log('An error occurred');
+          setLoading(false);
         }
-      } catch {
-        console.log("An error occurred");
-        setloading(true);
-      }
-    };
-    fetchData();
-  }, []);
+      };
+      fetchData();
+    }
+  }, [page]);
 
+  
   return (
     <div className="container">
       <div className="row">
         {loading ? (
-          <p>retrieving products</p>
+          <p>Retrieving products</p>
         ) : (
           products.map((product) => (
             <div key={product.product_id} className="col-md-4 mb-4">
@@ -116,47 +80,36 @@ const ProductList = () => {
           ))
         )}
       </div>
-
-      <nav aria-label="Product Page Navigation">
-        <ul className="pagination justify-content-center">
-          <li
-            className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-            onClick={() => handlePageChange(currentPage - 1)}
-          >
-            <a className="page-link" role="button" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
+      <nav aria-label="Page navigation example" className="d-flex justify-content-center">
+        <ul className="pagination">
+          <li className="page-item">
+            <Link legacyBehavior href={`/shop/${parseInt(page) - 1}`} passHref>
+              <a className={`page-link ${parseInt(page) === 1 ? 'disabled' : ''}`}>
+                &laquo;
+              </a>
+            </Link>
           </li>
           {Array.from(
             { length: Math.ceil(products.length / productsPerPage) },
             (_, index) => (
               <li
                 key={index}
-                className={`page-item ${
-                  currentPage === index + 1 ? "active" : ""
-                }`}
+                className={`page-item ${parseInt(page) === index + 1 ? 'active' : ''}`}
               >
-                <a
-                  className="page-link"
-                  onClick={() => handlePageChange(index + 1)}
-                  role="button"
-                >
-                  {index + 1}
-                </a>
+                <Link legacyBehavior href={`/shop/${index + 1}`} passHref>
+                  <a className="page-link">
+                    {index + 1}
+                  </a>
+                </Link>
               </li>
-            ),
+            )
           )}
-          <li
-            className={`page-item ${
-              currentPage === Math.ceil(products.length / productsPerPage)
-                ? "disabled"
-                : ""
-            }`}
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            <a className="page-link" role="button" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
+          <li className="page-item">
+            <Link legacyBehavior href={`/shop/${parseInt(page) + 1}`} passHref>
+              <a className={`page-link ${parseInt(page) === Math.ceil(products.length / productsPerPage) ? 'disabled' : ''}`}>
+                &raquo;
+              </a>
+            </Link>
           </li>
         </ul>
       </nav>
