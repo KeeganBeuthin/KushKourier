@@ -29,6 +29,7 @@ module.exports = {
   getProducts: async (c, req, res) => {
     console.log(req.params);
     console.log(c.request.params.productId)
+    
     const limit = 10;
     const page = c.request.params.productId || 1;
     const offset = (page - 1) * limit;

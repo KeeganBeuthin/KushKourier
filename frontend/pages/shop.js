@@ -8,12 +8,14 @@ import Navbar from "../components/navbar";
 // import Card from '../components/card';
 // import ProductRow from '../components/productRow';
 import ProductPage from "../components/productPage";
+import BreadCrumb from "../components/breadCrumb";
 
 type ShopProps = {};
 const Shop = (/*props: ShopProps*/): React$Element<any> => {
   return (
     <>
       <Navbar />
+      <BreadCrumb />
       <ProductPage />
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

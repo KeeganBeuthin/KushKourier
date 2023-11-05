@@ -214,6 +214,33 @@ module.exports = {
           },
         },
       },
+      '/api/products/{category}/{page}': {
+        get: {
+          operationId: 'getProductsByCategory',
+          parameters: [
+            {
+              name: 'category',
+              in: 'path',
+              required: true,
+              schema: { type: 'string' },
+            },
+            {
+              name: 'page',
+              in: 'path',
+              required: true,
+              schema: { type: 'integer' },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Products retrieved successfully',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
       '/api/users': {
         get: {
           operationId: 'getUsers',

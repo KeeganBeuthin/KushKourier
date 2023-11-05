@@ -182,7 +182,7 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
             </li>
           )}
           <li className="nav-item">
-            <a className="nav-link Lgreen" href="/shop">
+            <a className="nav-link Lgreen" href="/shop/1">
               Products
             </a>
           </li>
