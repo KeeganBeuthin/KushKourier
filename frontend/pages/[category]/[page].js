@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../../components/navbar";
-import ProductPage from "../../components/productPage";
-import BreadCrumbShop from "../../components/breadCrumbShop";
+import ProductCategory from "../../components/productCategory";
+import BreadCrumbCategory from "../../components/breadCrumbCategory";
 import ShopSidebar from "../../components/shopSideBar";
 
 type ShopProps = {};
@@ -16,8 +16,8 @@ const Shop = (): React$Element<any> => {
             <ShopSidebar />
           </div>
           <div className="col-md-9">
-            <BreadCrumbShop />
-            <ProductPage />
+            <BreadCrumbCategory />
+            <ProductCategory />
           </div>
         </div>
       </div>

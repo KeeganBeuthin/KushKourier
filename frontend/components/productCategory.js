@@ -6,12 +6,13 @@ import { CapacitorHttp } from "@capacitor/core";
 import Link from "next/link";
 const isAndroid = Capacitor.getPlatform() === "android";
 
-const ProductCard = () => {
+const ProductCategory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;
   const router = useRouter();
 
   const { page } = router.query;
+  const {category} = router.query
   const pageNum = parseInt(page, 10);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,12 +23,13 @@ const ProductCard = () => {
       // Check if page is defined
       const fetchData = async () => {
         try {
+            console.log(category)
           let productPage;
 
           if (isAndroid) {
-            productPage = `http://192.168.39.115:9000/api/products/${page}`;
+            productPage = `http://192.168.39.115:9000/api/products/${category}/${page}`;
           } else {
-            productPage = `/api/products/${page}`;
+            productPage = `/api/products/${category}/${page}`;
           }
 
           const options = {
@@ -130,7 +132,7 @@ const ProductCard = () => {
   );
   };
 
-export default ProductCard;
+export default ProductCategory;
 
 
 
