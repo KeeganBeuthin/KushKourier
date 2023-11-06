@@ -190,8 +190,6 @@ module.exports = {
             },
           },
         },
-        
-       
       },
       '/api/products/{productId}': {
         get: {
@@ -202,6 +200,27 @@ module.exports = {
               in: 'path',
               required: true,
               schema: { type: 'integer' },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Product retrieved successfully',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
+      '/api/product/{productName}': {
+        get: {
+          operationId:'getProduct',
+          parameters: [
+            {
+              name: 'productName',
+              in: 'path',
+              required: true,
+              schema: { type: 'string' },
             },
           ],
           responses: {

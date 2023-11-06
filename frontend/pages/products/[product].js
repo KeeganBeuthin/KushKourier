@@ -1,32 +1,39 @@
+// components/ProductDisplay.js
+
 import React from "react";
+import ProductPage from '../../components/productPage'
 import Navbar from "../../components/navbar";
-import ProductCard from "../../components/productCard";
-import BreadCrumbShop from "../../components/breadCrumbShop";
+import ProductCategory from "../../components/productCategory";
+import BreadCrumbCategory from "../../components/breadCrumbCategory";
 import ShopSidebar from "../../components/shopSideBar";
 
-type ShopProps = {};
+const isAndroid = Capacitor.getPlatform() === "android";
 
-const Shop = (): React$Element<any> => {
+const Product = () => {
+
+
+ 
+
   return (
-    <>
-      <Navbar />
+   <>
+   
+   <Navbar />
       <div className="container mt-4">
         <div className="row">
           <div className="col-md-3">
             <ShopSidebar />
           </div>
           <div className="col-md-9">
-            <BreadCrumbShop />
-            <ProductCard />
+            <BreadCrumbCategory />
+            <ProductPage />
           </div>
         </div>
       </div>
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    </>
+   </>
   );
 };
 
-export type { ShopProps };
-export default Shop;
+export default Product;

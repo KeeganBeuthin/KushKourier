@@ -79,11 +79,15 @@ const ProductCategory = () => {
               products.map((product) => (
                 <div key={product.product_id} className="col-md-4 mb-4">
                   <div className="card">
+                  <Link legacyBehavior href={`/products/${product.product_name}`} passHref>
+                  <a>
                     <img
                       src={`data:image/png;base64,${product.image[0]}`}
                       className="card-img-top"
                       alt={product.product_name}
                     />
+                     </a>
+                  </Link>
                     <div className="card-body">
                       <h5 className="card-title">{product.product_name}</h5>
                       <p className="card-text">Category: {product.category}</p>

@@ -161,6 +161,64 @@ module.exports = {
     return res.status(200).json({ product });
   },
 
+  getProduct: async (c, req, res) => {
+    const name = c.request.params.productName;
+    const prod = c.request.params
+ 
+
+
+      const productInfo = await sql`
+      SELECT
+        p.product_id,
+        p.product_name,
+        p.price,
+        p.stock,
+        p.discount,
+        p.category_id
+      FROM products p 
+      WHERE product_name=${name}
+    `;
+
+
+
+      if (productInfo.length === 0) {
+        return res.status(404).json({ error: "No product found" });
+      }
+  
+      const product = [];
+  
+      const productBody = productInfo[0]
+
+        const category = await sql`
+        SELECT category_name
+        FROM categories
+        WHERE category_id = ${productBody.category_id}
+      `;
+      
+  
+        const images = await sql`
+        SELECT image_data
+        FROM images
+        WHERE product_id = ${productBody.product_id}
+      `;
+  
+        const productObject = {
+          product_id: productBody.product_id,
+          product_name: productBody.product_name,
+          price: productBody.price,
+          stock: productBody.stock,
+          discount: productBody.discount,
+          category: category[0].category_name,
+          image: images.map((image) => image.image_data.toString("base64")),
+        };
+
+        console.log(productObject)
+
+        product.push(productObject);
+    
+    return res.status(200).json({ product });
+  },
+
   createProduct: async (c, req, res) => {
     const files = [];
 
