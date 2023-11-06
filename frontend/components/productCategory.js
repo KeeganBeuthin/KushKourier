@@ -62,12 +62,61 @@ const ProductCategory = () => {
     }
   }, [page]);
 
+  console.log(products[0])
+
   return (
     <div className="container">
       {error ? (
         <div className='container'>
            <h1>Error 404: content unavailable</h1>
         <img className="card-img-top" src="/error404.jpg" alt="Title" />
+        <nav
+            aria-label="Page navigation example"
+            className="d-flex justify-content-center"
+          >
+          <ul className="pagination">
+            <li className="page-item">
+              <Link legacyBehavior href={`/${category}/${page - 1}`} passHref>
+                <a className={`page-link ${page === 1 ? "disabled" : ""}`}
+                disabled={page === 1}
+                onClick={() => {
+                  if (page >= 1) {
+                   window.location.href = `/${category}/${pageNum -1}`;
+                  }
+                }}>
+                  &laquo;
+                </a>
+              </Link>
+            </li>
+            {Array.from(
+              { length: Math.ceil(products.length / productsPerPage) },
+              (_, index) => (
+                <li
+                  key={index}
+                  className={`page-item ${page === index + 1 ? "active" : ""}`}
+                >
+                  <Link legacyBehavior href={`/${category}/${index + 1}`} passHref>
+                    <a className="page-link">{index + 1}</a>
+                  </Link>
+                </li>
+              ),
+            )}
+            <li className="page-item">
+              <Link legacyBehavior href={`/${category}/${pageNum + 1}`} passHref>
+                <a className={`page-link ${page === page + 1}`} 
+                 disabled={page === 1}
+                 onClick={() => {
+                   if (page > 1) {
+                    window.location.href = `/${category}/${pageNum +1}`;
+                   }
+                 }}
+                 >
+                    &raquo;
+                 </a>
+              </Link>
+            </li>
+          </ul>
+          </nav>
        
         </div>
       ) : (
@@ -104,7 +153,7 @@ const ProductCategory = () => {
           >
           <ul className="pagination">
             <li className="page-item">
-              <Link legacyBehavior href={`/shop/${page - 1}`} passHref>
+              <Link legacyBehavior href={`/${category}/${page - 1}`} passHref>
                 <a className={`page-link ${page === 1 ? "disabled" : ""}`}>
                   &laquo;
                 </a>
@@ -117,14 +166,14 @@ const ProductCategory = () => {
                   key={index}
                   className={`page-item ${page === index + 1 ? "active" : ""}`}
                 >
-                  <Link legacyBehavior href={`/shop/${index + 1}`} passHref>
+                  <Link legacyBehavior href={`/${category}/${index + 1}`} passHref>
                     <a className="page-link">{index + 1}</a>
                   </Link>
                 </li>
               ),
             )}
             <li className="page-item">
-              <Link legacyBehavior href={`/shop/${pageNum + 1}`} passHref>
+              <Link legacyBehavior href={`/${category}/${pageNum + 1}`} passHref>
                 <a className={`page-link ${page === page + 1}`}>&raquo;</a>
               </Link>
             </li>

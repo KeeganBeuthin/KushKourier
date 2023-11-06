@@ -45,7 +45,6 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
 
   const name = useSelector((state) => state.user.legalName);
 
-  console.log(name);
 
   useEffect(() => {
     const fetchData = async () => {

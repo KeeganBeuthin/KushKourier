@@ -32,6 +32,10 @@ module.exports = {
 
     const page = c.request.params.productId || 1;
 
+    if(page ==0||NaN){
+      return res.status(404).json({error:'invalid page'})
+      }
+
     const offset = (page - 1) * limit;
     
     const productInfo = await sql`
@@ -87,6 +91,9 @@ module.exports = {
 
     const page = c.request.params.page || 1;
 
+    if(page ==0||NaN){
+    return res.status(404).json({error:'invalid page'})
+    }
     const category = c.request.params.category
 
     const offset = (page - 1) * limit;

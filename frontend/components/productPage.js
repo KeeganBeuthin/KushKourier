@@ -4,11 +4,14 @@ import { Capacitor } from "@capacitor/core";
 import { CapacitorHttp } from "@capacitor/core";
 import Link from "next/link";
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { setProductData } from '../redux/productSlice';
+import { useDispatch, useSelector } from "react-redux";
 
 const isAndroid = Capacitor.getPlatform() === "android";
 
 const ProductPage = () => {
 
+  const dispatch = useDispatch();
 
   const router = useRouter();
 
@@ -23,8 +26,6 @@ const ProductPage = () => {
       const fetchData = async () => {
         try {
           let productURL;
-console.log(productURL)
-console.log(router.query)
           if (isAndroid) {
             productURL = `http://192.168.39.115:9000/api/product/${product}`;
           } else {
@@ -45,8 +46,10 @@ console.log(router.query)
           const response = await CapacitorHttp.get(options);
 
           if (response.status === 200 || response.status === 304) {
-            const productData = response.data.product;
+            const productData = response.data.product[0];
             setProductInfo(productData);
+            dispatch(setProductName(productData.product_name));
+           
             setLoading(false);
           } else if (response.status === 404 || 500) {
             setLoading(false);
@@ -59,8 +62,10 @@ console.log(router.query)
       };
       fetchData();
     }
-  }, [product]);
-  console.log(productInfo[0])
+  }, [product, dispatch]);
+
+  const productName = useSelector((state) => state.product);
+  console.log(productName)
 
   return (
     <div className="container">
@@ -78,20 +83,20 @@ console.log(router.query)
               <Row>
                 <Col md={6}>
                   <img
-                    src={`data:image/png;base64,${productInfo[0].image[0]}`}
-                    alt={productInfo[0].name}
+                    src={`data:image/png;base64,${productInfo.image[0]}`}
+                    alt={productInfo.name}
                     className="img-fluid"
                   />
                 </Col>
                 <Col md={6}>
                   <Card>
                     <Card.Body>
-                      <Card.Title>{productInfo[0].product_name}</Card.Title>
-                      <Card.Text>{productInfo[0].description}</Card.Text>
+                      <Card.Title>{productInfo.product_name}</Card.Title>
+                      <Card.Text>{productInfo.description}</Card.Text>
                       <Card.Text>
-                        Price: R{productInfo[0].price}
+                        Price: R{productInfo.price}
                       </Card.Text>
-                      <Card.Text>Category: {productInfo[0].category}</Card.Text>
+                      <Card.Text>Category: {productInfo.category}</Card.Text>
                       <Button variant="primary">Add to Cart</Button>
                     </Card.Body>
                   </Card>

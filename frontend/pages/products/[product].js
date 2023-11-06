@@ -4,13 +4,16 @@ import React from "react";
 import ProductPage from '../../components/productPage'
 import Navbar from "../../components/navbar";
 import ProductCategory from "../../components/productCategory";
-import BreadCrumbCategory from "../../components/breadCrumbCategory";
+import BreadCrumbProduct from "../../components/breadCrumbProduct";
 import ShopSidebar from "../../components/shopSideBar";
+import { useSelector } from "react-redux";
 
 const isAndroid = Capacitor.getPlatform() === "android";
 
-const Product = () => {
 
+ 
+
+const Product = () => {
 
  
 
@@ -24,7 +27,7 @@ const Product = () => {
             <ShopSidebar />
           </div>
           <div className="col-md-9">
-            <BreadCrumbCategory />
+            <BreadCrumbProduct/>
             <ProductPage />
           </div>
         </div>

@@ -102,11 +102,15 @@ const ProductCard = () => {
           >
           <ul className="pagination">
             <li className="page-item">
-              <Link legacyBehavior href={`/shop/${page - 1}`} passHref>
-                <a className={`page-link ${page === 1 ? "disabled" : ""}`}>
-                  &laquo;
-                </a>
-              </Link>
+            {page === 1 ? (
+    <a className="page-link disabled" disabled>
+      &laquo;
+    </a>
+  ) : (
+    <Link legacyBehavior href={`/shop/${page - 1}`} passHref>
+      <a className="page-link">&laquo;</a>
+    </Link>
+  )}
             </li>
             {Array.from(
               { length: Math.ceil(products.length / productsPerPage) },
