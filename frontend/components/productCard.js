@@ -49,7 +49,7 @@ const ProductCard = () => {
             setLoading(false);
           } else if (response.status === 404 || 500) {
             setLoading(false);
-            setError(true)
+            setError(true);
           }
         } catch {
           console.log("An error occurred");
@@ -63,10 +63,9 @@ const ProductCard = () => {
   return (
     <div className="container">
       {error ? (
-        <div className='container'>
-           <h1>Error 404: content unavailable</h1>
-        <img className="card-img-top" src="/error404.jpg" alt="Title" />
-       
+        <div className="container">
+          <h1>Error 404: content unavailable</h1>
+          <img className="card-img-top" src="/error404.jpg" alt="Title" />
         </div>
       ) : (
         <div>
@@ -77,15 +76,19 @@ const ProductCard = () => {
               products.map((product) => (
                 <div key={product.product_id} className="col-md-4 mb-4">
                   <div className="card">
-                  <Link legacyBehavior href={`/products/${product.product_name}`} passHref>
-                  <a>
-                    <img
-                      src={`data:image/png;base64,${product.image[0]}`}
-                      className="card-img-top"
-                      alt={product.product_name}
-                    />
-                     </a>
-                  </Link>
+                    <Link
+                      legacyBehavior
+                      href={`/products/${product.product_name}`}
+                      passHref
+                    >
+                      <a>
+                        <img
+                          src={`data:image/png;base64,${product.image[0]}`}
+                          className="card-img-top"
+                          alt={product.product_name}
+                        />
+                      </a>
+                    </Link>
                     <div className="card-body">
                       <h5 className="card-title">{product.product_name}</h5>
                       <p className="card-text">Category: {product.category}</p>
@@ -100,45 +103,44 @@ const ProductCard = () => {
             aria-label="Page navigation example"
             className="d-flex justify-content-center"
           >
-          <ul className="pagination">
-            <li className="page-item">
-            {page === 1 ? (
-    <a className="page-link disabled" disabled>
-      &laquo;
-    </a>
-  ) : (
-    <Link legacyBehavior href={`/shop/${page - 1}`} passHref>
-      <a className="page-link">&laquo;</a>
-    </Link>
-  )}
-            </li>
-            {Array.from(
-              { length: Math.ceil(products.length / productsPerPage) },
-              (_, index) => (
-                <li
-                  key={index}
-                  className={`page-item ${page === index + 1 ? "active" : ""}`}
-                >
-                  <Link legacyBehavior href={`/shop/${index + 1}`} passHref>
-                    <a className="page-link">{index + 1}</a>
+            <ul className="pagination">
+              <li className="page-item">
+                {page === 1 ? (
+                  <a className="page-link disabled" disabled>
+                    &laquo;
+                  </a>
+                ) : (
+                  <Link legacyBehavior href={`/shop/${page - 1}`} passHref>
+                    <a className="page-link">&laquo;</a>
                   </Link>
-                </li>
-              ),
-            )}
-            <li className="page-item">
-              <Link legacyBehavior href={`/shop/${pageNum + 1}`} passHref>
-                <a className={`page-link ${page === page + 1}`}>&raquo;</a>
-              </Link>
-            </li>
-          </ul>
+                )}
+              </li>
+              {Array.from(
+                { length: Math.ceil(products.length / productsPerPage) },
+                (_, index) => (
+                  <li
+                    key={index}
+                    className={`page-item ${
+                      page === index + 1 ? "active" : ""
+                    }`}
+                  >
+                    <Link legacyBehavior href={`/shop/${index + 1}`} passHref>
+                      <a className="page-link">{index + 1}</a>
+                    </Link>
+                  </li>
+                ),
+              )}
+              <li className="page-item">
+                <Link legacyBehavior href={`/shop/${pageNum + 1}`} passHref>
+                  <a className={`page-link ${page === page + 1}`}>&raquo;</a>
+                </Link>
+              </li>
+            </ul>
           </nav>
         </div>
       )}
     </div>
   );
-  };
+};
 
 export default ProductCard;
-
-
-
