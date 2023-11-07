@@ -6,7 +6,6 @@ import Script from "next/script";
 
 import store from "../redux/store";
 import "../styles/main.css";
-import { useRouter } from 'next/router'
 import { Provider } from "react-redux";
 type CustomAppProps = {
   Component: any,
@@ -17,7 +16,6 @@ export default function MyApp({
   Component,
   pageProps,
 }: CustomAppProps): React$Element<any> {
-  const Router = useRouter()
   return (
     <>
       <Provider store={store}>

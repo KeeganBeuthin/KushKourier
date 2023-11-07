@@ -1,5 +1,5 @@
 
-
+//@flow
 type Values = {
   profileLegalName: string | void,
 };

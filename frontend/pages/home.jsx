@@ -1,7 +1,5 @@
 // @flow
 import React from "react";
-
-import ControlledCarousel from "../components/carousel";
 import Navbar from "../components/navbar";
 import Slider from "../components/slider";
 // import Card from '../components/card';

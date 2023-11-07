@@ -1,6 +1,4 @@
 import React from "react";
-import Link from "next/link";
-
 const ShopSidebar = () => {
   return (
     <div className="list-group">

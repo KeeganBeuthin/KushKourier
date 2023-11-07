@@ -3,19 +3,11 @@
 import React from "react";
 import ProductPage from '../../components/productPage'
 import Navbar from "../../components/navbar";
-import ProductCategory from "../../components/productCategory";
 import BreadCrumbProduct from "../../components/breadCrumbProduct";
 import ShopSidebar from "../../components/shopSideBar";
-import { useSelector } from "react-redux";
 
-const isAndroid = Capacitor.getPlatform() === "android";
-
-
- 
 
 const Product = () => {
-
- 
 
   return (
    <>

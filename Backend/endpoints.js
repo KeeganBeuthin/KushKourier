@@ -404,6 +404,48 @@ module.exports = {
           },
         },
       },
+      '/api/cart/create': {
+        post: {
+          operationId: 'createCart',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'Cart Created Successfully',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
+      '/api/cart/val': {
+        post: {
+          operationId: 'cartCheck',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'Cart validated',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
     },
     components: {
      schemas: {

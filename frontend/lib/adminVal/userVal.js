@@ -1,15 +1,14 @@
+//@flow
 type Values = {
     userId: number | void,
 
   };
+  
+  type Errors = {
+    userId?: number | void,
+  };
 
 const userVal = (values: Values): Errors => {
-
-
-
-    type Errors = {
-        userId?: number | void,
-      };
 
       const errors = {}
       

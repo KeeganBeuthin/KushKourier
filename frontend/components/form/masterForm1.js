@@ -1,5 +1,5 @@
 //@flow
-import React, { useRef, useState } from "react";
+import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from "formik";
 import { CapacitorHttp } from "@capacitor/core";
@@ -13,7 +13,7 @@ type MasterForm1 = {
 };
 
 type UserId ={
-  userId: number|void;
+  userId: number | void;
 }
 
 const initialValues: UserId = {

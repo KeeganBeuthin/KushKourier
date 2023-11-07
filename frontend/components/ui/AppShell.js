@@ -7,6 +7,7 @@ import store from "../../redux/store";
 import Home from "../../pages/home";
 import User from "../../pages/user";
 import Shop from "../../pages/shop";
+import Admin from '../../pages/admin'
 setupIonicReact({});
 
 const AppShell = () => {
@@ -18,8 +19,9 @@ const AppShell = () => {
             <Switch>
             <Route path="/shop" component={Shop} /> 
               <Route path="/shop/:page" component={Shop} />
-              <Route path="/" exact component={Home} />
+              <Route path="/" component={Home} />
               <Route path="/user" component={User} />
+              <Route path="/admin" component={Admin} />
             </Switch>
           </IonRouterOutlet>
         </IonReactRouter>

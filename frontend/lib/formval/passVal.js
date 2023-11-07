@@ -1,4 +1,4 @@
-
+//@flow
 type Values = {
   profilePassword: string | void,
 };

@@ -1,23 +1,24 @@
-
+//@flow
 type Values = {
     ProductName: string | void,
     ProductCategory: string | void,
     ProductStock: string | void,
     ProductPrice: string | void
   };
+  type Errors = {
+    ProductName?: string | void,
+    ProductCategory?: string | void,
+    ProductStock?: string | void,
+    ProductPrice?: string | void
+  };
+
   
 const productVal = (values: Values): Errors => {
 
 
   
       
-      type Errors = {
-        ProductName?: string | void,
-        ProductCategory?: string | void,
-        ProductStock?: string | void,
-        ProductPrice?: string | void
-      };
-
+    
       
     const errors = {};
 

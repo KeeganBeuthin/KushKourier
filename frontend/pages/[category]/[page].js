@@ -1,3 +1,4 @@
+//@flow
 import React from "react";
 import Navbar from "../../components/navbar";
 import ProductCategory from "../../components/productCategory";

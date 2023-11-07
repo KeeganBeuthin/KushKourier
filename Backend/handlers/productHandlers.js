@@ -32,7 +32,7 @@ module.exports = {
 
     const page = c.request.params.productId || 1;
 
-    if(page ==0||NaN){
+    if(page <=0||NaN){
       return res.status(404).json({error:'invalid page'})
       }
 
@@ -91,9 +91,10 @@ module.exports = {
 
     const page = c.request.params.page || 1;
 
-    if(page ==0||NaN){
+    if(page <=0||NaN){
     return res.status(404).json({error:'invalid page'})
     }
+    
     const category = c.request.params.category
 
     const offset = (page - 1) * limit;
@@ -108,7 +109,7 @@ module.exports = {
 
     const catId = cat[0].category_id
 
-    console.log(catId)
+    
     
     const productInfo = await sql`
     SELECT
@@ -219,7 +220,7 @@ module.exports = {
           image: images.map((image) => image.image_data.toString("base64")),
         };
 
-        console.log(productObject)
+       
 
         product.push(productObject);
     
@@ -258,7 +259,6 @@ module.exports = {
       insert into images (image_data, product_id) values (decode(${base64Data},'base64'),${productId})
       `;
 
-    console.log(image);
     return res.status(200).json({ success: "product created" });
   },
 };

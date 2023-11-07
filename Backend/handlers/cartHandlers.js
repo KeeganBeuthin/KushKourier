@@ -124,4 +124,45 @@ module.exports ={
           return res.status(500).json({ error: "Server error" });
         }
       },
+      createCart: async (c,req,res) => {
+        const productInfo = req.body
+
+        const cookies = req.headers.cookie || '';
+
+        const match = /cartHash=([^;]+)/.exec(cookies);
+        
+        if (match) {
+          const cartHash = decodeURIComponent(match[1]);
+          console.log(cartHash);
+          const cartInsert = await sql`
+          insert into carts (cart_hash) values (${cartHash})
+          `
+        }else{
+          return res.status(404).json({error: 'invalid Request'})
+        }
+
+        return res.status(200).json({success: 'cart Created'})
+      },
+      cartCheck: async (c,req,res) => {
+        const productInfo = req
+
+        const cookies = req.headers.cookie || '';
+        const match = /cartHash=([^;]+)/.exec(cookies);
+        
+        if (match) {
+          const cartHash = decodeURIComponent(match[1]);
+          console.log(cartHash);
+    
+        const cartCheck = await sql`
+        select * from carts where cart_hash=${cartHash}
+        `
+console.log(cartCheck)
+        if(cartCheck.length==0){
+          return res.status(404).json({error:'no cart found'})
+        }
+        return res.status(200).json({success: 'cart validated'})
+      }
+      return res.status(404).json({error:'no cart found'})
+      },
+      
 }

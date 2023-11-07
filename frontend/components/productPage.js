@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Capacitor } from "@capacitor/core";
 import { CapacitorHttp } from "@capacitor/core";
-import Link from "next/link";
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { setProductData } from '../redux/productSlice';
+import { setProductName } from '../redux/productSlice';
 import { useDispatch, useSelector } from "react-redux";
 
 const isAndroid = Capacitor.getPlatform() === "android";
+
+
 
 const ProductPage = () => {
 
@@ -19,11 +20,27 @@ const ProductPage = () => {
   const [productInfo, setProductInfo] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+ 
+
+  const incrementQuantity = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
   useEffect(() => {
     if (product !== undefined) {
+
       // Check if page is defined
       const fetchData = async () => {
+
+      
+
         try {
           let productURL;
           if (isAndroid) {
@@ -43,15 +60,15 @@ const ProductPage = () => {
             },
           };
 
-          const response = await CapacitorHttp.get(options);
+          let response = await CapacitorHttp.get(options);
 
           if (response.status === 200 || response.status === 304) {
-            const productData = response.data.product[0];
+            let productData = response.data.product[0];
             setProductInfo(productData);
             dispatch(setProductName(productData.product_name));
            
             setLoading(false);
-          } else if (response.status === 404 || 500) {
+          } else if (response.status === 404 || response.status === 500) {
             setLoading(false);
             setError(true)
           }
@@ -65,7 +82,47 @@ const ProductPage = () => {
   }, [product, dispatch]);
 
   const productName = useSelector((state) => state.product);
-  console.log(productName)
+console.log(productInfo)
+  const addToCart = async () => {
+    
+  try{
+    let cartUrl;
+    if (isAndroid) {
+      cartUrl = `http://192.168.39.115:9000/api/create/cart`;
+    } else {
+      cartUrl = `/api/cart/create`;
+    }
+
+    const itemData: object = {
+      category: productInfo.category,
+      price: productInfo.price,
+      product_id: productInfo.product_id,
+      product_name: productInfo.product_name,
+      stock: productInfo.stock,
+    }
+
+  const cartInfo = {itemData}
+  
+  const options = {
+    url: cartUrl,
+    headers: {
+      "Content-Type": "application/json",
+      credentials: "include",
+      authorization: "include",
+    },
+    data: cartInfo,
+  };
+
+  let response = await CapacitorHttp.post(options);
+  if(response.status==200){
+    console.log('good')
+  }
+  }
+  catch (error) {
+    console.error(error, "Cart creation error");
+  }
+};
+
 
   return (
     <div className="container">
@@ -97,7 +154,22 @@ const ProductPage = () => {
                         Price: R{productInfo.price}
                       </Card.Text>
                       <Card.Text>Category: {productInfo.category}</Card.Text>
-                      <Button variant="primary">Add to Cart</Button>
+                      <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
+                      <div className="mt-2">
+                        <Button
+                          variant="outline-primary"
+                          onClick={decrementQuantity}
+                        >
+                          -
+                        </Button>
+                        <span className="mx-2">{quantity}</span>
+                        <Button
+                          variant="outline-primary"
+                          onClick={incrementQuantity}
+                        >
+                          +
+                        </Button>
+                      </div>
                     </Card.Body>
                   </Card>
                 </Col>

@@ -10,12 +10,24 @@ import { Capacitor } from "@capacitor/core";
 // type NavbarProps = {
 // };
 
+function generateRandomHash(length) {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
 const isAndroid = Capacitor.getPlatform() === "android";
 
 let client;
 
 let logout;
 
+let cartVal
+
+let cartCreate
 
 if (isAndroid) {
   client = "http://192.168.39.115:9000/api/cookieVal";
@@ -29,6 +41,17 @@ if (isAndroid) {
   logout = "/api/logout";
 }
 
+if (isAndroid) {
+  cartVal = "http://192.168.39.115:9000/api/cart/val";
+} else {
+  cartVal = "/api/cart/val";
+}
+
+if (isAndroid) {
+  cartCreate = "http://192.168.39.115:9000/api/cart/create";
+} else {
+  cartCreate = "/api/cart/create";
+}
 
 
 
@@ -43,15 +66,54 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
 
   // const email = useSelector((state) => state.user.email);
 
-  const name = useSelector((state) => state.user.legalName);
 
+  useEffect(() => {
+    const cartCheck = async () => {
+
+      try {
+        const options = {
+          url: cartVal,
+          headers: {
+            "Content-Type": "application/json",
+            'credentials': "include",
+          },
+        };
+        const response = await CapacitorHttp.post(options);
+        if (response.status == 200) {
+          next()
+        }
+        else if(response.status == 404){
+          console.log('jj')
+          const newCartHash = generateRandomHash(40);
+          console.log(newCartHash)
+   
+          document.cookie =`cartHash=${newCartHash}; path=/; max-age=360000000; samesite=lax`;
+
+          const options = {
+            url: cartCreate,
+            headers: {
+              "Content-Type": "application/json",
+              'credentials': "include",
+            },
+          };
+          const response = await CapacitorHttp.post(options);
+
+
+        }
+      } catch {
+        console.log("An error occurred");
+      }
+    };
+
+    cartCheck();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      const apiUrl = client;
+
       try {
         const options = {
-          url: apiUrl,
+          url: client,
           headers: {
             "Content-Type": "application/json",
             credentials: "include",
@@ -113,7 +175,7 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
       />
       <a
         className="navbar-brand Lgreen d-inline-flex fs-1 pacifico"
-        href="/home"
+        href={isAndroid ? "/" : "/home"}
       >
         Kush Kourier
       </a>

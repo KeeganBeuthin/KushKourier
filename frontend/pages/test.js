@@ -1,7 +1,8 @@
+//@flow
 import React from "react";
 import Navbar from "../components/navbar";
 import ProductPage from "../components/productPage";
-import BreadCrumb from "../components/breadCrumb";
+import BreadCrumbShop from "../components/breadCrumbShop";
 import ShopSidebar from "../components/shopSideBar";
 
 const test = (): React$Element<any> => {
@@ -14,7 +15,7 @@ const test = (): React$Element<any> => {
             <ShopSidebar />
           </div>
           <div className="col-md-9">
-            <BreadCrumb />
+            <BreadCrumbShop />
             <ProductPage />
           </div>
         </div>

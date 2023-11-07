@@ -7,7 +7,6 @@ import Link from "next/link";
 const isAndroid = Capacitor.getPlatform() === "android";
 
 const ProductCategory = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;
   const router = useRouter();
 
@@ -43,13 +42,13 @@ const ProductCategory = () => {
             },
           };
 
-          const response = await CapacitorHttp.get(options);
+          let response = await CapacitorHttp.get(options);
 
           if (response.status === 200 || response.status === 304) {
-            const productInfo = response.data.products;
+            let productInfo = response.data.products;
             setProducts(productInfo);
             setLoading(false);
-          } else if (response.status === 404 || 500) {
+          } else if (response.status === 404 || response.status === 500) {
             setLoading(false);
             setError(true)
           }
@@ -80,7 +79,7 @@ const ProductCategory = () => {
                 <a className={`page-link ${page === 1 ? "disabled" : ""}`}
                 disabled={page === 1}
                 onClick={() => {
-                  if (page >= 1) {
+                  if (page >= 0) {
                    window.location.href = `/${category}/${pageNum -1}`;
                   }
                 }}>
@@ -103,11 +102,11 @@ const ProductCategory = () => {
             )}
             <li className="page-item">
               <Link legacyBehavior href={`/${category}/${pageNum + 1}`} passHref>
-                <a className={`page-link ${page === page + 1}`} 
-                 disabled={page === 1}
+                <a className={`page-link ${pageNum === pageNum + 1}`} 
+                 
                  onClick={() => {
-                   if (page > 1) {
-                    window.location.href = `/${category}/${pageNum +1}`;
+                   if (pageNum >= 0) {
+                    window.location.href = `/${category}/${pageNum + 1}`;
                    }
                  }}
                  >
@@ -152,9 +151,15 @@ const ProductCategory = () => {
             className="d-flex justify-content-center"
           >
           <ul className="pagination">
-            <li className="page-item">
+          <li className="page-item">
               <Link legacyBehavior href={`/${category}/${page - 1}`} passHref>
-                <a className={`page-link ${page === 1 ? "disabled" : ""}`}>
+                <a className={`page-link ${page == 1 ? "disabled" : ""}`}
+                disabled={page === 1}
+                onClick={() => {
+                  if (page >= 0) {
+                   window.location.href = `/${category}/${pageNum -1}`;
+                  }
+                }}>
                   &laquo;
                 </a>
               </Link>
@@ -172,9 +177,18 @@ const ProductCategory = () => {
                 </li>
               ),
             )}
-            <li className="page-item">
+              <li className="page-item">
               <Link legacyBehavior href={`/${category}/${pageNum + 1}`} passHref>
-                <a className={`page-link ${page === page + 1}`}>&raquo;</a>
+                <a className={`page-link ${pageNum === pageNum + 1}`} 
+                 
+                 onClick={() => {
+                   if (pageNum >= 0) {
+                    window.location.href = `/${category}/${pageNum + 1}`;
+                   }
+                 }}
+                 >
+                    &raquo;
+                 </a>
               </Link>
             </li>
           </ul>

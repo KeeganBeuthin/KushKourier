@@ -41,3 +41,16 @@ ALTER TABLE images
 ADD CONSTRAINT fk_product_id
     FOREIGN KEY (product_id)
     REFERENCES Products(product_id);
+    
+CREATE TABLE Carts (
+    cart_id SERIAL PRIMARY KEY,
+    cart_hash VARCHAR NOT NULL,
+    user_id INT,
+    product_id INT,
+    quantity INT 
+);
+
+ALTER TABLE Carts
+ADD CONSTRAINT fk_user_id
+    FOREIGN KEY (user_id)
+    REFERENCES accounts(user_id);
