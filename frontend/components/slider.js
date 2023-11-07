@@ -10,7 +10,7 @@ const Slider = () => {
         {/* Category 1 (Hemp CBD) */}
         <div className="mx-sm" style={{ minWidth: "80px", width: "80px" }}>
           <a
-            href="#"
+            href="/CBD-Hemp/1"
             className="d-block text-center"
             data-testid="Hemp CBD-products-category"
           >
@@ -39,7 +39,7 @@ const Slider = () => {
         {/* Category 2 (Delta-8 THC) */}
         <div className="mx-sm" style={{ minWidth: "80px", width: "80px" }}>
           <a
-            href="#"
+            href="/Delta-8/1"
             className="d-block text-center"
             data-testid="Delta-8 THC-products-category"
           >
@@ -68,7 +68,7 @@ const Slider = () => {
         {/* Category 3 (Growing) */}
         <div className="mx-sm" style={{ minWidth: "80px", width: "80px" }}>
           <a
-            href="#"
+            href="/Growing-Equipment/1"
             className="d-block text-center"
             data-testid="Growing-products-category"
           >
@@ -97,7 +97,7 @@ const Slider = () => {
         {/* Category 4 (Edibles) */}
         <div className="mx-sm" style={{ minWidth: "80px", width: "80px" }}>
           <a
-            href="#"
+            href="/Edibles/1"
             className="d-block text-center"
             data-testid="Edibles-products-category"
           >
@@ -126,7 +126,7 @@ const Slider = () => {
         {/* Category 5 (Vaping) */}
         <div className="mx-sm" style={{ minWidth: "80px", width: "80px" }}>
           <a
-            href="#"
+            href="/Vape/1"
             className="d-block text-center"
             data-testid="Vaping-products-category"
           >
@@ -155,7 +155,7 @@ const Slider = () => {
         {/* Category 6 (Flower) */}
         <div className="mx-sm" style={{ minWidth: "80px", width: "80px" }}>
           <a
-            href="#"
+            href="/Flower/1"
             className="d-block text-center"
             data-testid="Flower-products-category"
           >
@@ -184,7 +184,7 @@ const Slider = () => {
         {/* Category 7 (Pre-rolls) */}
         <div className="mx-sm" style={{ minWidth: "80px", width: "80px" }}>
           <a
-            href="#"
+            href="/Rolling-Papers/1"
             className="d-block text-center"
             data-testid="Pre-rolls-products-category"
           >
@@ -205,7 +205,7 @@ const Slider = () => {
               </div>
             </div>
             <div className="font-weight-bold text-success text-xs text-underline roboto">
-              Pre-rolls
+              Rolling-Papers
             </div>
           </a>
         </div>
