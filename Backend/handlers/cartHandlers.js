@@ -1,4 +1,3 @@
-
 const cors = require("cors");
 const postgres = require("postgres");
 const OpenAPIBackend = require("openapi-backend").default;
@@ -13,7 +12,6 @@ const sql = postgres("postgres://postgres:hahaha@127.0.0.1:8080/rat");
 const path = require("path");
 const fs = require("fs");
 
-
 let redisClient = createClient();
 redisClient.connect().catch(console.error);
 
@@ -22,169 +20,180 @@ let redisStore = new RedisStore({
   prefix: "SessionStore:",
 });
 
-module.exports ={
+module.exports = {
+  addToCart: async (c, req, res) => {
+    const { price, quantity, product_id } = req.body.itemData;
 
+    const cookies = req.headers.cookie || "";
 
-    addToCart: async (c, req, res) => {
+    const match = /cartHash=([^;]+)/.exec(cookies);
 
-      const {price,quantity,product_id} = req.body.itemData
+    const cartHash = decodeURIComponent(match[1]);
 
-      const cookies = req.headers.cookie || '';
+    if (!price || !quantity || !product_id) {
+      return res.status(400).json({ error: "Invalid cart item data" });
+    }
 
-      const match = /cartHash=([^;]+)/.exec(cookies);
-
-      const cartHash = decodeURIComponent(match[1]);
-      
-    
-        if (!price || !quantity || !product_id) {
-          return res.status(400).json({ error: "Invalid cart item data" });
-        }
-    
-        try {
-          await sql`
+    try {
+      await sql`
               INSERT INTO carts (product_id, quantity, price,cart_hash)
               VALUES (${product_id}, ${quantity}, ${price},${cartHash}) 
             `;
-            console.log('added')
-          return res.status(200).json({ message: "Product added to cart" });
-        } catch (error) {
-          console.error("Error adding product to cart:", error);
-          return res.status(500).json({ error: "Server error" });
-        }
-      },
-    
-      removeFromCart: async (c, req, res) => {
-        const { user_id, cart_id } = req.body;
-    
-        if (!user_id || !cart_id) {
-          return res.status(400).json({ error: "Invalid user or cart item data" });
-        }
-    
-        try {
-          await sql`
+      console.log("added");
+      return res.status(200).json({ message: "Product added to cart" });
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+      return res.status(500).json({ error: "Server error" });
+    }
+  },
+
+  removeItemFromCart: async (c, req, res) => {
+    const { item } = req.body;
+
+    if (!item) {
+      return res.status(400).json({ error: "Invalid user or cart item data" });
+    }
+
+    try {
+      await sql`
               DELETE FROM carts
-              WHERE cart_id = ${cart_id} AND user_id = ${user_id}
+              WHERE cart_id = ${item}
             `;
-          return res.status(200).json({ message: "Product removed from cart" });
-        } catch (error) {
-          console.error("Error removing product from cart:", error);
-          return res.status(500).json({ error: "Server error" });
-        }
-      },
-    
-      updateQuantity: async (c, req, res) => {
-        const { user_id, cart_id, new_quantity } = req.body;
-    
-        if (!user_id || !cart_id || new_quantity === undefined) {
-          return res
-            .status(400)
-            .json({ error: "Invalid user, cart item, or quantity data" });
-        }
-    
-        try {
-          await sql`
+      return res.status(200).json({ message: "Product removed from cart" });
+    } catch (error) {
+      console.error("Error removing product from cart:", error);
+      return res.status(500).json({ error: "Server error" });
+    }
+  },
+
+  updateQuantity: async (c, req, res) => {
+    const { user_id, cart_id, new_quantity } = req.body;
+
+    if (!user_id || !cart_id || new_quantity === undefined) {
+      return res
+        .status(400)
+        .json({ error: "Invalid user, cart item, or quantity data" });
+    }
+
+    try {
+      await sql`
               UPDATE carts
               SET quantity = ${new_quantity}
               WHERE cart_id = ${cart_id} AND user_id = ${user_id}
             `;
-          return res.status(200).json({ message: "Cart item quantity updated" });
-        } catch (error) {
-          console.error("Error updating cart item quantity:", error);
-          return res.status(500).json({ error: "Server error" });
-        }
-      },
-    
-      getCartContents: async (c, req, res) => {
-        const cookies = req.headers.cookie || '';
+      return res.status(200).json({ message: "Cart item quantity updated" });
+    } catch (error) {
+      console.error("Error updating cart item quantity:", error);
+      return res.status(500).json({ error: "Server error" });
+    }
+  },
 
-        const match = /cartHash=([^;]+)/.exec(cookies);
-  
-        const cartHash = decodeURIComponent(match[1]);
-    
-        if (!cartHash) {
-          return res.status(400).json({ error: "Invalid Request" });
-        }
-    
-          const cartContents = await sql`
-              SELECT * FROM carts where cart_hash=${cartHash}
-            `;
+  getCartContents: async (c, req, res) => {
+    const cookies = req.headers.cookie || "";
 
-            console.log(cartContents)
+    const match = /cartHash=([^;]+)/.exec(cookies);
 
-          return res.status(200).json(cartContents);
-        
-        
-      },
-    
-      getCartPrice: async (c, req, res) => {
-        const { user_id } = req.query;
-    
-        if (!user_id) {
-          return res.status(400).json({ error: "Invalid user ID" });
-        }
-    
-        try {
-          const totalPrice = await sql`
+    const cartHash = decodeURIComponent(match[1]);
+
+    if (!cartHash) {
+      return res.status(400).json({ error: "Invalid Request" });
+    }
+
+    const cartInfo = await sql`
+        SELECT
+          c.cart_id,
+          c.product_id,
+          c.quantity,
+          c.price,
+          p.product_name,
+          i.image_data
+        FROM carts AS c
+        INNER JOIN products AS p ON c.product_id = p.product_id
+        INNER JOIN images AS i ON c.product_id = i.product_id
+        WHERE c.cart_hash = ${cartHash}
+      `;
+
+    const cartContents = cartInfo.map((item) => {
+      const imageBuffer = item.image_data;
+      if (imageBuffer && imageBuffer.length > 0) {
+        const base64Image = Buffer.from(imageBuffer).toString("base64");
+        return { ...item, image_data: base64Image };
+      }
+      return item;
+    });
+
+    console.log(cartContents);
+
+    return res.status(200).json(cartContents);
+  },
+
+  getCartTotalPrice: async (c, req, res) => {
+    const { cartHash } = req.query;
+
+    if (!cartHash) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    try {
+      const totalPrice = await sql`
               SELECT SUM(quantity * price) AS total_price
               FROM carts
-              WHERE user_id = ${user_id}
+              WHERE cart_hash = ${cartHash}
             `;
-          return res.status(200).json(totalPrice[0]);
-        } catch (error) {
-          console.error("Error calculating cart total price:", error);
-          return res.status(500).json({ error: "Server error" });
-        }
-      },
-      createCart: async (c,req,res) => {
+      return res.status(200).json(totalPrice[0]);
+    } catch (error) {
+      console.error("Error calculating cart total price:", error);
+      return res.status(500).json({ error: "Server error" });
+    }
+  },
+  createCart: async (c, req, res) => {
+    const cookies = req.headers.cookie;
 
-        const cookies = req.headers.cookie;
+    const match = /cartHash=([^;]+)/.exec(cookies);
 
-        const match = /cartHash=([^;]+)/.exec(cookies);
-        
-        const session = req.session.id;
-    
-        const sessionData = await redisClient.get(`SessionStore:${session}`);
+    const session = req.session.id;
 
-        const cartHash = decodeURIComponent(match[1]);
+    const sessionData = await redisClient.get(`SessionStore:${session}`);
 
-        console.log(cartHash);
+    const cartHash = decodeURIComponent(match[1]);
 
-        if (!sessionData) {
-          const cartInsert = await sql`
+    console.log(cartHash);
+
+    if (!sessionData) {
+      const cartInsert = await sql`
           insert into carts (cart_hash) values (${cartHash})
           `;
-          return res.status(200).json({success:'cart Created'})
-        }
+      return res.status(200).json({ success: "cart Created" });
+    }
 
-        const id = JSON.parse(sessionData);
-    
-        const identifierNum = id.userId[0].user_id;
+    const id = JSON.parse(sessionData);
 
-          const cartInsert = await sql`
+    const identifierNum = id.userId[0].user_id;
+
+    const cartInsert = await sql`
           insert into carts (cart_hash,user_id) values (${cartHash},${identifierNum})
-          `
-          return res.status(200).json({success: 'cart Created'})
-      },
-      cartCheck: async (c,req,res) => {
-        const productInfo = req
+          `;
+    return res.status(200).json({ success: "cart Created" });
+  },
+  cartCheck: async (c, req, res) => {
+    const productInfo = req;
 
-        const cookies = req.headers.cookie || '';
-        const match = /cartHash=([^;]+)/.exec(cookies);
-        
-        if (match) {
-          const cartHash = decodeURIComponent(match[1]);
-          console.log(cartHash);
-    
-        const cartCheck = await sql`
+    const cookies = req.headers.cookie || "";
+    const match = /cartHash=([^;]+)/.exec(cookies);
+
+    if (match) {
+      const cartHash = decodeURIComponent(match[1]);
+      console.log(cartHash);
+
+      const cartCheck = await sql`
         select * from carts where cart_hash=${cartHash}
-        `
-console.log(cartCheck)
-        if(cartCheck.length==0){
-          return res.status(404).json({error:'no cart found'})
-        }
-        return res.status(200).json({success: 'cart validated'})
+        `;
+      console.log(cartCheck);
+      if (cartCheck.length == 0) {
+        return res.status(404).json({ error: "no cart found" });
       }
-      return res.status(404).json({error:'no cart found'})
-      },
-      
-}
+      return res.status(200).json({ success: "cart validated" });
+    }
+    return res.status(404).json({ error: "no cart found" });
+  },
+};

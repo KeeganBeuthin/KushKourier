@@ -27,17 +27,16 @@ module.exports = {
     console.log(id);
   },
   getProducts: async (c, req, res) => {
-  
     const limit = 10;
 
     const page = c.request.params.productId || 1;
 
-    if(page <=0||NaN){
-      return res.status(404).json({error:'invalid page'})
-      }
+    if (page <= 0 || NaN) {
+      return res.status(404).json({ error: "invalid page" });
+    }
 
     const offset = (page - 1) * limit;
-    
+
     const productInfo = await sql`
     SELECT
       p.product_id,
@@ -86,31 +85,28 @@ module.exports = {
     return res.status(200).json({ products });
   },
   getProductsByCategory: async (c, req, res) => {
-
     const limit = 10;
 
     const page = c.request.params.page || 1;
 
-    if(page <=0||NaN){
-    return res.status(404).json({error:'invalid page'})
+    if (page <= 0 || NaN) {
+      return res.status(404).json({ error: "invalid page" });
     }
-    
-    const category = c.request.params.category
+
+    const category = c.request.params.category;
 
     const offset = (page - 1) * limit;
 
     const cat = await sql`
     select category_id from categories where category_name=${category}
-    `
+    `;
 
-    if (cat.length=== 0) {
+    if (cat.length === 0) {
       return res.status(404).json({ error: "No products found" });
     }
 
-    const catId = cat[0].category_id
+    const catId = cat[0].category_id;
 
-    
-    
     const productInfo = await sql`
     SELECT
       p.product_id,
@@ -161,7 +157,7 @@ module.exports = {
   },
   getProductById: async (c, req, res) => {
     const id = c.request.params.productId;
-    console.log('hi')
+    console.log("hi");
 
     const product = await sql`
             select * from products where product_id=${id}
@@ -171,11 +167,9 @@ module.exports = {
 
   getProduct: async (c, req, res) => {
     const name = c.request.params.productName;
-    const prod = c.request.params
- 
+    const prod = c.request.params;
 
-
-      const productInfo = await sql`
+    const productInfo = await sql`
       SELECT
         p.product_id,
         p.product_name,
@@ -187,43 +181,38 @@ module.exports = {
       WHERE product_name=${name}
     `;
 
+    if (productInfo.length === 0) {
+      return res.status(404).json({ error: "No product found" });
+    }
 
+    const product = [];
 
-      if (productInfo.length === 0) {
-        return res.status(404).json({ error: "No product found" });
-      }
-  
-      const product = [];
-  
-      const productBody = productInfo[0]
+    const productBody = productInfo[0];
 
-        const category = await sql`
+    const category = await sql`
         SELECT category_name
         FROM categories
         WHERE category_id = ${productBody.category_id}
       `;
-      
-  
-        const images = await sql`
+
+    const images = await sql`
         SELECT image_data
         FROM images
         WHERE product_id = ${productBody.product_id}
       `;
-  
-        const productObject = {
-          product_id: productBody.product_id,
-          product_name: productBody.product_name,
-          price: productBody.price,
-          stock: productBody.stock,
-          discount: productBody.discount,
-          category: category[0].category_name,
-          image: images.map((image) => image.image_data.toString("base64")),
-        };
 
-       
+    const productObject = {
+      product_id: productBody.product_id,
+      product_name: productBody.product_name,
+      price: productBody.price,
+      stock: productBody.stock,
+      discount: productBody.discount,
+      category: category[0].category_name,
+      image: images.map((image) => image.image_data.toString("base64")),
+    };
 
-        product.push(productObject);
-    
+    product.push(productObject);
+
     return res.status(200).json({ product });
   },
 

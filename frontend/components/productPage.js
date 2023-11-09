@@ -21,7 +21,7 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [quantity, setQuantity] = useState(1);
- 
+  const [itemAdded, setItemAdded] = useState(false);
 
   const incrementQuantity = () => {
     setQuantity(quantity + 1);
@@ -115,6 +115,7 @@ console.log(productInfo)
 
   let response = await CapacitorHttp.post(options);
   if(response.status==200){
+    setItemAdded(true)
     console.log('good')
   }
   }
@@ -176,6 +177,9 @@ console.log(productInfo)
                         Total Price: R{totalPrice}
                       </div>
                       <Button variant="primary" onClick={addToCart} className='mt-3'>Add to Cart</Button>
+                      {itemAdded && (
+                      <div className="text-success mt-3">Item successfully Added X3!</div>
+                     )}
                     </Card.Body>
                   </Card>
                 </Col>

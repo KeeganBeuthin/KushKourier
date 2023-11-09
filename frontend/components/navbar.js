@@ -12,7 +12,8 @@ import { useRouter } from "next/router";
 // };
 
 function generateRandomHash(length) {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -20,16 +21,15 @@ function generateRandomHash(length) {
   return result;
 }
 
-
 const isAndroid = Capacitor.getPlatform() === "android";
 
 let client;
 
 let logout;
 
-let cartVal
+let cartVal;
 
-let cartCreate
+let cartCreate;
 
 if (isAndroid) {
   client = "http://192.168.39.115:9000/api/cookieVal";
@@ -55,10 +55,7 @@ if (isAndroid) {
   cartCreate = "/api/cart/create";
 }
 
-
-
 const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
-
   const router = useRouter();
 
   const [auth, setAuth] = useState(false);
@@ -79,43 +76,52 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
     setShowCartNav(false);
   };
 
-
   const navigateToCart = () => {
-    router.push("/cart");
+    // Get the cartHash value from the cookie
+    const cookies = document.cookie.split("; ");
+    let cartHash = null;
+    for (const cookie of cookies) {
+      const [name, value] = cookie.split("=");
+      if (name === "cartHash") {
+        cartHash = value;
+        break;
+      }
+    }
+
+    // Redirect to the /cart/:cartHash URL
+    if (cartHash) {
+      router.push(`/cart/${cartHash}`);
+    }
   };
 
   useEffect(() => {
     const cartCheck = async () => {
-
       try {
         const options = {
           url: cartVal,
           headers: {
             "Content-Type": "application/json",
-            'credentials': "include",
+            credentials: "include",
           },
         };
         const response = await CapacitorHttp.post(options);
         if (response.status == 200) {
-          next()
-        }
-        else if(response.status == 404){
-          console.log('jj')
+          next();
+        } else if (response.status == 404) {
+          console.log("jj");
           const newCartHash = generateRandomHash(40);
-          console.log(newCartHash)
-   
-          document.cookie =`cartHash=${newCartHash}; path=/; max-age=360000000; samesite=lax`;
+          console.log(newCartHash);
+
+          document.cookie = `cartHash=${newCartHash}; path=/; max-age=360000000; samesite=lax`;
 
           const options = {
             url: cartCreate,
             headers: {
               "Content-Type": "application/json",
-              'credentials': "include",
+              credentials: "include",
             },
           };
           const response = await CapacitorHttp.post(options);
-
-
         }
       } catch {
         console.log("An error occurred");
@@ -127,7 +133,6 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
 
   useEffect(() => {
     const fetchData = async () => {
-
       try {
         const options = {
           url: client,
@@ -163,25 +168,22 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
   };
 
   const handleLogout = async () => {
-      try {
-        const options = {
-          url: logout,
-          headers: {
-            "Content-Type": "application/json",
-            'credentials': "include",
-          },
-        };
-        const response = await CapacitorHttp.post(options);
-        if (response.status === 200) {
-          setAuth(false);
-
-        }
-      } catch {
-        console.log("An error occurred");
+    try {
+      const options = {
+        url: logout,
+        headers: {
+          "Content-Type": "application/json",
+          credentials: "include",
+        },
+      };
+      const response = await CapacitorHttp.post(options);
+      if (response.status === 200) {
+        setAuth(false);
       }
+    } catch {
+      console.log("An error occurred");
     }
-
-  
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light Fgreen shadow-lg">
@@ -211,22 +213,21 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
         <ul className="navbar-nav mx-3">
           <li className="nav-item">
             {auth ? (
-               <>
-              <li className="nav-item d-inline-flex">
-                <a className="nav-link Lgreen" href="/user">
-                  hello {username}!
-                </a>
-              </li>
-              <li className="nav-item d-inline-flex">
-                <button
-                  className="btn btn-outline-light text-dark"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-              </li>
-            </>
-          
+              <>
+                <li className="nav-item d-inline-flex">
+                  <a className="nav-link Lgreen" href="/user">
+                    hello {username}!
+                  </a>
+                </li>
+                <li className="nav-item d-inline-flex">
+                  <button
+                    className="btn btn-outline-light text-dark"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
             ) : (
               <button
                 className="btn btn-outline-light text-dark"
@@ -298,15 +299,11 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
               </button>
             </div>
             <button
-            className="btn btn-outline-light my-2 my-sm-0 text-light me-sm-2 ms-sm-1"
-            onClick={navigateToCart} >
-            <img
-              src={"/cart.svg"}
-              width="20"
-              height="20"
-              alt="Cart Icon"
-            />
-          </button>
+              className="btn btn-outline-light my-2 my-sm-0 text-light me-sm-2 ms-sm-1"
+              onClick={navigateToCart}
+            >
+              <img src={"/cart.svg"} width="20" height="20" alt="Cart Icon" />
+            </button>
           </div>
         </form>
       </div>

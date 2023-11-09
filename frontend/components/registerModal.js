@@ -5,6 +5,7 @@ import { Formik, Field, ErrorMessage } from "formik";
 import { register_validate } from "../lib/registerValidate";
 import { CapacitorHttp } from "@capacitor/core";
 import type { FormikProps } from "formik";
+
 type RegisterModalProps = {
   show: boolean,
   onClose: () => void,
@@ -25,6 +26,7 @@ const RegisterModal = ({
   onClose,
   switchForm,
 }: RegisterModalProps): React$Element<any> => {
+
   const initialValues: RegisterValues = {
     registerUsername: "",
     registerEmail: "",

@@ -411,13 +411,58 @@ module.exports = {
             required: true,
             content: {
               'application/json': {
-                
               },
             },
           },
           responses: {
             '200': {
               description: 'Cart Created Successfully',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
+      '/api/cart/removeItem': {
+        post: {
+          operationId: 'removeItemFromCart',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'Item Removed Successfully',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
+      '/api/cart/get': {
+        get: {
+          operationId: 'getCartContents',
+          responses: {
+            '200': {
+              description: 'Cart retrieved Successfully',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
+      '/api/cart/value': {
+        get: {
+          operationId: 'getCartTotalPrice',
+          responses: {
+            '200': {
+              description: 'Cart Price Retrieved Successfully',
             },
             '400': {
               description: 'Bad Request',

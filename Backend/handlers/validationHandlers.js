@@ -21,60 +21,56 @@ let redisStore = new RedisStore({
 });
 
 module.exports = {
-    cookieValidate: async (c, req, res) => {
-        const session = req.session.id;
-    
-        const cookies = req.headers.cookie;
-    
-        const sessionData = await redisClient.get(`SessionStore:${session}`);
-        if (!sessionData) {
-          return res.status(500).json({ error: "session data not found" });
-        }
-        const id = JSON.parse(sessionData);
-    
-        const identifierNum = id.userId[0].user_id;
-    
-        const userInfo = await sql`
+  cookieValidate: async (c, req, res) => {
+    const session = req.session.id;
+
+    const cookies = req.headers.cookie;
+
+    const sessionData = await redisClient.get(`SessionStore:${session}`);
+    if (!sessionData) {
+      return res.status(500).json({ error: "session data not found" });
+    }
+    const id = JSON.parse(sessionData);
+
+    const identifierNum = id.userId[0].user_id;
+
+    const userInfo = await sql`
           select email,username from accounts where user_id =${identifierNum}
           `;
-    
-        const package = userInfo[0];
-        console.log(package);
-        return res.status(200).json({ package });
-      },
-      adminValidate: async (c, req, res) => {
-        const session = req.session.id;
-    
-        const cookies = req.headers.cookie;
-    
-        const sessionData = await redisClient.get(`SessionStore:${session}`);
-        if (!sessionData) {
-          return res.status(500).json({ error: "session data not found" });
-        }
-        const id = JSON.parse(sessionData);
-    
-        const identifierNum = id.userId[0].user_id;
-    
-        const userInfo = await sql`
+
+    const package = userInfo[0];
+    console.log(package);
+    return res.status(200).json({ package });
+  },
+  adminValidate: async (c, req, res) => {
+    const session = req.session.id;
+
+    const cookies = req.headers.cookie;
+
+    const sessionData = await redisClient.get(`SessionStore:${session}`);
+    if (!sessionData) {
+      return res.status(500).json({ error: "session data not found" });
+    }
+    const id = JSON.parse(sessionData);
+
+    const identifierNum = id.userId[0].user_id;
+
+    const userInfo = await sql`
           select role from accounts where user_id =${identifierNum}
           `;
-         
-       const roleInfo = userInfo[0].role
-    
-    
-       const stringRole = JSON.stringify(roleInfo)
-    
-    
-    const parsedRole = JSON.parse(stringRole)
-    
-    
-       if(parsedRole==="master"){
-        res.status(201).json({validated: 'welcome master user'})
-       }else if(parsedRole==="admin"){
-        return res.status(200).json({validated:'welcome admin' });
-       } else {
-        return res.status(400).json({error:'validation failed'})
-      }
-      },
-}
 
+    const roleInfo = userInfo[0].role;
+
+    const stringRole = JSON.stringify(roleInfo);
+
+    const parsedRole = JSON.parse(stringRole);
+
+    if (parsedRole === "master") {
+      res.status(201).json({ validated: "welcome master user" });
+    } else if (parsedRole === "admin") {
+      return res.status(200).json({ validated: "welcome admin" });
+    } else {
+      return res.status(400).json({ error: "validation failed" });
+    }
+  },
+};
