@@ -37,3 +37,25 @@
 .logo-image {
   min-width: 200px; /* Adjust the minimum width as needed */
 }
+
+.cart-popup {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cart-content {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  min-width: 200px;
+  z-index: 999;
+}
+
+.cart-popup:hover .cart-content {
+  display: block;
+}

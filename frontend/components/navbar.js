@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUsername, setEmail } from "../redux/userSlice";
 import RegisterModal from "./registerModal";
 import { Capacitor } from "@capacitor/core";
+import { useRouter } from "next/router";
 // type NavbarProps = {
 // };
 
@@ -18,6 +19,7 @@ function generateRandomHash(length) {
   }
   return result;
 }
+
 
 const isAndroid = Capacitor.getPlatform() === "android";
 
@@ -56,6 +58,9 @@ if (isAndroid) {
 
 
 const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
+
+  const router = useRouter();
+
   const [auth, setAuth] = useState(false);
 
   const dispatch = useDispatch();
@@ -64,8 +69,20 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
 
   const username = useSelector((state) => state.user.username);
 
-  // const email = useSelector((state) => state.user.email);
+  const [showCartNav, setShowCartNav] = useState(false);
 
+  const openCartNav = () => {
+    setShowCartNav(true);
+  };
+
+  const closeCartNav = () => {
+    setShowCartNav(false);
+  };
+
+
+  const navigateToCart = () => {
+    router.push("/cart");
+  };
 
   useEffect(() => {
     const cartCheck = async () => {
@@ -280,6 +297,16 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
                 />
               </button>
             </div>
+            <button
+            className="btn btn-outline-light my-2 my-sm-0 text-light me-sm-2 ms-sm-1"
+            onClick={navigateToCart} >
+            <img
+              src={"/cart.svg"}
+              width="20"
+              height="20"
+              alt="Cart Icon"
+            />
+          </button>
           </div>
         </form>
       </div>

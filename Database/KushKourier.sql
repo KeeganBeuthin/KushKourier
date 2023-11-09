@@ -47,7 +47,8 @@ CREATE TABLE Carts (
     cart_hash VARCHAR NOT NULL,
     user_id INT,
     product_id INT,
-    quantity INT 
+    quantity INT,
+    price INT
 );
 
 ALTER TABLE Carts

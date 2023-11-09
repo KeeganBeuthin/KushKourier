@@ -88,17 +88,17 @@ console.log(productInfo)
   try{
     let cartUrl;
     if (isAndroid) {
-      cartUrl = `http://192.168.39.115:9000/api/create/cart`;
+      cartUrl = `http://192.168.39.115:9000/api/cart/add`;
     } else {
-      cartUrl = `/api/cart/create`;
+      cartUrl = `/api/cart/add`;
     }
 
     const itemData: object = {
       category: productInfo.category,
       price: productInfo.price,
+      quantity: quantity,
       product_id: productInfo.product_id,
       product_name: productInfo.product_name,
-      stock: productInfo.stock,
     }
 
   const cartInfo = {itemData}
@@ -123,6 +123,7 @@ console.log(productInfo)
   }
 };
 
+  const totalPrice = productInfo.price * quantity;
 
   return (
     <div className="container">
@@ -154,7 +155,7 @@ console.log(productInfo)
                         Price: R{productInfo.price}
                       </Card.Text>
                       <Card.Text>Category: {productInfo.category}</Card.Text>
-                      <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
+                      
                       <div className="mt-2">
                         <Button
                           variant="outline-primary"
@@ -169,7 +170,12 @@ console.log(productInfo)
                         >
                           +
                         </Button>
+                        
                       </div>
+                      <div className="mt-2">
+                        Total Price: R{totalPrice}
+                      </div>
+                      <Button variant="primary" onClick={addToCart} className='mt-3'>Add to Cart</Button>
                     </Card.Body>
                   </Card>
                 </Col>

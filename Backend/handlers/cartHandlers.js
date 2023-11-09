@@ -26,17 +26,26 @@ module.exports ={
 
 
     addToCart: async (c, req, res) => {
-        const { user_id, product_id, quantity, price } = req.body;
+
+      const {price,quantity,product_id} = req.body.itemData
+
+      const cookies = req.headers.cookie || '';
+
+      const match = /cartHash=([^;]+)/.exec(cookies);
+
+      const cartHash = decodeURIComponent(match[1]);
+      
     
-        if (!user_id || !product_id || !quantity || !price) {
+        if (!price || !quantity || !product_id) {
           return res.status(400).json({ error: "Invalid cart item data" });
         }
     
         try {
           await sql`
-              INSERT INTO carts (user_id, product_id, quantity, price)
-              VALUES (${user_id}, ${product_id}, ${quantity}, ${price})
+              INSERT INTO carts (product_id, quantity, price,cart_hash)
+              VALUES (${product_id}, ${quantity}, ${price},${cartHash}) 
             `;
+            console.log('added')
           return res.status(200).json({ message: "Product added to cart" });
         } catch (error) {
           console.error("Error adding product to cart:", error);
@@ -86,23 +95,25 @@ module.exports ={
       },
     
       getCartContents: async (c, req, res) => {
-        const { user_id } = req.query;
+        const cookies = req.headers.cookie || '';
+
+        const match = /cartHash=([^;]+)/.exec(cookies);
+  
+        const cartHash = decodeURIComponent(match[1]);
     
-        if (!user_id) {
-          return res.status(400).json({ error: "Invalid user ID" });
+        if (!cartHash) {
+          return res.status(400).json({ error: "Invalid Request" });
         }
     
-        try {
           const cartContents = await sql`
-              SELECT cart_id, product_id, quantity, price
-              FROM carts
-              WHERE user_id = ${user_id}
+              SELECT * FROM carts where cart_hash=${cartHash}
             `;
+
+            console.log(cartContents)
+
           return res.status(200).json(cartContents);
-        } catch (error) {
-          console.error("Error retrieving cart contents:", error);
-          return res.status(500).json({ error: "Server error" });
-        }
+        
+        
       },
     
       getCartPrice: async (c, req, res) => {
@@ -125,23 +136,34 @@ module.exports ={
         }
       },
       createCart: async (c,req,res) => {
-        const productInfo = req.body
 
-        const cookies = req.headers.cookie || '';
+        const cookies = req.headers.cookie;
 
         const match = /cartHash=([^;]+)/.exec(cookies);
         
-        if (match) {
-          const cartHash = decodeURIComponent(match[1]);
-          console.log(cartHash);
+        const session = req.session.id;
+    
+        const sessionData = await redisClient.get(`SessionStore:${session}`);
+
+        const cartHash = decodeURIComponent(match[1]);
+
+        console.log(cartHash);
+
+        if (!sessionData) {
           const cartInsert = await sql`
           insert into carts (cart_hash) values (${cartHash})
-          `
-        }else{
-          return res.status(404).json({error: 'invalid Request'})
+          `;
+          return res.status(200).json({success:'cart Created'})
         }
 
-        return res.status(200).json({success: 'cart Created'})
+        const id = JSON.parse(sessionData);
+    
+        const identifierNum = id.userId[0].user_id;
+
+          const cartInsert = await sql`
+          insert into carts (cart_hash,user_id) values (${cartHash},${identifierNum})
+          `
+          return res.status(200).json({success: 'cart Created'})
       },
       cartCheck: async (c,req,res) => {
         const productInfo = req

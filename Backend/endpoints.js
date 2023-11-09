@@ -425,6 +425,27 @@ module.exports = {
           },
         },
       },
+      '/api/cart/add': {
+        post: {
+          operationId: 'addToCart',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'Item Added Successfully',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
       '/api/cart/val': {
         post: {
           operationId: 'cartCheck',
