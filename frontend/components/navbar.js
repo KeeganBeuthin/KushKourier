@@ -112,7 +112,7 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
           const newCartHash = generateRandomHash(40);
           console.log(newCartHash);
 
-          document.cookie = `cartHash=${newCartHash}; path=/; max-age=360000000; samesite=lax`;
+          document.cookie = `cartHash=${newCartHash}; path=/; max-age=360000; samesite=lax`;
 
           const options = {
             url: cartCreate,

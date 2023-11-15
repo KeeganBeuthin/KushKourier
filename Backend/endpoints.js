@@ -512,6 +512,48 @@ module.exports = {
           },
         },
       },
+      '/api/cart/createCheckout': {
+        post: {
+          operationId: 'createCheckout',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'Checkout Created',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
+      '/api/cart/webHooks': {
+        post: {
+          operationId: 'checkoutWebhook',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'webhook interacted with',
+            },
+            '400': {
+              description: 'Bad Request',
+            },
+          },
+        },
+      },
     },
     components: {
      schemas: {

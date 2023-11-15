@@ -1,8 +1,8 @@
 // @flow
-import React from "react";
-import Navbar from "../../components/navbar";
-import CartScreen from "../../components/cartScreen";
-import CheckoutCard from "../../components/checkoutCard";
+import React from 'react';
+import Navbar from '../../components/navbar';
+import CartScreen from '../../components/cartScreen';
+import CheckoutCard from '../../components/checkoutCard';
 
 const Cart = () => {
   return (
@@ -26,3 +26,6 @@ const Cart = () => {
 };
 
 export default Cart;
+
+
+

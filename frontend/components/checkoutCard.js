@@ -7,21 +7,88 @@ const isAndroid = Capacitor.getPlatform() === "android";
 
 let cartCheck;
 
+let checkoutUrl
+
 if (isAndroid) {
   cartCheck = "http://192.168.39.115:9000/api/cart/value";
 } else {
   cartCheck = "/api/cart/value";
 }
 
+if (isAndroid) {
+  checkoutUrl = "http://192.168.39.115:9000/api/cart/createCheckout";
+} else {
+  checkoutUrl = "/api/cart/createCheckout";
+}
+
 const CheckoutCard = () => {
   const [totalPrice, setTotalPrice] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [cartItems, setCartItems] = useState([]);
   const router = useRouter();
 
   const { cartHash } = router.query;
 
-  const handleCheckout = () => {};
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const options = {
+          url: getCart,
+          headers: {
+            "Content-Type": "application/json",
+            credentials: "include",
+          },
+        };
+
+        let response = await CapacitorHttp.get(options);
+
+        if (response.status === 200 || response.status === 304) {
+          let cartData = response.data;
+          console.log(cartData)
+          setCartItems(cartData);
+          setLoading(false);
+        } else if (response.status === 404 || response.status === 500) {
+          setLoading(false);
+         
+        }
+      } catch (error) {
+        console.log("An error occurred");
+        setLoading(false);
+       
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+  const handleCheckout = async () => {
+    try {
+      const options = {
+        url: cartCheck,
+        headers: {
+          "Content-Type": "application/json",
+          credentials: "include",
+        },
+      };
+
+      const response = await CapacitorHttp.post(options);
+
+      if (response.status == 200) {
+      
+      } else {
+        console.error("Failed to Checkout");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(
+        "An error occurred while checking out",
+        error,
+      );
+      setLoading(false);
+    }
+
+  };
 
   useEffect(() => {
     if (cartHash !== undefined) {
@@ -60,6 +127,8 @@ const CheckoutCard = () => {
     }
   }, [cartHash]);
 
+  console.log(cartItems)
+
   return (
     <div className="card">
       <div className="card-body">
@@ -69,7 +138,7 @@ const CheckoutCard = () => {
         ) : totalPrice !== null ? (
           <p className="card-text">Total Price: R {totalPrice}</p>
         ) : (
-          <p className="card-text">Failed to fetch total price</p>
+          <p className="card-text">No total price available</p>
         )}
         <button className="btn btn-success" onClick={handleCheckout}>
           Checkout
