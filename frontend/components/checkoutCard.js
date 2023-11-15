@@ -9,10 +9,18 @@ let cartCheck;
 
 let checkoutUrl
 
+let getCart
+
 if (isAndroid) {
   cartCheck = "http://192.168.39.115:9000/api/cart/value";
 } else {
   cartCheck = "/api/cart/value";
+}
+
+if (isAndroid) {
+  getCart = "http://192.168.39.115:9000/api/cart/get";
+} else {
+  getCart = "/api/cart/get";
 }
 
 if (isAndroid) {
@@ -30,6 +38,7 @@ const CheckoutCard = () => {
   const { cartHash } = router.query;
 
   useEffect(() => {
+    
     const fetchData = async () => {
       try {
         const options = {
@@ -43,9 +52,17 @@ const CheckoutCard = () => {
         let response = await CapacitorHttp.get(options);
 
         if (response.status === 200 || response.status === 304) {
+
           let cartData = response.data;
-          console.log(cartData)
-          setCartItems(cartData);
+        
+          const formattedCartItems = cartData.map(item => ({
+            cart_id: item.cart_id,
+            product_id: item.product_id,
+            quantity: item.quantity,
+            price: item.price,
+          }));
+         
+          setCartItems(formattedCartItems);
           setLoading(false);
         } else if (response.status === 404 || response.status === 500) {
           setLoading(false);
@@ -65,11 +82,15 @@ const CheckoutCard = () => {
   const handleCheckout = async () => {
     try {
       const options = {
-        url: cartCheck,
+        url: checkoutUrl,
         headers: {
           "Content-Type": "application/json",
           credentials: "include",
         },
+        params: {
+          cartHash,
+        },
+        data: cartItems
       };
 
       const response = await CapacitorHttp.post(options);
@@ -108,7 +129,6 @@ const CheckoutCard = () => {
           const response = await CapacitorHttp.get(options);
 
           if (response.status == 200) {
-            console.log(response.data.total_price);
             setTotalPrice(response.data.total_price);
             setLoading(false);
           } else {

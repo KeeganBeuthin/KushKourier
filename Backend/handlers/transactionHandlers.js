@@ -20,10 +20,71 @@ let redisStore = new RedisStore({
   prefix: "SessionStore:",
 });
 
+const YOUR_SECRET_KEY = 'sk_test_2c6bfa26AW6L89K1f734b2e92ce5'
+
+
 module.exports = {
 
     createCheckout: async (c,req,res) => {
-   
+        const { cartHash } = req.query;
+        console.log(cartHash)
+
+     console.log(req.body)
+
+     if (!cartHash) {
+        return res.status(400).json({ error: "Invalid Cart Hash" });
+      }
+
+      try {
+
+        const totalPriceResult  = await sql`
+                SELECT SUM(quantity * price) AS total_price
+                FROM carts
+                WHERE cart_hash = ${cartHash}
+              `;
+
+              const totalPrice = totalPriceResult[0].total_price;
+ 
+              const yocoPayload = {
+                amount: totalPrice, 
+                currency: "ZAR",
+              };
+          
+
+              console.log(yocoPayload)
+
+              const yocoApiUrl = "https://payments.yoco.com/api/checkouts";
+console.log(process.env.SECRET_KEY)
+              const response = await fetch(yocoApiUrl, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${YOUR_SECRET_KEY}`,
+                },
+                body: JSON.stringify(yocoPayload),
+              });
+          
+              if (response.ok) {
+                const state = response.redirectUrl
+                console.log(state)
+                return res.status(200).json({ success: 'checkout created' });
+
+              } else {
+                
+                const errorData = await yocoApiResponse.json();
+
+                console.error("Yoco API Error:", errorData);
+
+                return res.status(500).json({ error: 'Error creating checkout' });
+              }
+          
+            } catch (error) {
+              console.error("An error occurred", error);
+
+              return res.status(500).json({ error: 'Internal server error' });
+            }
+
+     return res.status(200).json({success: 'checkout created'})
     },
 
     checkoutWebhook: async (c,req,res) => {

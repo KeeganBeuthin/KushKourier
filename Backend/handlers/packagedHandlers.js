@@ -17,6 +17,7 @@ const cartHandlers = require('./cartHandlers');
 const validationHandlers = require('./validationHandlers');
 const productHandlers = require('./productHandlers');
 const userHandlers = require('./userHandlers');
+const transactionHandlers = require('./transactionHandlers')
 
 let redisClient = createClient();
 redisClient.connect().catch(console.error);
@@ -32,5 +33,6 @@ module.exports = {
     ...productHandlers,
     ...userHandlers,
     ...validationHandlers,
+    ...transactionHandlers
 }
   
