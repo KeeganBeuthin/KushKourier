@@ -2,7 +2,7 @@
 import React from "react";
 import { Formik, Field, ErrorMessage } from "formik";
 import type { FormikProps } from "formik";
-import { passVal } from "../../lib/formval/passval";
+import { passVal } from "../../lib/formval/passVal";
 import { Form, Button } from "react-bootstrap";
 import { CapacitorHttp } from "@capacitor/core";
 

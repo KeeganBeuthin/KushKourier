@@ -1,17 +1,20 @@
 version: '3'
 services:
  frontend:
+  container_name: KushKourier_frontend
   build: ./frontend/
   ports:
      - 3000:3000
   depends_on:
       - database
  database:
+  container_name: KushKourier_Postgres
   build: ./Database
   ports:
      - 8080:5432
   restart: unless-stopped
  backend: 
+  container_name: KushKourier_backend 
   build: ./backend/
   ports: 
      - 9000:9000

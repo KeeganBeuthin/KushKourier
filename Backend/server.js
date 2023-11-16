@@ -13,12 +13,7 @@ const endpoints = require('./endpoints');
 const handlers = require('./handlers/packagedHandlers');
 const bodyParser = require('body-parser');
 
-
-//defined handlers
-
-
 let redisClient = createClient()
-
 
 redisClient.connect().catch(console.error)
 

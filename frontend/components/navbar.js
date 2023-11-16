@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { CapacitorHttp } from "@capacitor/core";
-import LoginModal from "./LoginModal";
+import LoginModal from "./loginModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setUsername, setEmail } from "../redux/userSlice";
 import RegisterModal from "./registerModal";
