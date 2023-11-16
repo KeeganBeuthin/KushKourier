@@ -7,9 +7,9 @@ const isAndroid = Capacitor.getPlatform() === "android";
 
 let cartCheck;
 
-let checkoutUrl
+let checkoutUrl;
 
-let getCart
+let getCart;
 
 if (isAndroid) {
   cartCheck = "http://192.168.39.115:9000/api/cart/value";
@@ -29,6 +29,8 @@ if (isAndroid) {
   checkoutUrl = "/api/cart/createCheckout";
 }
 
+let yocoUrl = "https://payments.yoco.com/api/checkouts";
+
 const CheckoutCard = () => {
   const [totalPrice, setTotalPrice] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -38,7 +40,6 @@ const CheckoutCard = () => {
   const { cartHash } = router.query;
 
   useEffect(() => {
-    
     const fetchData = async () => {
       try {
         const options = {
@@ -52,32 +53,28 @@ const CheckoutCard = () => {
         let response = await CapacitorHttp.get(options);
 
         if (response.status === 200 || response.status === 304) {
-
           let cartData = response.data;
-        
-          const formattedCartItems = cartData.map(item => ({
+
+          const formattedCartItems = cartData.map((item) => ({
             cart_id: item.cart_id,
             product_id: item.product_id,
             quantity: item.quantity,
             price: item.price,
           }));
-         
+
           setCartItems(formattedCartItems);
           setLoading(false);
         } else if (response.status === 404 || response.status === 500) {
           setLoading(false);
-         
         }
       } catch (error) {
         console.log("An error occurred");
         setLoading(false);
-       
       }
     };
 
     fetchData();
   }, []);
-
 
   const handleCheckout = async () => {
     try {
@@ -90,25 +87,23 @@ const CheckoutCard = () => {
         params: {
           cartHash,
         },
-        data: cartItems
+        data: cartItems,
       };
 
       const response = await CapacitorHttp.post(options);
 
       if (response.status == 200) {
-      
+        const redirect = response.data.redirect;
+
+        window.location.href = redirect;
       } else {
         console.error("Failed to Checkout");
         setLoading(false);
       }
     } catch (error) {
-      console.error(
-        "An error occurred while checking out",
-        error,
-      );
+      console.error("An error occurred while checking out", error);
       setLoading(false);
     }
-
   };
 
   useEffect(() => {
@@ -147,7 +142,7 @@ const CheckoutCard = () => {
     }
   }, [cartHash]);
 
-  console.log(cartItems)
+  console.log(cartItems);
 
   return (
     <div className="card">
