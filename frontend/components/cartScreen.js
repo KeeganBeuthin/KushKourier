@@ -56,7 +56,7 @@ const CartScreen = () => {
     fetchData();
   }, []);
 
-  const removeItem = (item: number) => {
+  const removeItem = (item) => {
 
     try {
       const options = {

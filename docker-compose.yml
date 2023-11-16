@@ -1,8 +1,19 @@
 version: '3'
 services:
+ frontend:
+  build: ./frontend/
+  ports:
+     - 3000:3000
+  depends_on:
+      - database
  database:
   build: ./Database
   ports:
      - 8080:5432
   restart: unless-stopped
-  
+ backend: 
+  build: ./backend/
+  ports: 
+     - 9000:9000
+  depends_on:
+      - database

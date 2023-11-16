@@ -1,3 +1,4 @@
+//@flow
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Capacitor } from "@capacitor/core";
@@ -82,7 +83,8 @@ const ProductPage = () => {
   }, [product, dispatch]);
 
   const productName = useSelector((state) => state.product);
-console.log(productInfo)
+
+console.log(productName)
   const addToCart = async () => {
     
   try{

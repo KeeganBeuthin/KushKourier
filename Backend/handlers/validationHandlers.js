@@ -49,7 +49,7 @@ module.exports = {
 
     const sessionData = await redisClient.get(`SessionStore:${session}`);
     if (!sessionData) {
-      return res.status(500).json({ error: "session data not found" });
+      return res.status(404).json({ error: "session data not found" });
     }
     const id = JSON.parse(sessionData);
 

@@ -11,7 +11,7 @@ const ProductCategory = () => {
   const router = useRouter();
 
   const { page } = router.query;
-  const {category} = router.query
+  const { category } = router.query;
   const pageNum = parseInt(page, 10);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ const ProductCategory = () => {
       // Check if page is defined
       const fetchData = async () => {
         try {
-            console.log(category)
+          console.log(category);
           let productPage;
 
           if (isAndroid) {
@@ -50,7 +50,7 @@ const ProductCategory = () => {
             setLoading(false);
           } else if (response.status === 404 || response.status === 500) {
             setLoading(false);
-            setError(true)
+            setError(true);
           }
         } catch {
           console.log("An error occurred");
@@ -61,62 +61,73 @@ const ProductCategory = () => {
     }
   }, [page]);
 
-  console.log(products[0])
+  console.log(products[0]);
 
   return (
     <div className="container">
       {error ? (
-        <div className='container'>
-           <h1>Error 404: content unavailable</h1>
-        <img className="card-img-top" src="/error404.jpg" alt="Title" />
-        <nav
+        <div className="container">
+          <h1>Error 404: content unavailable</h1>
+          <img className="card-img-top" src="/error404.jpg" alt="Title" />
+          <nav
             aria-label="Page navigation example"
             className="d-flex justify-content-center"
           >
-          <ul className="pagination">
-            <li className="page-item">
-              <Link legacyBehavior href={`/${category}/${page - 1}`} passHref>
-                <a className={`page-link ${page === 1 ? "disabled" : ""}`}
-                disabled={page === 1}
-                onClick={() => {
-                  if (page >= 0) {
-                   window.location.href = `/${category}/${pageNum -1}`;
-                  }
-                }}>
-                  &laquo;
-                </a>
-              </Link>
-            </li>
-            {Array.from(
-              { length: Math.ceil(products.length / productsPerPage) },
-              (_, index) => (
-                <li
-                  key={index}
-                  className={`page-item ${page === index + 1 ? "active" : ""}`}
+            <ul className="pagination">
+              <li className="page-item">
+                <Link legacyBehavior href={`/${category}/${page - 1}`} passHref>
+                  <a
+                    className={`page-link ${page === 1 ? "disabled" : ""}`}
+                    disabled={page === 1}
+                    onClick={() => {
+                      if (page >= 0) {
+                        window.location.href = `/${category}/${pageNum - 1}`;
+                      }
+                    }}
+                  >
+                    &laquo;
+                  </a>
+                </Link>
+              </li>
+              {Array.from(
+                { length: Math.ceil(products.length / productsPerPage) },
+                (_, index) => (
+                  <li
+                    key={index}
+                    className={`page-item ${
+                      page === index + 1 ? "active" : ""
+                    }`}
+                  >
+                    <Link
+                      legacyBehavior
+                      href={`/${category}/${index + 1}`}
+                      passHref
+                    >
+                      <a className="page-link">{index + 1}</a>
+                    </Link>
+                  </li>
+                ),
+              )}
+              <li className="page-item">
+                <Link
+                  legacyBehavior
+                  href={`/${category}/${pageNum + 1}`}
+                  passHref
                 >
-                  <Link legacyBehavior href={`/${category}/${index + 1}`} passHref>
-                    <a className="page-link">{index + 1}</a>
-                  </Link>
-                </li>
-              ),
-            )}
-            <li className="page-item">
-              <Link legacyBehavior href={`/${category}/${pageNum + 1}`} passHref>
-                <a className={`page-link ${pageNum === pageNum + 1}`} 
-                 
-                 onClick={() => {
-                   if (pageNum >= 0) {
-                    window.location.href = `/${category}/${pageNum + 1}`;
-                   }
-                 }}
-                 >
+                  <a
+                    className={`page-link ${pageNum === pageNum + 1}`}
+                    onClick={() => {
+                      if (pageNum >= 0) {
+                        window.location.href = `/${category}/${pageNum + 1}`;
+                      }
+                    }}
+                  >
                     &raquo;
-                 </a>
-              </Link>
-            </li>
-          </ul>
+                  </a>
+                </Link>
+              </li>
+            </ul>
           </nav>
-       
         </div>
       ) : (
         <div>
@@ -127,15 +138,19 @@ const ProductCategory = () => {
               products.map((product) => (
                 <div key={product.product_id} className="col-md-4 mb-4">
                   <div className="card">
-                  <Link legacyBehavior href={`/products/${product.product_name}`} passHref>
-                  <a>
-                    <img
-                      src={`data:image/png;base64,${product.image[0]}`}
-                      className="card-img-top"
-                      alt={product.product_name}
-                    />
-                     </a>
-                  </Link>
+                    <Link
+                      legacyBehavior
+                      href={`/products/${product.product_name}`}
+                      passHref
+                    >
+                      <a>
+                        <img
+                          src={`data:image/png;base64,${product.image[0]}`}
+                          className="card-img-top"
+                          alt={product.product_name}
+                        />
+                      </a>
+                    </Link>
                     <div className="card-body">
                       <h5 className="card-title">{product.product_name}</h5>
                       <p className="card-text">Category: {product.category}</p>
@@ -150,56 +165,65 @@ const ProductCategory = () => {
             aria-label="Page navigation example"
             className="d-flex justify-content-center"
           >
-          <ul className="pagination">
-          <li className="page-item">
-              <Link legacyBehavior href={`/${category}/${page - 1}`} passHref>
-                <a className={`page-link ${page == 1 ? "disabled" : ""}`}
-                disabled={page === 1}
-                onClick={() => {
-                  if (page >= 0) {
-                   window.location.href = `/${category}/${pageNum -1}`;
-                  }
-                }}>
-                  &laquo;
-                </a>
-              </Link>
-            </li>
-            {Array.from(
-              { length: Math.ceil(products.length / productsPerPage) },
-              (_, index) => (
-                <li
-                  key={index}
-                  className={`page-item ${page === index + 1 ? "active" : ""}`}
-                >
-                  <Link legacyBehavior href={`/${category}/${index + 1}`} passHref>
-                    <a className="page-link">{index + 1}</a>
-                  </Link>
-                </li>
-              ),
-            )}
+            <ul className="pagination">
               <li className="page-item">
-              <Link legacyBehavior href={`/${category}/${pageNum + 1}`} passHref>
-                <a className={`page-link ${pageNum === pageNum + 1}`} 
-                 
-                 onClick={() => {
-                   if (pageNum >= 0) {
-                    window.location.href = `/${category}/${pageNum + 1}`;
-                   }
-                 }}
-                 >
+                <Link legacyBehavior href={`/${category}/${page - 1}`} passHref>
+                  <a
+                    className={`page-link ${page == 1 ? "disabled" : ""}`}
+                    disabled={page === 1}
+                    onClick={() => {
+                      if (page >= 0) {
+                        window.location.href = `/${category}/${pageNum - 1}`;
+                      }
+                    }}
+                  >
+                    &laquo;
+                  </a>
+                </Link>
+              </li>
+              {Array.from(
+                { length: Math.ceil(products.length / productsPerPage) },
+                (_, index) => (
+                  <li
+                    key={index}
+                    className={`page-item ${
+                      page === index + 1 ? "active" : ""
+                    }`}
+                  >
+                    <Link
+                      legacyBehavior
+                      href={`/${category}/${index + 1}`}
+                      passHref
+                    >
+                      <a className="page-link">{index + 1}</a>
+                    </Link>
+                  </li>
+                ),
+              )}
+              <li className="page-item">
+                <Link
+                  legacyBehavior
+                  href={`/${category}/${pageNum + 1}`}
+                  passHref
+                >
+                  <a
+                    className={`page-link ${pageNum === pageNum + 1}`}
+                    onClick={() => {
+                      if (pageNum >= 0) {
+                        window.location.href = `/${category}/${pageNum + 1}`;
+                      }
+                    }}
+                  >
                     &raquo;
-                 </a>
-              </Link>
-            </li>
-          </ul>
+                  </a>
+                </Link>
+              </li>
+            </ul>
           </nav>
         </div>
       )}
     </div>
   );
-  };
+};
 
 export default ProductCategory;
-
-
-

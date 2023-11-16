@@ -12,19 +12,16 @@ type MasterForm1 = {
   onClose: () => void,
 };
 
-type UserId ={
-  userId: number | void;
-}
-
-const initialValues: UserId = {
-  userId: 0
+type UserId = {
+  userId: number | void,
 };
 
-
+const initialValues: UserId = {
+  userId: 0,
+};
 
 const PromoteForm = ({ show, onClose }: MasterForm1): React$Element<any> => {
-
-console.log(initialValues.userId)
+  console.log(initialValues.userId);
   const handleSubmit = async (values: UserId) => {
     const apiUrl = "/api/user/promote";
 

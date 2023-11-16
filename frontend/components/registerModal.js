@@ -26,14 +26,13 @@ const RegisterModal = ({
   onClose,
   switchForm,
 }: RegisterModalProps): React$Element<any> => {
-
   const initialValues: RegisterValues = {
     registerUsername: "",
     registerEmail: "",
     registerPassword: "",
     registerCpassword: "",
     registerFirstName: "",
-    registerLastName: ""
+    registerLastName: "",
   };
 
   const handleSubmit = async (values: RegisterValues) => {

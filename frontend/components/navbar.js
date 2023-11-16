@@ -8,8 +8,6 @@ import { setUsername, setEmail } from "../redux/userSlice";
 import RegisterModal from "./registerModal";
 import { Capacitor } from "@capacitor/core";
 import { useRouter } from "next/router";
-// type NavbarProps = {
-// };
 
 function generateRandomHash(length) {
   const characters =
@@ -31,10 +29,18 @@ let cartVal;
 
 let cartCreate;
 
+let admin 
+
 if (isAndroid) {
   client = "http://192.168.39.115:9000/api/cookieVal";
 } else {
   client = "/api/cookieVal";
+}
+
+if (isAndroid) {
+  admin = "http://192.168.39.115:9000/api/admin/val";
+} else {
+  admin = "/api/admin/val";
 }
 
 if (isAndroid) {
@@ -55,7 +61,7 @@ if (isAndroid) {
   cartCreate = "/api/cart/create";
 }
 
-const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
+const Navbar = (): React$Element<any> => {
   const router = useRouter();
 
   const [auth, setAuth] = useState(false);
@@ -66,18 +72,37 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
 
   const username = useSelector((state) => state.user.username);
 
-  const [showCartNav, setShowCartNav] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false) 
 
-  const openCartNav = () => {
-    setShowCartNav(true);
-  };
+  useEffect(() => {
+    async function checkAdmin() {
+      try {
+        const options = {
+          url: admin,
+          headers: {
+            "Content-Type": "application/json",
+            credentials: "include",
+          },
+        };
+        const response = await CapacitorHttp.post(options);
+        if (response.status === 201 || response.status === 200) {
+          setIsAdmin(true);
+          console.log(isAdmin);
+        }
+        else{
+          setIsAdmin(false)
+          next()
+        }
+      } catch (error) {
+        console.error("An error occurred", error);
+      }
+    }
 
-  const closeCartNav = () => {
-    setShowCartNav(false);
-  };
+    checkAdmin();
+  }, []);
+
 
   const navigateToCart = () => {
-    // Get the cartHash value from the cookie
     const cookies = document.cookie.split("; ");
     let cartHash = null;
     for (const cookie of cookies) {
@@ -88,7 +113,6 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
       }
     }
 
-    // Redirect to the /cart/:cartHash URL
     if (cartHash) {
       router.push(`/cart/${cartHash}`);
     }
@@ -105,9 +129,9 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
           },
         };
         const response = await CapacitorHttp.post(options);
-        if (response.status == 200) {
+        if (response.status === 200) {
           next();
-        } else if (response.status == 404) {
+        } else if (response.status === 404) {
           console.log("jj");
           const newCartHash = generateRandomHash(40);
           console.log(newCartHash);
@@ -122,7 +146,12 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
             },
           };
           const response = await CapacitorHttp.post(options);
+
+          if(response.status===200){
+            next()
+          }
         }
+     
       } catch {
         console.log("An error occurred");
       }
@@ -274,7 +303,14 @@ const Navbar = (/*props: NavbarProps*/): React$Element<any> => {
             <a className="nav-link Lgreen" href="#">
               Contact
             </a>
-          </li>
+            </li>
+            {isAdmin && (
+    <li className="nav-item">
+      <a className="nav-link Lgreen" href="/admin">
+        Admin
+      </a>
+    </li>
+  )}
         </ul>
 
         <form className="d-flex ml-auto my-2 my-lg-0">

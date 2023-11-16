@@ -29,7 +29,6 @@ if (isAndroid) {
   checkoutUrl = "/api/cart/createCheckout";
 }
 
-let yocoUrl = "https://payments.yoco.com/api/checkouts";
 
 const CheckoutCard = () => {
   const [totalPrice, setTotalPrice] = useState(null);

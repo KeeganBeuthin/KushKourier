@@ -39,12 +39,12 @@ interface Image {
   data: string;
 }
 
-interface File  {
+interface File {
   data: string;
   name: string;
 }
 
-type FileState = File | null
+type FileState = File | null;
 
 const ProductForm = ({ show, onClose }: AdminForm1): React$Element<any> => {
   const [selectedFile, setSelectedFile] = useState<FileState>(null);
@@ -58,7 +58,6 @@ const ProductForm = ({ show, onClose }: AdminForm1): React$Element<any> => {
 
     e.target.value = null;
   };
-
 
   const handleSubmit = async (values: ProductValues) => {
     const apiUrl = "/api/products";
@@ -79,7 +78,6 @@ const ProductForm = ({ show, onClose }: AdminForm1): React$Element<any> => {
         reader.readAsDataURL(file);
       });
     }
-
 
     let base64Data = await readFileAsBase64(selectedFile);
 
