@@ -45,7 +45,7 @@ const ProductPage = () => {
         try {
           let productURL;
           if (isAndroid) {
-            productURL = `http://192.168.39.115:9000/api/product/${product}`;
+            productURL = `http://192.168.39.116:9000/api/product/${product}`;
           } else {
             productURL = `/api/product/${product}`;
           }
@@ -90,7 +90,7 @@ console.log(productName)
   try{
     let cartUrl;
     if (isAndroid) {
-      cartUrl = `http://192.168.39.115:9000/api/cart/add`;
+      cartUrl = `http://192.168.39.116:9000/api/cart/add`;
     } else {
       cartUrl = `/api/cart/add`;
     }

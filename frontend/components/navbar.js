@@ -32,31 +32,31 @@ let cartCreate;
 let admin 
 
 if (isAndroid) {
-  client = "http://192.168.39.115:9000/api/cookieVal";
+  client = "http://192.168.39.116:9000/api/cookieVal";
 } else {
   client = "/api/cookieVal";
 }
 
 if (isAndroid) {
-  admin = "http://192.168.39.115:9000/api/admin/val";
+  admin = "http://192.168.39.116:9000/api/admin/val";
 } else {
   admin = "/api/admin/val";
 }
 
 if (isAndroid) {
-  logout = "http://192.168.39.115:9000/api/logout";
+  logout = "http://192.168.39.116:9000/api/logout";
 } else {
   logout = "/api/logout";
 }
 
 if (isAndroid) {
-  cartVal = "http://192.168.39.115:9000/api/cart/val";
+  cartVal = "http://192.168.39.116:9000/api/cart/val";
 } else {
   cartVal = "/api/cart/val";
 }
 
 if (isAndroid) {
-  cartCreate = "http://192.168.39.115:9000/api/cart/create";
+  cartCreate = "http://192.168.39.116:9000/api/cart/create";
 } else {
   cartCreate = "/api/cart/create";
 }
@@ -214,8 +214,18 @@ const Navbar = (): React$Element<any> => {
     }
   };
 
+  const notify = () => {
+    console.log('clicked')
+  }
+
   return (
+    
     <nav className="navbar navbar-expand-lg navbar-light Fgreen shadow-lg">
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+     
+
       <img
         src="/kushman.png"
         alt="weed leaf"
@@ -223,7 +233,7 @@ const Navbar = (): React$Element<any> => {
       />
       <a
         className="navbar-brand Lgreen d-inline-flex fs-1 pacifico"
-        href={isAndroid ? "/" : "/home"}
+        href={isAndroid ? "/shop" : "/home"}
       >
         Kush Kourier
       </a>
@@ -235,6 +245,7 @@ const Navbar = (): React$Element<any> => {
         aria-controls="navbarNav"
         aria-expanded="false"
         aria-label="Toggle navigation"
+        onClick={notify}
       >
         <span className="navbar-toggler-icon"></span>
       </button>
@@ -343,6 +354,7 @@ const Navbar = (): React$Element<any> => {
           </div>
         </form>
       </div>
+    
     </nav>
   );
 };

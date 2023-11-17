@@ -13,7 +13,7 @@ const isAndroid = Capacitor.getPlatform() === "android";
 
 let client;
 if (isAndroid) {
-  client = "http://192.168.39.115:9000/api/admin/val";
+  client = "http://192.168.39.116:9000/api/admin/val";
 } else {
   client = "/api/admin/val";
 }

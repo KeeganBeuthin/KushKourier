@@ -148,7 +148,8 @@ module.exports = {
   },
   createCart: async (c, req, res) => {
     const cookies = req.headers.cookie;
-
+console.log(cookies)
+console.log(req.headers)
     const match = /cartHash=([^;]+)/.exec(cookies);
 
     const session = req.session.id;

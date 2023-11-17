@@ -9,13 +9,13 @@ let getCart;
 let deleteItem;
 
 if (isAndroid) {
-  getCart = "http://192.168.39.115:9000/api/cart/get";
+  getCart = "http://192.168.39.116:9000/api/cart/get";
 } else {
   getCart = "/api/cart/get";
 }
 
 if (isAndroid) {
-  deleteItem = "http://192.168.39.115:9000/api/cart/removeItem";
+  deleteItem = "http://192.168.39.116:9000/api/cart/removeItem";
 } else {
   deleteItem = "/api/cart/removeItem";
 }

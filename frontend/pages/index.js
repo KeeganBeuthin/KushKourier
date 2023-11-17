@@ -6,6 +6,7 @@ const App = dynamic(() => import("../components/ui/AppShell"), {
 });
 
 function Index() {
-  return <App />;
+  return <App/>
+  ;
 }
 export default Index;

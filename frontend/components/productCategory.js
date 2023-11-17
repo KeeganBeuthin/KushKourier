@@ -26,7 +26,7 @@ const ProductCategory = () => {
           let productPage;
 
           if (isAndroid) {
-            productPage = `http://192.168.39.115:9000/api/products/${category}/${page}`;
+            productPage = `http://192.168.39.116:9000/api/products/${category}/${page}`;
           } else {
             productPage = `/api/products/${category}/${page}`;
           }

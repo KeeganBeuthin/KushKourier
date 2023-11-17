@@ -12,19 +12,19 @@ let checkoutUrl;
 let getCart;
 
 if (isAndroid) {
-  cartCheck = "http://192.168.39.115:9000/api/cart/value";
+  cartCheck = "http://192.168.39.116:9000/api/cart/value";
 } else {
   cartCheck = "/api/cart/value";
 }
 
 if (isAndroid) {
-  getCart = "http://192.168.39.115:9000/api/cart/get";
+  getCart = "http://192.168.39.116:9000/api/cart/get";
 } else {
   getCart = "/api/cart/get";
 }
 
 if (isAndroid) {
-  checkoutUrl = "http://192.168.39.115:9000/api/cart/createCheckout";
+  checkoutUrl = "http://192.168.39.116:9000/api/cart/createCheckout";
 } else {
   checkoutUrl = "/api/cart/createCheckout";
 }

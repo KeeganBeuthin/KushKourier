@@ -24,7 +24,7 @@ const ProductCard = () => {
           let productPage;
 
           if (isAndroid) {
-            productPage = `http://192.168.39.115:9000/api/products/${page}`;
+            productPage = `http://192.168.39.116:9000/api/products/${page}`;
           } else {
             productPage = `/api/products/${page}`;
           }
