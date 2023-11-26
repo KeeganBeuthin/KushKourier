@@ -40,14 +40,14 @@ const ProductPage = () => {
       // Check if page is defined
       const fetchData = async () => {
 
-      
+        const encodedProductName = encodeURIComponent(product);
 
         try {
           let productURL;
           if (isAndroid) {
-            productURL = `http://192.168.39.116:9000/api/product/${product}`;
+            productURL = `http://192.168.39.116:9000/api/product/${encodedProductName}?product=${encodedProductName}`;
           } else {
-            productURL = `/api/product/${product}`;
+            productURL = `/api/product/${encodedProductName}?product=${encodedProductName}`;
           }
 
           const options = {
@@ -103,7 +103,22 @@ console.log(productName)
       product_name: productInfo.product_name,
     }
 
-  const cartInfo = {itemData}
+    const cartInfo = {itemData}
+
+    const getCookieValue = (cookieName) => {
+      const cookiesArray = document.cookie.split('; ');
+      for (const cookie of cookiesArray) {
+        const [name, value] = cookie.split('=');
+        if (name === cookieName) {
+          return value;
+        }
+      }
+      return null; 
+    };
+    
+    
+    const cartHashCookieValue = getCookieValue('cartHash');
+
   
   const options = {
     url: cartUrl,
@@ -115,6 +130,14 @@ console.log(productName)
     data: cartInfo,
   };
 
+  if (isAndroid) {
+
+    options.headers.Cookie = `cartHash=${cartHashCookieValue}`;
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+
+
   let response = await CapacitorHttp.post(options);
   if(response.status==200){
     setItemAdded(true)
@@ -122,7 +145,7 @@ console.log(productName)
   }
   }
   catch (error) {
-    console.error(error, "Cart creation error");
+    console.error(error, "Cart addition error");
   }
 };
 

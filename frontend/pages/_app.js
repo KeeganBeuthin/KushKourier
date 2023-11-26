@@ -7,6 +7,7 @@ import Script from "next/script";
 import store from "../redux/store";
 import "../styles/main.css";
 import { Provider } from "react-redux";
+
 type CustomAppProps = {
   Component: any,
   pageProps: any,

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUsername, setEmail } from "../redux/userSlice";
 import RegisterModal from "./registerModal";
 import { Capacitor } from "@capacitor/core";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 
 function generateRandomHash(length) {
   const characters =
@@ -29,7 +29,7 @@ let cartVal;
 
 let cartCreate;
 
-let admin 
+let admin;
 
 if (isAndroid) {
   client = "http://192.168.39.116:9000/api/cookieVal";
@@ -72,7 +72,7 @@ const Navbar = (): React$Element<any> => {
 
   const username = useSelector((state) => state.user.username);
 
-  const [isAdmin, setIsAdmin] = useState(false) 
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     async function checkAdmin() {
@@ -88,10 +88,9 @@ const Navbar = (): React$Element<any> => {
         if (response.status === 201 || response.status === 200) {
           setIsAdmin(true);
           console.log(isAdmin);
-        }
-        else{
-          setIsAdmin(false)
-          next()
+        } else {
+          setIsAdmin(false);
+          next();
         }
       } catch (error) {
         console.error("An error occurred", error);
@@ -101,7 +100,6 @@ const Navbar = (): React$Element<any> => {
     checkAdmin();
   }, []);
 
-
   const navigateToCart = () => {
     const cookies = document.cookie.split("; ");
     let cartHash = null;
@@ -109,6 +107,7 @@ const Navbar = (): React$Element<any> => {
       const [name, value] = cookie.split("=");
       if (name === "cartHash") {
         cartHash = value;
+        console.log(cartHash)
         break;
       }
     }
@@ -121,14 +120,38 @@ const Navbar = (): React$Element<any> => {
   useEffect(() => {
     const cartCheck = async () => {
       try {
+
+        const getCookieValue = (cookieName) => {
+          const cookiesArray = document.cookie.split('; ');
+          for (const cookie of cookiesArray) {
+            const [name, value] = cookie.split('=');
+            if (name === cookieName) {
+              return value;
+            }
+          }
+          return null; 
+        };
+        
+        
+        const cartHashCookieValue = getCookieValue('cartHash');
+
         const options = {
           url: cartVal,
           headers: {
             "Content-Type": "application/json",
-            credentials: "include",
+            'credentials': "include",
           },
         };
+
+        if (isAndroid) {
+
+          options.headers.Cookie = `cartHash=${cartHashCookieValue}`;
+
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
         const response = await CapacitorHttp.post(options);
+
         if (response.status === 200) {
           next();
         } else if (response.status === 404) {
@@ -142,16 +165,23 @@ const Navbar = (): React$Element<any> => {
             url: cartCreate,
             headers: {
               "Content-Type": "application/json",
-              credentials: "include",
+              'credentials': "include",
             },
           };
+
+          if (isAndroid) {
+
+            options.headers.Cookie = `cartHash=${newCartHash}`;
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+
           const response = await CapacitorHttp.post(options);
 
-          if(response.status===200){
-            next()
+          if (response.status === 200) {
+            next();
           }
         }
-     
       } catch {
         console.log("An error occurred");
       }
@@ -215,17 +245,11 @@ const Navbar = (): React$Element<any> => {
   };
 
   const notify = () => {
-    console.log('clicked')
-  }
+    console.log("clicked");
+  };
 
   return (
-    
     <nav className="navbar navbar-expand-lg navbar-light Fgreen shadow-lg">
-            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-     
-
       <img
         src="/kushman.png"
         alt="weed leaf"
@@ -233,15 +257,15 @@ const Navbar = (): React$Element<any> => {
       />
       <a
         className="navbar-brand Lgreen d-inline-flex fs-1 pacifico"
-        href={isAndroid ? "/shop" : "/home"}
+        href={isAndroid ? "/home" : "/home"}
       >
         Kush Kourier
       </a>
       <button
         className="navbar-toggler ps-sm-2"
         type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
         aria-controls="navbarNav"
         aria-expanded="false"
         aria-label="Toggle navigation"
@@ -314,14 +338,14 @@ const Navbar = (): React$Element<any> => {
             <a className="nav-link Lgreen" href="#">
               Contact
             </a>
+          </li>
+          {isAdmin && (
+            <li className="nav-item">
+              <a className="nav-link Lgreen" href="/admin">
+                Admin
+              </a>
             </li>
-            {isAdmin && (
-    <li className="nav-item">
-      <a className="nav-link Lgreen" href="/admin">
-        Admin
-      </a>
-    </li>
-  )}
+          )}
         </ul>
 
         <form className="d-flex ml-auto my-2 my-lg-0">
@@ -354,7 +378,6 @@ const Navbar = (): React$Element<any> => {
           </div>
         </form>
       </div>
-    
     </nav>
   );
 };

@@ -28,6 +28,22 @@ const CartScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
+        const getCookieValue = (cookieName) => {
+          const cookiesArray = document.cookie.split('; ');
+          for (const cookie of cookiesArray) {
+            const [name, value] = cookie.split('=');
+            if (name === cookieName) {
+              return value;
+            }
+          }
+          return null; 
+        };
+        
+        
+        const cartHashCookieValue = getCookieValue('cartHash');
+
+
         const options = {
           url: getCart,
           headers: {
@@ -35,6 +51,14 @@ const CartScreen = () => {
             credentials: "include",
           },
         };
+
+        if (isAndroid) {
+
+          options.headers.Cookie = `cartHash=${cartHashCookieValue}`;
+
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+        }
 
         let response = await CapacitorHttp.get(options);
 

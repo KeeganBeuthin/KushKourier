@@ -40,6 +40,22 @@ const CheckoutCard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+
+      const getCookieValue = (cookieName) => {
+        const cookiesArray = document.cookie.split('; ');
+        for (const cookie of cookiesArray) {
+          const [name, value] = cookie.split('=');
+          if (name === cookieName) {
+            return value;
+          }
+        }
+        return null; 
+      };
+      
+      
+      const cartHashCookieValue = getCookieValue('cartHash');
+
+
       try {
         const options = {
           url: getCart,
@@ -48,6 +64,14 @@ const CheckoutCard = () => {
             credentials: "include",
           },
         };
+
+        if (isAndroid) {
+
+          options.headers.Cookie = `cartHash=${cartHashCookieValue}`;
+
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
 
         let response = await CapacitorHttp.get(options);
 
@@ -108,6 +132,7 @@ const CheckoutCard = () => {
   useEffect(() => {
     if (cartHash !== undefined) {
       const fetchTotalPrice = async () => {
+
         try {
           const options = {
             url: cartCheck,
@@ -119,6 +144,8 @@ const CheckoutCard = () => {
               cartHash,
             },
           };
+
+console.log(cartHash)
 
           const response = await CapacitorHttp.get(options);
 
