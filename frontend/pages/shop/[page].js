@@ -4,7 +4,6 @@ import Navbar from "../../components/navbar";
 import ProductCard from "../../components/productCard";
 import BreadCrumbShop from "../../components/breadCrumbShop";
 import ShopSidebar from "../../components/shopSideBar";
-
 type ShopProps = {};
 
 const Shop = (): React$Element<any> => {

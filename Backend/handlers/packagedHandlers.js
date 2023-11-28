@@ -1,4 +1,3 @@
-
 const cors = require("cors");
 const postgres = require("postgres");
 const OpenAPIBackend = require("openapi-backend").default;
@@ -13,11 +12,11 @@ const sql = postgres("postgres://postgres:hahaha@127.0.0.1:8080/rat");
 const path = require("path");
 const fs = require("fs");
 
-const cartHandlers = require('./cartHandlers');
-const validationHandlers = require('./validationHandlers');
-const productHandlers = require('./productHandlers');
-const userHandlers = require('./userHandlers');
-const transactionHandlers = require('./transactionHandlers')
+const cartHandlers = require("./cartHandlers");
+const validationHandlers = require("./validationHandlers");
+const productHandlers = require("./productHandlers");
+const userHandlers = require("./userHandlers");
+const transactionHandlers = require("./transactionHandlers");
 
 let redisClient = createClient();
 redisClient.connect().catch(console.error);
@@ -27,12 +26,10 @@ let redisStore = new RedisStore({
   prefix: "SessionStore:",
 });
 
-
 module.exports = {
-    ...cartHandlers,
-    ...productHandlers,
-    ...userHandlers,
-    ...validationHandlers,
-    ...transactionHandlers
-}
-  
+  ...cartHandlers,
+  ...productHandlers,
+  ...userHandlers,
+  ...validationHandlers,
+  ...transactionHandlers,
+};

@@ -4,7 +4,11 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from "formik";
 import login_validate from "../lib/loginValidate";
 import { CapacitorHttp } from "@capacitor/core";
+import { Capacitor } from "@capacitor/core";
 import type { FormikProps } from "formik";
+
+const isAndroid = Capacitor.getPlatform() === "android";
+
 type LoginModalProps = {
   show: boolean,
   onClose: () => void,
@@ -26,9 +30,15 @@ const LoginModal = ({
     loginPassword: "",
   };
 
-  const handleSubmit = async (values: LoginValues) => {
-    const apiUrl: string = "/api/login";
+  let apiUrl;
 
+  if (isAndroid) {
+    apiUrl = "http://192.168.39.116:9000/api/login";
+  } else {
+    apiUrl = "/api/cart/login";
+  }
+
+  const handleSubmit = async (values: LoginValues) => {
     try {
       const options = {
         url: apiUrl,

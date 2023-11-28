@@ -29,7 +29,6 @@ if (isAndroid) {
   checkoutUrl = "/api/cart/createCheckout";
 }
 
-
 const CheckoutCard = () => {
   const [totalPrice, setTotalPrice] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -40,21 +39,18 @@ const CheckoutCard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-
       const getCookieValue = (cookieName) => {
-        const cookiesArray = document.cookie.split('; ');
+        const cookiesArray = document.cookie.split("; ");
         for (const cookie of cookiesArray) {
-          const [name, value] = cookie.split('=');
+          const [name, value] = cookie.split("=");
           if (name === cookieName) {
             return value;
           }
         }
-        return null; 
+        return null;
       };
-      
-      
-      const cartHashCookieValue = getCookieValue('cartHash');
 
+      const cartHashCookieValue = getCookieValue("cartHash");
 
       try {
         const options = {
@@ -66,12 +62,10 @@ const CheckoutCard = () => {
         };
 
         if (isAndroid) {
-
           options.headers.Cookie = `cartHash=${cartHashCookieValue}`;
 
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
-
 
         let response = await CapacitorHttp.get(options);
 
@@ -132,7 +126,6 @@ const CheckoutCard = () => {
   useEffect(() => {
     if (cartHash !== undefined) {
       const fetchTotalPrice = async () => {
-
         try {
           const options = {
             url: cartCheck,
@@ -145,7 +138,7 @@ const CheckoutCard = () => {
             },
           };
 
-console.log(cartHash)
+          console.log(cartHash);
 
           const response = await CapacitorHttp.get(options);
 

@@ -25,19 +25,16 @@ module.exports = {
     const { price, quantity, product_id } = req.body.itemData;
 
     const cookies = req.headers.cookie || "";
-console.log(cookies)
+    console.log(cookies);
     const match = /cartHash=([^;]+)/.exec(cookies);
 
     const cartHash = decodeURIComponent(match[1]);
 
     if (!price || !quantity || !product_id) {
-
       return res.status(400).json({ error: "Invalid cart item data" });
-
     }
 
     try {
-
       await sql`
               INSERT INTO carts (product_id, quantity, price,cart_hash)
               VALUES (${product_id}, ${quantity}, ${price},${cartHash}) 
@@ -46,12 +43,10 @@ console.log(cookies)
       console.log("added");
 
       return res.status(200).json({ message: "Product added to cart" });
-
     } catch (error) {
       console.error("Error adding product to cart:", error);
 
       return res.status(500).json({ error: "Server error" });
-
     }
   },
 
@@ -59,22 +54,17 @@ console.log(cookies)
     const { item } = req.body;
 
     if (!item) {
-
       return res.status(400).json({ error: "Invalid user or cart item data" });
-
     }
 
     try {
-
       await sql`
               DELETE FROM carts
               WHERE cart_id = ${item}
             `;
 
       return res.status(200).json({ message: "Product removed from cart" });
-
     } catch (error) {
-
       console.error("Error removing product from cart:", error);
 
       return res.status(500).json({ error: "Server error" });
@@ -91,7 +81,6 @@ console.log(cookies)
     }
 
     try {
-
       await sql`
               UPDATE carts
               SET quantity = ${new_quantity}
@@ -99,7 +88,6 @@ console.log(cookies)
             `;
 
       return res.status(200).json({ message: "Cart item quantity updated" });
-
     } catch (error) {
       console.error("Error updating cart item quantity:", error);
 
@@ -133,15 +121,12 @@ console.log(cookies)
       `;
 
     const cartContents = cartInfo.map((item) => {
-
       const imageBuffer = item.image_data;
 
       if (imageBuffer && imageBuffer.length > 0) {
-
         const base64Image = Buffer.from(imageBuffer).toString("base64");
 
         return { ...item, image_data: base64Image };
-
       }
       return item;
     });
@@ -152,7 +137,6 @@ console.log(cookies)
   },
 
   getCartTotalPrice: async (c, req, res) => {
-
     const { cartHash } = req.query;
 
     if (!cartHash) {
@@ -160,7 +144,6 @@ console.log(cookies)
     }
 
     try {
-
       const totalPrice = await sql`
               SELECT SUM(quantity * price) AS total_price
               FROM carts
@@ -168,7 +151,6 @@ console.log(cookies)
             `;
 
       return res.status(200).json(totalPrice[0]);
-
     } catch (error) {
       console.error("Error calculating cart total price:", error);
 
@@ -177,9 +159,9 @@ console.log(cookies)
   },
   createCart: async (c, req, res) => {
     const cookies = req.headers.cookie;
-console.log(cookies)
-console.log(req.headers)
-console.log(req.body)
+    console.log(cookies);
+    console.log(req.headers);
+    console.log(req.body);
     const match = /cartHash=([^;]+)/.exec(cookies);
 
     const session = req.session.id;
@@ -188,14 +170,13 @@ console.log(req.body)
 
     const cartHash = decodeURIComponent(match[1]);
 
-    if(!cartHash){
-      return res.status(404).json({error: 'no Cart Hash'})
+    if (!cartHash) {
+      return res.status(404).json({ error: "no Cart Hash" });
     }
-    
+
     console.log(cartHash);
 
     if (!sessionData) {
-
       const cartInsert = await sql`
           insert into carts (cart_hash) values (${cartHash})
           `;
@@ -213,12 +194,11 @@ console.log(req.body)
     return res.status(200).json({ success: "cart Created" });
   },
   cartCheck: async (c, req, res) => {
-
     const productInfo = req;
 
     const cookies = req.headers.cookie || "";
-console.log(cookies)
-console.log(req.headers)
+    console.log(cookies);
+    console.log(req.headers);
     const match = /cartHash=([^;]+)/.exec(cookies);
 
     if (match) {
@@ -238,5 +218,4 @@ console.log(req.headers)
     }
     return res.status(404).json({ error: "no cart found" });
   },
-
 };

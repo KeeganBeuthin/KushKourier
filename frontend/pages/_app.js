@@ -20,7 +20,6 @@ export default function MyApp({
   return (
     <>
       <Provider store={store}>
-       
         <Head />
         <Component {...pageProps} />
         <Script
@@ -31,7 +30,6 @@ export default function MyApp({
           nomodule=""
           src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"
         ></Script>
-       
       </Provider>
     </>
   );

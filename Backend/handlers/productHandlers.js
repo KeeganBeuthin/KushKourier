@@ -166,7 +166,7 @@ module.exports = {
   },
 
   getProduct: async (c, req, res) => {
-    console.log(req.headers)
+    console.log(req.headers);
     const name = c.request.params.productName;
     const prod = c.request.params;
 

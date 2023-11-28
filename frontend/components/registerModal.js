@@ -4,7 +4,10 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from "formik";
 import { register_validate } from "../lib/registerValidate";
 import { CapacitorHttp } from "@capacitor/core";
+import { Capacitor } from "@capacitor/core";
 import type { FormikProps } from "formik";
+
+const isAndroid = Capacitor.getPlatform() === "android";
 
 type RegisterModalProps = {
   show: boolean,
@@ -35,9 +38,15 @@ const RegisterModal = ({
     registerLastName: "",
   };
 
-  const handleSubmit = async (values: RegisterValues) => {
-    const apiUrl = "/api/register";
+  let apiUrl;
 
+  if (isAndroid) {
+    apiUrl = "http://192.168.39.116:9000/api/register";
+  } else {
+    apiUrl = "/api/cart/register";
+  }
+
+  const handleSubmit = async (values: RegisterValues) => {
     try {
       const options = {
         url: apiUrl,

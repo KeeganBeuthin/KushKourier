@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUsername, setEmail } from "../redux/userSlice";
 import RegisterModal from "./registerModal";
 import { Capacitor } from "@capacitor/core";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 function generateRandomHash(length) {
   const characters =
@@ -107,7 +107,7 @@ const Navbar = (): React$Element<any> => {
       const [name, value] = cookie.split("=");
       if (name === "cartHash") {
         cartHash = value;
-        console.log(cartHash)
+        console.log(cartHash);
         break;
       }
     }
@@ -120,34 +120,31 @@ const Navbar = (): React$Element<any> => {
   useEffect(() => {
     const cartCheck = async () => {
       try {
-
         const getCookieValue = (cookieName) => {
-          const cookiesArray = document.cookie.split('; ');
+          const cookiesArray = document.cookie.split("; ");
           for (const cookie of cookiesArray) {
-            const [name, value] = cookie.split('=');
+            const [name, value] = cookie.split("=");
             if (name === cookieName) {
               return value;
             }
           }
-          return null; 
+          return null;
         };
-        
-        
-        const cartHashCookieValue = getCookieValue('cartHash');
+
+        const cartHashCookieValue = getCookieValue("cartHash");
 
         const options = {
           url: cartVal,
           headers: {
             "Content-Type": "application/json",
-            'credentials': "include",
+            credentials: "include",
           },
         };
 
         if (isAndroid) {
-
           options.headers.Cookie = `cartHash=${cartHashCookieValue}`;
 
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
 
         const response = await CapacitorHttp.post(options);
@@ -165,15 +162,14 @@ const Navbar = (): React$Element<any> => {
             url: cartCreate,
             headers: {
               "Content-Type": "application/json",
-              'credentials': "include",
+              credentials: "include",
             },
           };
 
           if (isAndroid) {
-
             options.headers.Cookie = `cartHash=${newCartHash}`;
-            
-            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            await new Promise((resolve) => setTimeout(resolve, 1000));
           }
 
           const response = await CapacitorHttp.post(options);
@@ -369,12 +365,21 @@ const Navbar = (): React$Element<any> => {
                 />
               </button>
             </div>
-            <button
-              className="btn btn-outline-light my-2 my-sm-0 text-light me-sm-2 ms-sm-1"
-              onClick={navigateToCart}
-            >
-              <img src={"/cart.svg"} width="20" height="20" alt="Cart Icon" />
-            </button>
+            {isAndroid ? (
+              <a
+                className="btn btn-outline-light my-2 my-sm-0 text-light me-sm-2 ms-sm-1"
+                href="/cart"
+              >
+                <img src={"/cart.svg"} width="20" height="20" alt="Cart Icon" />
+              </a>
+            ) : (
+              <button
+                className="btn btn-outline-light my-2 my-sm-0 text-light me-sm-2 ms-sm-1"
+                onClick={navigateToCart}
+              >
+                <img src={"/cart.svg"} width="20" height="20" alt="Cart Icon" />
+              </button>
+            )}
           </div>
         </form>
       </div>
